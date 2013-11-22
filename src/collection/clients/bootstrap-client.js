@@ -12,6 +12,7 @@ function(LivefyreHttpClient, inherits, base64) {
     var LivefyreBootstrapClient = function (opts) {
         opts = opts || {};
         opts.serviceName = 'bootstrap';
+        this._version = opts.version;
         LivefyreHttpClient.call(this, opts);
     };
 
@@ -40,6 +41,8 @@ function(LivefyreHttpClient, inherits, base64) {
         var url = [
             this._getUrlBase(opts),
             "/bs3/",
+            this._version || "",
+            "/",
             includeEnvironment ? opts.environment + "/" : "",
             opts.network,
             "/",
