@@ -1,8 +1,8 @@
 define([
-    'streamhub-sdk/content/views/livefyre-content-view',
+    'streamhub-sdk/content/views/content-view',
     'inherits',
     'streamhub-sdk/jquery'],
-function (LivefyreContentView, inherits, $) {
+function (ContentView, inherits, $) {
     'use strict';
 
     /**
@@ -29,6 +29,7 @@ function (LivefyreContentView, inherits, $) {
         }
         
         context.authorUrl = context.author.profileUrl;
+        context.authorDisplayName = context.author.displayName;
 
         context.contentSourceName = 'facbeook';
         context.contentSourceTooltipUrl = context.permalink;

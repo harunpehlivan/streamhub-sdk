@@ -1,9 +1,9 @@
 define([
-    'streamhub-sdk/content/views/livefyre-content-view',
-    'streamhub-sdk/ui/hub-button',
+    'streamhub-sdk/content/views/content-view',
+    'streamhub-sdk/ui/button',
     'inherits',
     'streamhub-sdk/jquery'],
-function (LivefyreContentView, HubButton, inherits, $) {
+function (ContentView, Button, inherits, $) {
     'use strict';
     
     /**
@@ -22,27 +22,29 @@ function (LivefyreContentView, HubButton, inherits, $) {
     
     TwitterContentView.prototype.elClass += ' content-tweet ';
 
-    TwitterContentView.prototype._renderButtons = function () {
+    TwitterContentView.prototype.render = function () {
+        ContentView.prototype.render.call(this);
+
         if (! this._rendered) {
-            var replyButton = new HubButton(undefined, {
-                className: 'content-action content-action-reply',
-                buttonUrl: 'https://twitter.com/intent/tweet?in_reply_to=' + this.content.tweetId
+            var replyButton = new Button(undefined, {
+                elClassPrefix: 'hub',
+                className: 'content-action content-action-reply'
             });
-            var retweetButton = new HubButton(undefined, {
-                className: 'content-action content-action-retweet',
-                buttonUrl: 'https://twitter.com/intent/retweet?tweet_id=' + this.content.tweetId
+            var retweetButton = new Button(undefined, {
+                elClassPrefix: 'hub',
+                className: 'content-action content-action-retweet'
             });
-            var favoriteButton = new HubButton(undefined, {
-                className: 'content-action content-action-favorite',
-                buttonUrl: 'https://twitter.com/intent/favorite?tweet_id=' + this.content.tweetId
+            var favoriteButton = new Button(undefined, {
+                elClassPrefix: 'hub',
+                className: 'content-action content-action-favorite'
             });
 
             this.addButton(replyButton);
             this.addButton(retweetButton);
             this.addButton(favoriteButton);
         } else {
-            for (var i=0; i < this._controls.left.length; i++) {
-                this.addButton(this._controls.left[i]);
+            for (var i=0; i < this._controls['left'].length; i++) {
+                this.addButton(this._controls['left'][i]);
             }
         }
 
@@ -59,6 +61,7 @@ function (LivefyreContentView, HubButton, inherits, $) {
             context.author.twitterUsername = context.author.profileUrl.split('/').pop();
         }
         context.authorUrl = '//twitter.com/intent/user?user_id='+context.author.twitterUserId;
+        context.authorDisplayName = context.author.displayName;
         context.authorUserName = context.author.twitterUsername;
         context.authorUserNamePrefix = '@';
 
