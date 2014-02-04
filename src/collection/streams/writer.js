@@ -35,6 +35,7 @@ function (Writable, LivefyreWriteClient, Auth, inherits) {
 
         var postParams = {
             body: content.body,
+            environment: collection.environment,
             collectionId: collection.id,
             environment: collection.environment,
             lftoken: Auth.getToken(),
@@ -45,11 +46,7 @@ function (Writable, LivefyreWriteClient, Auth, inherits) {
             var attachment;
             postParams.media = [];
             for (var i=0; i < numAttachments; i++) {
-                attachment = content.attachments[i];
-                if (typeof attachment.toJSON === 'function') {
-                    attachment = attachment.toJSON();
-                }
-                postParams.media.push(attachment);
+                postParams.media.push(content.attachments[i]);
             }
         }
 
