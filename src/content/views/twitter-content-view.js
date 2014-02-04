@@ -1,9 +1,9 @@
 define([
-    'streamhub-sdk/content/views/livefyre-content-view',
-    'streamhub-sdk/ui/hub-button',
+    'streamhub-sdk/content/views/content-view',
+    'streamhub-sdk/ui/button',
     'inherits',
     'streamhub-sdk/jquery'],
-function (LivefyreContentView, HubButton, inherits, $) {
+function (ContentView, Button, inherits, $) {
     'use strict';
     
     /**
@@ -22,28 +22,31 @@ function (LivefyreContentView, HubButton, inherits, $) {
     
     TwitterContentView.prototype.elClass += ' content-tweet ';
 
-    /**
-     * Create and add any buttons that should be on all TwitterContentViews.
-     * This will be invoked on construction
-     * They will be rendered by ._renderButtons later.
-     */
-    TwitterContentView.prototype._addInitialButtons = function () {
-        var replyButton = new HubButton(undefined, {
-            className: 'content-action content-action-reply',
-            buttonUrl: 'https://twitter.com/intent/tweet?in_reply_to=' + this.content.tweetId
-        });
-        var retweetButton = new HubButton(undefined, {
-            className: 'content-action content-action-retweet',
-            buttonUrl: 'https://twitter.com/intent/retweet?tweet_id=' + this.content.tweetId
-        });
-        var favoriteButton = new HubButton(undefined, {
-            className: 'content-action content-action-favorite',
-            buttonUrl: 'https://twitter.com/intent/favorite?tweet_id=' + this.content.tweetId
-        });
+    TwitterContentView.prototype._renderButtons = function () {
+        if (! this._rendered) {
+            var replyButton = new HubButton(undefined, {
+                className: 'content-action content-action-reply',
+                buttonUrl: 'https://twitter.com/intent/tweet?in_reply_to=' + this.content.tweetId
+            });
+            var retweetButton = new HubButton(undefined, {
+                className: 'content-action content-action-retweet',
+                buttonUrl: 'https://twitter.com/intent/retweet?tweet_id=' + this.content.tweetId
+            });
+            var favoriteButton = new HubButton(undefined, {
+                className: 'content-action content-action-favorite',
+                buttonUrl: 'https://twitter.com/intent/favorite?tweet_id=' + this.content.tweetId
+            });
 
-        this.addButton(replyButton);
-        this.addButton(retweetButton);
-        this.addButton(favoriteButton);
+            this.addButton(replyButton);
+            this.addButton(retweetButton);
+            this.addButton(favoriteButton);
+        } else {
+            for (var i=0; i < this._controls.left.length; i++) {
+                this.addButton(this._controls.left[i]);
+            }
+        }
+
+        this._rendered = true;
     };
 
     /**
@@ -56,6 +59,7 @@ function (LivefyreContentView, HubButton, inherits, $) {
             context.author.twitterUsername = context.author.profileUrl.split('/').pop();
         }
         context.authorUrl = '//twitter.com/intent/user?user_id='+context.author.twitterUserId;
+        context.authorDisplayName = context.author.displayName;
         context.authorUserName = context.author.twitterUsername;
         context.authorUserNamePrefix = '@';
 

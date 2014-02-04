@@ -164,38 +164,25 @@
 
             & * {
                 color: #999;
+                height: 20px;
                 padding: 2px 0;
             }
         }
 
-        .content-footer-left {
-            .hub-btn-link:first-child {
-                margin-left: -8px;
-            }
-        }
+        //.content-footer-left {
+        //}
 
         .content-footer-right {
             float: right;
-
-            .hub-btn-link:first-child {
-                margin-right: -5px;
-            }
         }
 
         .hub-btn {
             font-size: 12px;
             padding: 2px 7px;
-            margin-right: 0px;
-
-            & > a {
-                display: block;
-                width: 100%;
-                height: 100%;
-            }
+            margin-right: 10px;
         }
 
         .hub-content-like {
-            padding-left: 23px;
             background-image: data-uri('../images/like.png');
             background-repeat: no-repeat;
             background-position: 0px center;
@@ -214,7 +201,7 @@
             padding-left: 27px;
             background-image: data-uri('../images/reply.png');
             background-repeat: no-repeat;
-            background-position: 7px center;
+            background-position: 7px 4px;
         }
 
         .hub-content-share {
@@ -457,23 +444,46 @@
         .content-source-logo {
             background-position: -24px 0;
         }
-
-        .hub-content-action:first-child {
-            margin-left: -10px;
-        }
-        
-        .hub-content-action-favorite {
-            width: 18px;
-            height: 18px;
-            background-position: center;
+        .content-action {
+            padding: 0;
+            margin-right: 5px;
             background-repeat: no-repeat;
-            background-image: data-uri('../images/favorite.png');
-            &:hover {
-                background-image: data-uri('../images/favorite_hover.png');
+            
+            &.content-action-favorite {
+                width: 18px;
+                height: 18px;
+                background-image: data-uri('../images/favorite.png');
+                margin-top: 3px;
+                    background-image: data-uri('../images/favorite_hover.png');
+                    background-image: data-uri('../images/favorite_active.png');
             }
+            &.content-action-reply {
+                width: 23px;
+                height: 16px;
+                margin-top: 2px;
+                background-position: 0 0;
             &:active {
                 background-image: data-uri('../images/favorite_active.png');
+            &.content-action-reply {
+                width: 23px;
+                height: 16px;
+                margin-top: 4px;
+                background-image: data-uri('../images/reply.png');
+                    background-image: data-uri('../images/reply_hover.png');
+                    background-image: data-uri('../images/reply_active.png');
             }
+            &.content-action-retweet {
+                width: 27px;
+                height: 14px;
+                margin-top: 3px;
+                margin-bottom: 1px;
+                background-position: -25px -1px;
+                &:hover {
+                    background-position: -25px -17px;
+                }
+                &:active {
+                    background-position: -25px -33px;
+                }
         }
         .hub-content-action-reply {
             width: 23px;
@@ -498,6 +508,17 @@
             }
             &:active {
                 background-image: data-uri('../images/retweet_active.png');
+            &.content-action-retweet {
+                width: 27px;
+                height: 14px;
+                margin-top: 4px;
+                background-image: data-uri('../images/retweet.png');
+                &:hover {
+                    background-image: data-uri('../images/retweet_hover.png');
+                }
+                &:active {
+                    background-image: data-uri('../images/retweet_active.png');
+                }
             }
         }
     }

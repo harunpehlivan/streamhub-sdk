@@ -245,7 +245,7 @@ define([
     };
 
     ContentView.prototype.addButton = function (button) {
-        this._controls.left.push(button);
+        this._controls['left'].push(button);
 
         var footerLeft = this.$el.find(this.footerLeftSelector);
         var buttonContainerEl = $('<div></div>');
