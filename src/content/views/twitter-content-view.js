@@ -1,9 +1,9 @@
 define([
     'streamhub-sdk/content/views/content-view',
-    'streamhub-sdk/ui/button',
+    'streamhub-sdk/ui/button/hub-button',
     'inherits',
     'streamhub-sdk/jquery'],
-function (ContentView, Button, inherits, $) {
+function (ContentView, HubButton, inherits, $) {
     'use strict';
     
     /**
