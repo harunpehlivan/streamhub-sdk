@@ -34,6 +34,7 @@
     "less": "1.6.2",
     "jshint": "~2.1.0",
     "jsdoc": "git://github.com/jsdoc3/jsdoc.git",
+    "less": "~1.6.2",
     "ink-docstrap": "git://github.com/michaelward82/docstrap.git#line-number-alignment",
     "phantomjs": "~1.9.2-2",
     "karma": "~0.10.5",
