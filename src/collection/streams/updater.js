@@ -33,6 +33,10 @@ StateToContent, Annotator, debug) {
     var CollectionUpdater = function (opts) {
         opts = opts || {};
         this._collection = opts.collection;
+        var collectionSettings = this._collection.collectionSettings;
+        if (collectionSettings) {
+            this._latestEvent = collectionSettings.event;
+        }
         this._streamClient = opts.streamClient || new StreamClient();
         this._request = null;
         this._replies = opts.replies || false;

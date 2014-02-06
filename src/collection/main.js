@@ -206,7 +206,10 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
                 throw 'Fatal collection connection error';
             }
             var collectionSettings = initData.collectionSettings;
-            self.id = collectionSettings && collectionSettings.collectionId;
+            if (collectionSettings) {
+                self.id = collectionSettings.collectionId;
+                self.collectionSettings = collectionSettings;
+            }
             self.emit('_initFromBootstrap', err, initData);
         });
     };
