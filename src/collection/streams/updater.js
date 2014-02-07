@@ -33,9 +33,9 @@ StateToContent, Annotator, debug) {
     var CollectionUpdater = function (opts) {
         opts = opts || {};
         this._collection = opts.collection;
-        var collectionSettings = this._collection.collectionSettings;
-        if (collectionSettings) {
-            this._latestEvent = collectionSettings.event;
+        var collectionSettings = this._collection.settings;
+        if (collectionSettings.initEvent) {
+            this._latestEvent = collectionSettings.initEvent;
         }
         this._streamClient = opts.streamClient || new StreamClient();
         this._request = null;
