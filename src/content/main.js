@@ -28,6 +28,7 @@ define([
         this.visibility = Content.enums.visibility[vis];
         this.attachments = obj.attachments || [];
         this.replies = obj.replies || [];
+        this.origin = obj.origin || Content.enums.origin.BOOTSTRAP;
     };
     inherits(Content, EventEmitter);
 
@@ -88,6 +89,17 @@ define([
     };
 
     Content.enums = {};
+
+    /**
+     * The origin of a piece of content. That is, how did this piece of content
+     * get to the point in which you are seeing it?
+     * @type {Object}
+     */
+    Content.enums.origin = {
+        BOOTSTRAP: 0,
+        STREAM: 1
+    };
+
     /**
      * The StreamHub APIs use enumerations to define
      * the visibility of messages sent down the wire. All levels of

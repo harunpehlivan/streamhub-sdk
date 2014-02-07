@@ -6,9 +6,10 @@ define([
     'streamhub-sdk/collection/clients/stream-client',
     'streamhub-sdk/content/state-to-content',
     'streamhub-sdk/content/annotator',
+    'streamhub-sdk/content',
     'streamhub-sdk/debug'],
 function (inherits, Readable, streamUtil, BootstrapClient, StreamClient,
-StateToContent, Annotator, debug) {
+StateToContent, Annotator, Content, debug) {
     'use strict';
 
 
@@ -165,6 +166,7 @@ StateToContent, Annotator, debug) {
         for (contentId in states) {
             if (states.hasOwnProperty(contentId)) {
                 state = states[contentId];
+                state.origin = Content.enums.origin.STREAM;
                 stateToContent.write(state);
             }
         }
