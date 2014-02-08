@@ -170,5 +170,51 @@ function(LivefyreHttpClient, inherits) {
         }, callback);
     };
 
+    LivefyreWriteClient.prototype.like = function (opts, callback) {
+        opts = opts || {};
+        callback = callback || function () {};
+        var url = [
+            this._getUrlBase(opts),
+            '/api/v3.0/message/',
+            opts.contentId,
+            '/like/'
+        ].join("");
+
+        var postData = {
+            lftoken: opts.lftoken,
+            collection_id:  opts.collectionId
+        };
+
+        this._request({
+            method: 'POST',
+            url: url,
+            dataType: 'json',
+            data: postData
+        }, callback);
+    };
+
+    LivefyreWriteClient.prototype.unlike = function (opts, callback) {
+        opts = opts || {};
+        callback = callback || function () {};
+        var url = [
+            this._getUrlBase(opts),
+            '/api/v3.0/message/',
+            opts.contentId,
+            '/unlike/'
+        ].join("");
+
+        var postData = {
+            lftoken: opts.lftoken,
+            collection_id:  opts.collectionId
+        };
+
+        this._request({
+            method: 'POST',
+            url: url,
+            dataType: 'json',
+            data: postData
+        }, callback);
+    };
+
     return LivefyreWriteClient;
 });

@@ -99,26 +99,14 @@ function($, Content, Annotator, LivefyreOpine, inherits) {
      * @fires Content#opine
      */
     LivefyreContent.prototype.addOpine = function(obj) {
-        if (obj.vis === 0) {
-            this.removeOpine(obj);
-            return;
-        }
-
         var found = false;
         if (obj.id) {
-            for (var i=0; i < this.opines.length; i++) {
+            for (var i in this.opines) {
                 if (this.opines[i].id === obj.id) {
                     found = true;
                 }
             }
-        } else {
-            for (var i=0; i < this.opines.length; i++) {
-                if (this.opines[i].content.id === obj.content.id) {
-                    found = true;
-                }
-            }
         }
-
         if (!found) {
             this.opines.push(obj);
             if (obj.relType === LivefyreOpine.enums.type.indexOf('LIKE')) {
@@ -126,36 +114,6 @@ function($, Content, Annotator, LivefyreOpine, inherits) {
             }
             this.emit('opine', obj);
         }
-    };
-
-    /**
-     * Remove an Opine from the LivefyreContent
-     * @param obj {Oembed} An LivefyreOpine instance to remove
-     * @fires Content#removeOpine
-     */
-    LivefyreContent.prototype.removeOpine = function(obj) {
-        var indexToRemove = null;
-        if (obj.id) {
-            for (var i=0; i < this.opines.length; i++) {
-                if (this.opines[i].id === obj.id) {
-                    indexToRemove = i;
-                    break;
-                }
-            }
-        } else {
-            for (var i=0; i < this.opines.length; i++) {
-                if (this.opines[i].content.id === obj.content.id) {
-                    indexToRemove = i;
-                    break;
-                }
-            }
-        }
-        if (indexToRemove === null) {
-            return;
-        }
-        this.opines.splice(indexToRemove, 1);
-        this._likes--;
-        this.emit('removeOpine', obj);
     };
 
     LivefyreContent.prototype.getLikeCount = function () {

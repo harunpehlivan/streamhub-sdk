@@ -1,10 +1,7 @@
 define([
-    'streamhub-sdk/jquery',
     'streamhub-sdk/content',
     'inherits'
-], function ($, Content, inherits) {
-    'use strict';
-
+], function (Content, inherits) {
     var LivefyreOpine = function (json, opts) {
        opts = opts || {};
        Content.call(this, this);
@@ -20,7 +17,7 @@ define([
         // TODO(ryanc): In v3.0 bootstrap, all opines are Likes,
         // this may change in v3.1 bootstrap
         // (https://github.com/Livefyre/lfpb/blob/master/src/lfpb/facts/content.proto#L227-L258)
-        if (opts.opineType === undefined) {
+        if (opts.opineType == undefined) {
             this.relType = LivefyreOpine.enums.type.indexOf('LIKE');
         }
     };
