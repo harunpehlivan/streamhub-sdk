@@ -1,20 +1,21 @@
 define([
     'streamhub-sdk/jquery',
-    'auth',
+    'streamhub-sdk/auth',
     'streamhub-sdk/content/views/content-view',
     'streamhub-sdk/content/types/livefyre-content',
-    'streamhub-sdk/content/types/livefyre-opine',
-    'streamhub-sdk/ui/auth-required-command',
-    'streamhub-sdk/ui/command',
-    'streamhub-sdk/ui/hub-button',
-    'streamhub-sdk/ui/hub-like-button',
-    'streamhub-sdk/collection/liker',
+    'streamhub-sdk/ui/button/hub-button',
+    'streamhub-sdk/ui/button/hub-toggle-button',
+    'streamhub-sdk/collection/clients/write-client',
     'hgn!streamhub-sdk/content/templates/content',
     'streamhub-sdk/util',
     'inherits',
     'streamhub-sdk/debug'
-], function ($, auth, ContentView, LivefyreContent, LivefyreOpine, AuthRequiredCommand, Command, HubButton, HubLikeButton, Liker, ContentTemplate, util, inherits, debug) {
+], function ($, Auth, ContentView, LivefyreContent, HubButton, HubToggleButton, LivefyreWriteClient, ContentTemplate, util, inherits, debug) {
     'use strict';
+
+    var log = debug('streamhub-sdk/content/views/livefyre-content-view');
+    var LF_TOKEN = 'eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJkb21haW4iOiAibGFicy10NDAyLmZ5cmUuY28iLCAiZXhwaXJlcyI6IDExMzkxNzI4ODEzLjAzOTY2LCAidXNlcl9pZCI6ICJkZW1vLTAifQ.ZJLrUcRf3MbgOqJ1tLO81pZ7ANfatsKgLie6T6S_Wi4';
+    var USER_ID = 'demo-0@labs-t402.fyre.co';
 
     /**
      * Defines the base class for all content-views. Handles updates to attachments
@@ -23,8 +24,6 @@ define([
      * @param opts {Object} The set of options to configure this view with.
      * @param opts.content {Content} The content object to use when rendering. 
      * @param opts.el {?HTMLElement} The element to render this object in.
-     * @param opts.shareCommand {streamhub-sdk/ui/command} Command to use
-     *     for share button. If not present or cannot execute, no share button
      * @fires LivefyreContentView#removeContentView.hub
      * @exports streamhub-sdk/content/views/content-view
      * @constructor
@@ -32,43 +31,17 @@ define([
     var LivefyreContentView = function LivefyreContentView (opts) {
         opts = opts || {};
 
-        this._rendered = false;
         this._controls = {
             'left': [],
             'right': []
         };
-        this._commands = {};
-        this._setCommand({
-            like: opts.likeCommand,
-            share: opts.shareCommand
-        });
+        this._likeRequestListener = false;
+        this._rendered = false;
 
         ContentView.call(this, opts);
     };
     inherits(LivefyreContentView, ContentView);
 
-    LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left';
-    LivefyreContentView.prototype.footerRightSelector = '.content-footer-right';
-
-
-    /**
-     * Set the a command for a buton
-     * This should only be called once.
-     * @private
-     */
-    LivefyreContentView.prototype._setCommand = function (cmds) {
-        for (var name in cmds) {
-            if (cmds.hasOwnProperty(name)) {
-                if (! cmds[name]) {
-                    continue;
-                }
-                this._commands[name] = cmds[name];
-
-                // If canExecute changes, re-render buttons because now maybe the button should appear
-                cmds[name].on('change:canExecute', this._renderButtons.bind(this));
-            }
-        }
-    };
 
     /**
      * Render the content inside of the LivefyreContentView's element.
@@ -76,117 +49,95 @@ define([
      */
     LivefyreContentView.prototype.render = function () {
         ContentView.prototype.render.call(this);
-        this._renderButtons();
+        this._setupButtons();
+
         return this;
     };
 
-    LivefyreContentView.prototype._renderButtons = function () {
+    LivefyreContentView.prototype._handleLikeClick = function () {
+        // Lazily attach event handler for contentLike
+        if (! this._likeRequestListener) {
+            var self = this;
+            $('body').on('contentLike.hub', function (e, content) {
+                Auth.setToken(LF_TOKEN);
+
+                var writeClient = new LivefyreWriteClient();
+
+                var likeIntent;
+                if (! content.isLiked(USER_ID)) {
+                    likeIntent = writeClient.like;
+                } else {
+                    likeIntent = writeClient.unlike;
+                }
+                likeIntent.call(writeClient, {
+                    network: content.collection.network,
+                    siteId: content.collection.siteId,
+                    collectionId: content.collection.id,
+                    lftoken: LF_TOKEN,
+                    contentId: content.id
+                });
+            });
+            this._likeRequestListener = true;
+        }
+
+        this.$el.trigger('contentLike.hub', this.content);
+    };
+
+    LivefyreContentView.prototype._handleShare = function () {
+        console.log('contentShare.hub');
+        this.$el.trigger('contentShare.hub', this.content);
+    };
+
+    LivefyreContentView.prototype._setupButtons = function () {
         if (! (this.content instanceof LivefyreContent)) {
             return;
         }
+        if (! this._rendered) {
+            var likeCount = this.content.getLikeCount();
+            var likeButton = new HubToggleButton(this._handleLikeClick.bind(this), {
+                className: 'hub-content-like',
+                on: this.content.isLiked(USER_ID), //TODO(ryanc): Get user id from auth
+                label: likeCount
+            });
+            this.addButton(likeButton);
 
-        this.$el.find(this.footerLeftSelector).empty();
-        this.$el.find(this.footerRightSelector).empty();
+            //TODO(ryanc): Wait until we have replies on SDK
+            //var replyCommand = new Command(function () {
+            //    self.$el.trigger('contentReply.hub');
+            //});
+            //var replyButton = new HubButton(replyCommand, {
+            //    className: 'hub-btn-link hub-content-reply',
+            //    label: 'Reply'
+            //});
+            //this.addButton(replyButton);
 
-        //TODO(ryanc): Wait until we have replies on SDK
-        //var replyCommand = new Command(function () {
-        //    self.$el.trigger('contentReply.hub');
-        //});
-        //var replyButton = new HubButton(replyCommand, {
-        //    className: 'btn-link content-reply',
-        //    label: 'Reply'
-        //});
-        //this.addButton(replyButton);
-
-        this._renderLikeButton();
-        this._renderShareButton();
-    };
-
-    LivefyreContentView.prototype._updateLikeCount = function () {
-        this._likeButton.updateLabel(this.content.getLikeCount().toString());
-    };
-
-    /**
-     * Create a Button to be used for Liking functionality
-     * @protected
-     */
-    LivefyreContentView.prototype._createLikeButton = function () {
-        if (! auth.hasDelegate('login')) {
-            return; // Don't render a button when not logged in
-        }
-        return new HubLikeButton(this._commands.like, {
-            content: this.content
-        });
-    };
-
-    LivefyreContentView.prototype._renderLikeButton = function () {
-        var likeButton = this._likeButton = this._createLikeButton();
-        if ( ! likeButton) {
-            return;
-        }
-        this.addButton(likeButton);
-    };
-
-    /**
-     * Render a Share Button
-     * @protected
-     */
-    LivefyreContentView.prototype._renderShareButton = function () {
-        var shareButton = this._createShareButton();
-        if ( ! shareButton) {
-            return;
-        }
-        this.addButton(shareButton);
-    };
-
-    /**
-     * Create a Share Button
-     * @protected
-     */
-    LivefyreContentView.prototype._createShareButton = function () {
-        var shareCommand = this._commands.share;
-        if ( ! (shareCommand && shareCommand.canExecute())) {
-            return;
-        }
-        var shareButton = new HubButton(shareCommand, {
-            className: 'btn-link content-share',
-            label: 'Share'
-        });
-        return shareButton;
-    };
-
-    LivefyreContentView.prototype.addButton = function (button, opts) {
-        opts = opts || {};
-        var footerControls;
-        var footerSide;
-        if (opts.side === 'right') {
-            footerControls = this._controls.right;
-            footerSide = this.$el.find(this.footerRightSelector);
+            //TODO(ryanc): Wait until we have likes finished first
+            //var shareButton = new HubButton(this._handleShare.bind(this), {
+            //    className: 'hub-btn-link hub-content-share',
+            //    label: 'Share'
+            //});
+            //this.addButton(shareButton);
         } else {
-            footerControls = this._controls.left;
-            footerSide = this.$el.find(this.footerLeftSelector);
-        }
-
-        if (footerControls.length === 0) {
-            footerControls.push(button);
-        }
-        for (var i=0; i < footerControls.length; i++) {
-            if (footerControls[i] !== button) {
-                footerControls.push(button);
+            for (var i=0; i < this._controls['left'].length; i++) {
+                this.addButton(this._controls['left'][i]);
             }
         }
 
+        this._rendered = true;
+    };
+
+    LivefyreContentView.prototype.addButton = function (button) {
+        this._controls['left'].push(button);
+
+        var footerLeft = this.$el.find(this.footerLeftSelector);
         var buttonContainerEl = $('<div></div>');
-        footerSide.append(buttonContainerEl);
+        footerLeft.append(buttonContainerEl);
 
         button.setElement(buttonContainerEl);
         button.render();
     };
 
     LivefyreContentView.prototype.removeButton = function (button) {
-        this._controls.left.splice(this._controls.left.indexOf(button), 1);
-        this._controls.right.splice(this._controls.right.indexOf(button), 1);
-
         button.destroy();
     };
     
