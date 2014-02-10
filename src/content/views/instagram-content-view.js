@@ -1,7 +1,7 @@
 define([
-    'streamhub-sdk/content/views/content-view',
+    'streamhub-sdk/content/views/livefyre-content-view',
     'inherits'],
-function (ContentView, inherits) {
+function (LivefyreContentView, inherits) {
     'use strict';
     
     /**
@@ -29,7 +29,7 @@ function (ContentView, inherits) {
      * @return {Content} The content object this view was instantiated with.
      */
     InstagramContentView.prototype.getTemplateContext = function () {
-        var context = ContentView.prototype.getTemplateContext.call(this);
+        var context = LivefyreContentView.prototype.getTemplateContext.call(this);
 
         context.authorDisplayName = context.author.displayName;
 

@@ -1,8 +1,8 @@
 define([
-    'streamhub-sdk/content/views/content-view',
+    'streamhub-sdk/content/views/livefyre-content-view',
     'inherits',
     'streamhub-sdk/jquery'],
-function (ContentView, inherits, $) {
+function (LivefyreContentView, inherits, $) {
     'use strict';
 
     /**
