@@ -11,7 +11,6 @@ define([
     'streamhub-sdk/content/types/livefyre-twitter-content',
     'streamhub-sdk/content/views/livefyre-content-view',
     'streamhub-sdk/content/content-view-factory',
-    'streamhub-sdk/collection/clients/write-client',
     'streamhub-sdk/content/views/tiled-attachment-list-view'],
 function (
     $,
@@ -21,7 +20,6 @@ function (
     LivefyreTwitterContent,
     LivefyreContentView,
     ContentViewFactory,
-    LivefyreWriteClient,
     TiledAttachmentListView) {
     'use strict';
 
@@ -88,12 +86,6 @@ function (
                     expect($._data($('body')[0], 'events')).toBe(undefined);
                     likeButtonEl.trigger('click');
                     expect($._data($('body')[0], 'events').contentLike.length).toBe(1);
-                });
-
-                it("sets #_likeRequestListener flag to true", function () {
-                    expect(contentView._likeRequestListener).toBe(false);
-                    likeButtonEl.trigger('click');
-                    expect(contentView._likeRequestListener).toBe(true);
                 });
             });
 
