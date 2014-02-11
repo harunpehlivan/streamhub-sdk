@@ -32,6 +32,7 @@ inherits) {
         this._replies = opts.replies;
         this._collection = opts.collection;
         this._storage = opts.storage || Storage;
+        this._collection = opts.collection;
         Transform.call(this, opts);
     };
 

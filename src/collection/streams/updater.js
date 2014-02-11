@@ -166,9 +166,6 @@ StateToContent, Annotator, debug) {
             stateToContent = this._createStateToContent(streamData);
 
         stateToContent.on('data', function (content) {
-            if (self._collection) {
-                content.collection = self._collection;
-            }
             contents.push(content);
         });
 
