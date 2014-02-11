@@ -49,8 +49,21 @@ define([
     };
     inherits(LivefyreContentView, ContentView);
 
-    LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left > .content-control-list';
-    LivefyreContentView.prototype.footerRightSelector = '.content-footer-right > .content-control-list';
+    LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left';
+    LivefyreContentView.handleLikeClick = function (e, content) {
+        var liker = new Liker();
+        var userUri = Auth.getUserUri();
+
+        if (! content.isLiked(userUri)) {
+            liker.like(content, function () {
+                $('body').trigger('contentLike.hub');
+            });
+        } else {
+            liker.unlike(content, function () {
+                $('body').trigger('contentUnlike.hub');
+            });
+        }
+    };
 
     /**
      * Render the content inside of the LivefyreContentView's element.
@@ -59,13 +72,13 @@ define([
     LivefyreContentView.prototype.render = function () {
         ContentView.prototype.render.call(this);
         this._renderButtons();
-
         return this;
     };
 
     LivefyreContentView.prototype._handleLikeClick = function () {
         // Lazily attach event handler for contentLike
         if (! LIKE_REQUEST_LISTENER) {
+            $('body').on('contentLike.hub', function (e, content) {
                 var liker = new Liker();
                 var userUri = Auth.getUserUri();
 
@@ -76,6 +89,7 @@ define([
                 }
                 self._renderButtons();
             });
+            $('body').on('likeClick.hub', LivefyreContentView.handleLikeClick);
             LIKE_REQUEST_LISTENER = true;
         }
 
