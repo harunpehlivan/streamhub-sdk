@@ -21,7 +21,7 @@ require.config({
   },{
     name: "streamhub-sdk/auth",
     location: "src/auth"
-  }{
+  },{
     name: "streamhub-sdk/collection",
     location: "src/collection"
   },{
