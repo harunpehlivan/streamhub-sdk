@@ -99,12 +99,8 @@ define([
         if (! (this.content instanceof LivefyreContent)) {
             return;
         }
-        var likeCount = this.content.getLikeCount();
-        var likeButton = new HubToggleButton(this._handleLikeClick.bind(this), {
-            className: 'hub-content-like',
-            enabled: this.content.isLiked(Auth.getUserUri()), //TODO(ryanc): Get user id from auth
-            label: likeCount
-        });
+
+        var likeButton = this._createLikeButton();
         this.addButton(likeButton);
 
         //TODO(ryanc): Wait until we have replies on SDK
@@ -123,6 +119,20 @@ define([
         //    label: 'Share'
         //});
         //this.addButton(shareButton);
+    };
+
+    /**
+     * Create a Button to be used for Liking functionality
+     * @protected
+     */
+    LivefyreContentView.prototype._createLikeButton = function () {
+        var likeCount = this.content.getLikeCount();
+        var likeButton = new HubToggleButton(this._handleLikeClick.bind(this), {
+            className: 'content-like',
+            enabled: this.content.isLiked(Auth.getUserUri()), //TODO(ryanc): Get user id from auth
+            label: likeCount.toString()
+        });
+        return likeButton;
     };
 
     LivefyreContentView.prototype.addButton = function (button) {
