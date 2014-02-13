@@ -56,8 +56,6 @@ function (LivefyreContentView, inherits) {
     InstagramContentView.prototype.getTemplateContext = function () {
         var context = ContentView.prototype.getTemplateContext.call(this);
 
-        context.authorDisplayName = context.author.displayName;
-
         context.contentSourceName = 'instagram';
 
         return context;
