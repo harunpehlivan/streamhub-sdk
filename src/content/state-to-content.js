@@ -292,7 +292,7 @@ inherits) {
     StateToContent._addReplyOrStore = StateToContent.prototype._addReplyOrStore;
 
     StateToContent.prototype._addOpineOrStore = function (opine, targetId) {
-        var target = Storage.get(targetId);
+        var target = this._storage.get(targetId);
         if (target) {
             log('attaching attachment', arguments);
             target.addOpine(opine);
