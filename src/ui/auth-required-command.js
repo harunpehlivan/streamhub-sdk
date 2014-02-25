@@ -48,6 +48,9 @@ var AuthRequiredCommand = function (command, opts) {
     this._authCmd.on('change:canExecute', this._handleCanExecuteChange);
     if (opts.authCmd) {
         this.setAuthCommand(opts.authCmd);
+    } else {
+        var authDelegate = Auth.getDelegate();
+        this.setAuthCommand(new Command(authDelegate.login));
     }
     
     //Emit potential canExecute change whenever token is set or unset
