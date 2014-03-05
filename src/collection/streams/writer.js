@@ -39,6 +39,7 @@ function (Writable, LivefyreWriteClient, Auth, inherits) {
             network: collection.network,
             environment: collection.environment,
             collectionId: collection.id,
+            contentId: content.id,
             lftoken: Auth.getToken()
         };
 
@@ -61,6 +62,12 @@ function (Writable, LivefyreWriteClient, Auth, inherits) {
         if (content.tweetId) {
             post = this._writeClient.postTweet;
             postParams.tweetId = content.tweetId;
+        }
+
+        // Content extensions
+        if (content.extensions) {
+            postParams.contentExtensions = content.extensions;
+            this._writeClient.postContentExtensions(postParams);
         }
 
         post.call(this._writeClient, postParams, done);

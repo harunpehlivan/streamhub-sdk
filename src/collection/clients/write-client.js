@@ -175,5 +175,32 @@ function(LivefyreHttpClient, inherits) {
         }, callback);
     };
 
+    LivefyreWriteClient.prototype.postContentExtensions = function (opts, callback) {
+        opts = opts || {};
+        callback = callback || function () {};
+
+        if (! opts.contentExtensions || Object.keys(opts.contentExtensions).length === 0) {
+            callback();
+            return;
+        }
+
+        var url = [
+            this._getUrlBase(opts),
+            'api/v3.0/collection/',
+            opts.collectionId,
+            '/extensions/',
+            opts.contentId,
+            '?lftoken=',
+            opts.lftoken
+        ].join("");
+
+        this._request({
+            method: 'POST',
+            url: url,
+            dataType: 'json',
+            data: opts.contentExtensions
+        }, callback);
+    };
+
     return LivefyreWriteClient;
 });
