@@ -24,6 +24,7 @@ function(LivefyreHttpClient, inherits) {
      * @param opts.lftoken {string} The livefyre user auth token
      * @param opts.body {string} The content's body html with the following allowed tags:
      *     a, img, span, label, p, br, strong, em, u, blockquote, ul, li, ol, pre
+     * @param opts.title {string} The content's title
      * @param opts.media {array} An Array of oEmbed JSON Objects to attach to the posted Content
      * @param callback {function} A callback that is called upon success/failure of the
      *     write request. Callback signature is "function(error, data)".
@@ -40,6 +41,7 @@ function(LivefyreHttpClient, inherits) {
 
         var postData = {
             body: opts.body,
+            title: opts.title,
             lftoken: opts.lftoken
         };
 
@@ -172,33 +174,6 @@ function(LivefyreHttpClient, inherits) {
             url: url,
             dataType: 'json',
             data: postData
-        }, callback);
-    };
-
-    LivefyreWriteClient.prototype.postContentExtensions = function (opts, callback) {
-        opts = opts || {};
-        callback = callback || function () {};
-
-        if (! opts.contentExtensions || Object.keys(opts.contentExtensions).length === 0) {
-            callback();
-            return;
-        }
-
-        var url = [
-            this._getUrlBase(opts),
-            'api/v3.0/collection/',
-            opts.collectionId,
-            '/extensions/',
-            opts.contentId,
-            '?lftoken=',
-            opts.lftoken
-        ].join("");
-
-        this._request({
-            method: 'POST',
-            url: url,
-            dataType: 'json',
-            data: opts.contentExtensions
         }, callback);
     };
 
