@@ -159,12 +159,7 @@ inherits) {
         }
 
         // Content extensions
-        if (state.content.annotations.ext) {
-            for (var extension in ext) {
-                var key = Object.keys(extension)[0];
-                content.extensions[key] = extension[key];
-            }
-        }
+        content.extensions = state.content.annotations.extension;
 
         return [content];
     };
