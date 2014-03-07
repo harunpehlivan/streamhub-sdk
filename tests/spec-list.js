@@ -24,6 +24,7 @@ define(function () {
         'tests/spec/content/state-to-content',
         'tests/spec/content/annotator',
         'tests/spec/content/main',
+        'tests/spec/content/clients/content-client',
         'tests/spec/content/types/livefyre-content',
         'tests/spec/content/types/livefyre-facebook-content',
         'tests/spec/content/types/oembed',
@@ -39,8 +40,8 @@ define(function () {
         'tests/spec/modal/main',
         'tests/spec/modal/views/attachment-gallery-modal',
         'tests/spec/ui/button',
-        'tests/spec/ui/command',
-        'tests/spec/ui/auth-required-command'
+        'tests/spec/ui/command'//,
+        //'tests/spec/ui/auth-required-command'
     ];
     return specs;
 });
