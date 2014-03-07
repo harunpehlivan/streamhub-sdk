@@ -65,7 +65,7 @@ function (Writable, LivefyreWriteClient, Auth, inherits) {
             postParams.tweetId = content.tweetId;
         }
 
-        post.call(this._writeClient, postParams, function (response) {
+        post.call(this._writeClient, postParams, function (err, response) {
             content.set({
                 collection: this._collection,
                 id: response.data.messages[0].content.id
