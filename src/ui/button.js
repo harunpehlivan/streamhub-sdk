@@ -61,6 +61,11 @@ Button.prototype.template = ButtonTemplate;
  */
 Button.prototype.disabledClass = 'disabled';
 
+Button.prototype.updateLabel = function (label) {
+    this._label = label;
+    this.render();
+};
+
 Button.prototype.render = function () {
     View.prototype.render.call(this);
 };
