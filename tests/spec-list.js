@@ -23,6 +23,7 @@ define(function () {
         'tests/spec/auth/main',
         'tests/spec/content/state-to-content',
         'tests/spec/content/annotator',
+        'tests/spec/content/fetcher',
         'tests/spec/content/main',
         'tests/spec/content/clients/content-client',
         'tests/spec/content/types/livefyre-content',
