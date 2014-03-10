@@ -64,6 +64,9 @@ function (Writable, LivefyreWriteClient, Auth, inherits) {
         }
 
         post.call(this._writeClient, postParams, function (err, response) {
+            if (err) {
+                return done(err);
+            }
             content.set({
                 collection: this._collection,
                 id: response.data.messages[0].content.id
