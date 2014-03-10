@@ -87,6 +87,10 @@ inherits) {
 
         content = this._createContent(state, authors);
 
+        if (content && opts.collection) {
+            content.collection = opts.collection;
+        }
+
         // Store content with IDs in case we later get
         // replies or attachments targeting it
         if (content && content.id) {
@@ -151,10 +155,6 @@ inherits) {
         // Don't return replies if not explicitly specified
         if (isReply && ! opts.replies) {
             return;
-        }
-
-        if (opts.collection) {
-            content.collection = opts.collection;
         }
 
         if (opts.replies) {
