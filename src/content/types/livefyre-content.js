@@ -28,6 +28,7 @@ function($, Content, Annotator, LivefyreOpine, inherits) {
         json.content = json.content || {};
         json.content.annotations = json.content.annotations || {};
         this.body = json.content.bodyHtml || "";
+        this.title = json.title;
         this.source = LivefyreContent.SOURCES[json.source];
         this.id = json.content.id || json.id;
         this.author = json.author;
