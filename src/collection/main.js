@@ -34,7 +34,7 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
 
         this._collectionMeta = opts.collectionMeta;
         this._signed = opts.signed;
-        this._autoCreate = opts.autoCreate || true;
+        this._autoCreate = opts.autoCreate || true;//TODO (joao) Fix logic so it isn't always true.
         this._replies = opts.replies || false;
 
         this._bootstrapClient = opts.bootstrapClient || new LivefyreBootstrapClient();
