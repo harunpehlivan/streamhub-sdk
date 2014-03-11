@@ -71,32 +71,17 @@ Auth, Writable, Readable) {
             it('has .network', function () {
                 expect(collection.network).toBe(opts.network);
             });
+            
             it('has .siteId', function () {
                 expect(collection.siteId).toBe(opts.siteId);
             });
+            
             it('has .articleId', function () {
                 expect(collection.articleId).toBe(opts.articleId);
             });
+            
             it('has .environment', function () {
                 expect(collection.environment).toBe(opts.environment);
-            });
-            it('can fetchContent() if it has an .id', function () {
-                throw 'TODO (joao) Make this right!';
-                var spy = jasmine.createSpy('callback');
-                var opts = {
-                        network: 'livefyre.com',
-                        environment: 't402.livefyre.com',
-                        id: '10772933'
-                };
-                collection.id = '10772933';
-                
-                collection.fetchContent('26482715', spy);
-                waitsFor(function () {
-                    return spy.wasCalled;
-                }, 'callback spy to be called', 1000);
-                runs(function () {
-                    expect(spy).toHaveBeenCalled();
-                });
             });
             
             describe('.fetchContent', function () {
