@@ -54,7 +54,6 @@ function (inherits, View) {
 
         // When more content is held to be shown, show the button
         this._more.on('hold', function () {
-            debugger;
             self.$el.css('display', '');
         });
     };
