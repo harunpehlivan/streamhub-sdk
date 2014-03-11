@@ -24,7 +24,9 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
     /**
      * An Object that represents a hosted StreamHub Collection
      * @param [opts.replies=false] {boolean} Whether to stream out reply Content
-     * from the Archives and Updaters
+     *      from the Archives and Updaters
+     * @param [opts.autoCreate] {boolean} Set false to prevent from automatically
+     *      creating this collection if it doesn't alreayd exist.
      */
     var Collection = function (opts) {
         opts = opts || {};
@@ -108,8 +110,8 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
     
     /**
      * Makes a remote call to fetch a piece of content. If that content is a reply,
-     * the parent(s) will also be loaded. this.id is required before invoking this
-     * method.
+     * the parent(s) will also be loaded. this.id and this.network are required
+     * before invoking this method.
      * @param contentId {!string} ID for the piece of content desired.
      * @param callback {function(err: object, data: object)} Callback to return the content.
      * @param [depthOnly] {boolean=} Set true if you would also like all replies
@@ -132,6 +134,7 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
         opts.collection = this;
         opts.contentId = contentId;
 
+        //Send the request
         this._contentClient.getContent(opts, clbk);
         
         function clbk(err, data) {
@@ -145,12 +148,15 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
                 content,
                 contents = [];
             
+            //Prepare StateToContents to handle the recieved states
             opts.authors = data.authors;
             var trans = new StateToContent(opts);
+            
+            //Listen for states that have been transformed into Content
             trans.on('data', function (content) {
                 contents.push(content);
 
-                //Once we've receieved as many as we've written, find the desired
+                //Once we've recieved as many as we've written, find the desired
                 //Content and send it to the callback.
                 if (contents.length === statesCount) {
                     for (var j=0; j < statesCount; j++) {
@@ -164,6 +170,7 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
                 }
             });
 
+            //Write each state into StateToContent
             for (var i=0, statesCount=states.length; i < statesCount; i++) {
                 state = states[i];
                 trans.write(state);
