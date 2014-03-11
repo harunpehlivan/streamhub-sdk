@@ -5,12 +5,13 @@ var LivefyreHttpClient = require('streamhub-sdk/collection/clients/http-client')
 'use strict';
 
 /**
- * A Client for requesting Livefyre web services
- * This is private and should not be used or imported directly
- * @private
- * @param opts {object}
- * @param opts.serviceName {string} The StreamHub web service to request
- * @param opts.protocol {string} 'http:' or 'https:'
+ * Connects to the Livefyre network to grab a single comment state and
+ * related thread states
+ * @param [opts] {object}
+ * @param [opts.serviceName] {string} The StreamHub web service to request
+ * @param [opts.protocol] {string} 'http:' or 'https:'
+ * @extends {LivefyreHttpClient}
+ * @constructor
  */
 var LivefyreContentClient = function (opts) {
     opts = opts || {};
@@ -32,7 +33,7 @@ LivefyreContentClient.prototype._serviceName = 'bootstrap';
  *      replies to the specified contentId
  * @param [opts.environment] {string} Optional livefyre environment to use dev/prod environment
  * @param callback {function} A callback that is called upon success/failure of the
- *          stream request. Callback signature is "function(error, data)".
+ *      stream request. Callback signature is "function(error, data)".
  */
 LivefyreContentClient.prototype.getContent = function(opts, callback) {
     opts = opts || {};
