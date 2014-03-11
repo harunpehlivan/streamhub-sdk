@@ -50,6 +50,8 @@ define([
     inherits(LivefyreContentView, ContentView);
 
     LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left';
+    LivefyreContentView.prototype.footerRightSelector = '.content-footer-right';
+
     LivefyreContentView.handleLikeClick = function (e, content) {
         var liker = new Liker();
         var userUri = Auth.getUserUri();
@@ -135,16 +137,22 @@ define([
         return likeButton;
     };
 
-    LivefyreContentView.prototype.addButton = function (button) {
-        for (var i=0; i < this._controls.left.length; i++) {
-            if (this._controls.left[i] !== button) {
-                this._controls.left.push(button);
+    LivefyreContentView.prototype.addButton = function (button, opts) {
+        opts = opts || {};
+        opts.side = opts.side === 'right' ? 'right' : 'left';
+
+        var controlSet = this._controls[opts.side];
+
+        for (var i=0; i < controlSet.length; i++) {
+            if (controlSet[i] !== button) {
+                controlSet.push(button);
             }
         }
 
-        var footerLeft = this.$el.find(this.footerLeftSelector);
+        var footerSelector = opts.side === 'left' ? this.footerLeftSelector : this.footerRightSelector;
+        var footerSideEl = this.$el.find(footerSelector);
         var buttonContainerEl = $('<div></div>');
-        footerLeft.append(buttonContainerEl);
+        footerSideEl.append(buttonContainerEl);
 
         button.setElement(buttonContainerEl);
         button.render();
