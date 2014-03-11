@@ -95,6 +95,7 @@ define([
 
     LivefyreContentView.prototype._renderButtons = function () {
         this.$el.find(this.footerLeftSelector).empty();
+        this.$el.find(this.footerRightSelector).empty();
 
         if (! (this.content instanceof LivefyreContent)) {
             return;
