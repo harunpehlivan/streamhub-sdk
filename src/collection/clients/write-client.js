@@ -177,6 +177,30 @@ function(LivefyreHttpClient, inherits) {
         }, callback);
     };
 
+    LivefyreWriteClient.prototype.flag = function (opts, callback) {
+        opts = opts || {};
+        callback = callback || function () {};
+        var url = [
+            this._getUrlBase(opts),
+            '/api/v3.0/message/',
+            opts.contentId,
+            '/flag/',
+            opts.flagType
+        ].join("");
+
+        var postData = {
+            lftoken: opts.lftoken,
+            collection_id:  opts.collectionId
+        };
+
+        this._request({
+            method: 'POST',
+            url: url,
+            dataType: 'json',
+            data: postData
+        }, callback);
+    };
+
     LivefyreWriteClient.prototype.feature = function (opts, callback) {
         opts = opts || {};
         callback = callback || function () {};
