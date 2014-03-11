@@ -56,7 +56,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
@@ -86,7 +85,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
@@ -106,7 +104,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
@@ -126,7 +123,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
@@ -149,7 +145,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
@@ -172,7 +167,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
@@ -185,7 +179,8 @@ function(LivefyreHttpClient, inherits) {
             '/api/v3.0/message/',
             opts.contentId,
             '/flag/',
-            opts.flagType
+            opts.flagType,
+            '/'
         ].join("");
 
         var postData = {
@@ -196,7 +191,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
@@ -209,7 +203,8 @@ function(LivefyreHttpClient, inherits) {
             '/api/v3.0/collection/',
             opts.collectionId,
             '/feature/',
-            opts.contentId
+            opts.contentId,
+            '/'
         ].join("");
 
         var postData = {
@@ -219,7 +214,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
@@ -232,7 +226,8 @@ function(LivefyreHttpClient, inherits) {
             '/api/v3.0/collection/',
             opts.collectionId,
             '/unfeature/',
-            opts.contentId
+            opts.contentId,
+            '/'
         ].join("");
 
         var postData = {
@@ -242,7 +237,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
