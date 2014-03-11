@@ -86,6 +86,17 @@ function ($, LivefyreContent) {
             expect(spy.callCount).toBe(1);
             expect(content.replies.length).toBe(1);
         });
+        
+        it('calls setParent() when addReply()', function () {
+            var reply = {
+                id: '12345',
+                setParent: jasmine.createSpy()
+            };
+            content = new LivefyreContent(mockData.livefyreStreamContent);
+            
+            content.addReply(reply);
+            expect(reply.setParent).toHaveBeenCalledWith(content);
+        });
 
         describe('.isFeatured()', function () {
             it('is a method on LivefyreContent', function () {

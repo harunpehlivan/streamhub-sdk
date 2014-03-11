@@ -28,7 +28,6 @@ describe('streamhub-sdk/content/fetcher', function () {
             return spy.wasCalled;
         }, 'callback spy to be called', 1000);
         runs(function () {
-            debugger
             expect(spy).toHaveBeenCalled();
         });
     });
