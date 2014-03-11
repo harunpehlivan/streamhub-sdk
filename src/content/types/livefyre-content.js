@@ -87,7 +87,7 @@ function($, Content, Annotator, LivefyreOpine, inherits) {
             }
         }
         if (!found) {
-            obj.setParent(this);
+            obj.setParent && obj.setParent(this);
             this.replies.push(obj);
             this.emit('reply', obj);
         }
