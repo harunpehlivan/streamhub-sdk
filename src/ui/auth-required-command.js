@@ -19,11 +19,9 @@ var util = require('streamhub-sdk/util');
  * @extends {Command}
  */
 var AuthRequiredCommand = function (command, opts) {
-    if (!command || !command instanceof Command) {
-        throw 'A command needs to be specified when constructing an AuthRequiredCommand';
-    }
-    
     opts = opts || {};
+    command = command || new Command(function () {});
+    
     Command.call(this, executeFn, opts);
     
     var self = this;
@@ -49,8 +47,9 @@ var AuthRequiredCommand = function (command, opts) {
     if (opts.authCmd) {
         this.setAuthCommand(opts.authCmd);
     } else {
-        var authDelegate = Auth.getDelegate();
-        this.setAuthCommand(new Command(authDelegate.login));
+        this.setAuthCommand(new Command(function () {
+            Auth.getDelegate().login();
+        }));
     }
     
     //Emit potential canExecute change whenever token is set or unset
