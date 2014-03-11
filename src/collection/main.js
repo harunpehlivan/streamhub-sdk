@@ -7,12 +7,14 @@ define([
     'streamhub-sdk/collection/clients/bootstrap-client',
     'streamhub-sdk/collection/clients/create-client',
     'streamhub-sdk/collection/clients/write-client',
+    'streamhub-sdk/content/clients/content-client',
+    'streamhub-sdk/content/state-to-content',
     'streamhub-sdk/auth',
     'inherits',
     'streamhub-sdk/debug'],
 function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedContents,
         Duplex, LivefyreBootstrapClient, LivefyreCreateClient, LivefyreWriteClient,
-        Auth, inherits, debug) {
+        LivefyreContentClient, StateToContent, Auth, inherits, debug) {
     'use strict';
 
 
@@ -34,12 +36,13 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
 
         this._collectionMeta = opts.collectionMeta;
         this._signed = opts.signed;
-        this._autoCreate = ('autoCreate' in opts) ? opts.autoCreate : Boolean(this._collectionMeta);
+        this._autoCreate = (opts.autoCreate === false) ? false : true;
         this._maxInitAttempts = opts.maxInitAttempts || 4;
         this._replies = opts.replies || false;
 
         this._bootstrapClient = opts.bootstrapClient || new LivefyreBootstrapClient();
         this._createClient = opts.createClient || new LivefyreCreateClient();
+        this._contentClient = opts.contentClient || new LivefyreContentClient();
 
         // Internal streams
         this._writer = opts.writer || null;
@@ -100,6 +103,72 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
         opts = opts || {};
         opts.collection = this;
         return new FeaturedContents(opts);
+    };
+    
+    
+    /**
+     * Makes a remote call to fetch a piece of content. If that content is a reply,
+     * the parent(s) will also be loaded. this.id is required before invoking this
+     * method.
+     * @param contentId {!string} ID for the piece of content desired.
+     * @param callback {function(err: object, data: object)} Callback to return the content.
+     * @param [depthOnly] {boolean=} Set true if you would also like all replies
+     *          associated with the content.
+     */
+    Collection.prototype.fetchContent = function (contentId, callback, depthOnly) {
+        var opts = {};
+        if (!this.id || !this.network) {
+            throw 'Can\'t fetchContent() without this.id and this.network';
+        }
+        if (!contentId || !callback) {
+            throw 'Can\'t fetchContent() without specifying a contentId and a callback';
+        }
+        //build opts for content client and state to content
+        opts.collectionId = this.id;
+        opts.network = this.network;
+        opts.environment = this.environment;
+        opts.replies = true;
+        opts.depthOnly = depthOnly || false;
+        opts.collection = this;
+        opts.contentId = contentId;
+
+        this._contentClient.getContent(opts, clbk);
+        
+        function clbk(err, data) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            
+            var states = data.content || [],
+                state,
+                content,
+                contents = [];
+            
+            opts.authors = data.authors;
+            var trans = new StateToContent(opts);
+            trans.on('data', function (content) {
+                contents.push(content);
+
+                //Once we've receieved as many as we've written, find the desired
+                //Content and send it to the callback.
+                if (contents.length === statesCount) {
+                    for (var j=0; j < statesCount; j++) {
+                        if (contents[j] && contents[j].id === contentId) {//Must be strings
+                            callback(undefined, contents[j]);
+                            return;
+                        }
+                    }
+                    //If we get here, something went very wrong.
+                    callback('ERROR');
+                }
+            });
+
+            for (var i=0, statesCount=states.length; i < statesCount; i++) {
+                state = states[i];
+                trans.write(state);
+            }
+        }
     };
 
 

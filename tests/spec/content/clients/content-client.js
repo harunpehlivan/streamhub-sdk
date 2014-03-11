@@ -105,7 +105,6 @@ describe('streamhub-sdk/content/clients/content-client', function () {
     });
     
     describe('when constructed', function () {
-    
         it("makes requests to the right URL", function () {
             contentClient.getContent(callOpts, callback);
             expect(contentClient._request.mostRecentCall.args[0].url).toBe(
@@ -121,7 +120,9 @@ describe('streamhub-sdk/content/clients/content-client', function () {
         });
         
         xit('passes errors to the callback for getContent()', function () {
-            contentClient.getContent(callOpts, callback).error();
+            callOpts.network = 'fake';
+            callOpts.contentId = '2';
+            contentClient.getContent(callOpts, callback).fail(null, null, 'error msg');
             
             waitsFor(function() {
                 return callback.callCount > 0;
@@ -129,14 +130,13 @@ describe('streamhub-sdk/content/clients/content-client', function () {
             runs(function() {
                 expect(callback).toHaveBeenCalled();
                 expect(callback.callCount).toBe(1);
-                expect(callback.mostRecentCall.args[0]).toBeNull();
-                expect(callback.mostRecentCall.args[1]).toBeDefined();
-                expect(callback.mostRecentCall.args[1]).toBe("error msg");
+                expect(callback.mostRecentCall.args[0]).toBeDefined();
+                expect(callback.mostRecentCall.args[0]).toBe("error msg");
             });
         });
         
         it('passes successful state data to the callback for getContent()', function () {
-            contentClient.getContent(callOpts, callback).success();
+            contentClient.getContent(callOpts, callback).done(mockResponse);
             
             waitsFor(function() {
                 return callback.callCount > 0;
@@ -167,8 +167,18 @@ describe('streamhub-sdk/content/clients/content-client', function () {
             
             it('makes requests to the right opts.protocol and opts.serviceName URL', function () {
                 contentClient.getContent(callOpts, callback);
-                console.log(contentClient._request.mostRecentCall.args[0].url);
                 expect(contentClient._request.mostRecentCall.args[0].url.match('https://t402.test.')).toBeTruthy();
+            });
+        });
+        
+        describe('and called with additional opts', function () {
+            beforeEach(function () {
+                callOpts.depthOnly = true;
+            });
+            
+            it('makes a request with depth_only=true', function() {
+                contentClient.getContent(callOpts, callback);
+                expect(contentClient._request.mostRecentCall.args[0].data.depth_only).toBe(true);
             });
         });
     });
