@@ -233,6 +233,11 @@ Auth, Writable, Readable) {
 
                     collection = new Collection(opts);
                 });
+                
+                it('returns undefined if it is already in the process of initializing from bootstrap', function () {
+                    collection._isInitingFromBootstrap = true;
+                    expect(collection.initFromBootstrap()).not.toBeDefined();
+                });
 
                 it('reads from existing collections', function () {
                     spyOn(collection._bootstrapClient, "getContent").andCallFake(fnSuccessfulInit);
@@ -256,6 +261,13 @@ Auth, Writable, Readable) {
                     expect(collection._createClient.createCollection).toHaveBeenCalled();
                     expect(fnCallback).toHaveBeenCalledWith(null, mockInitResponse);
                     expect(fnCallback.callCount).toBe(1);
+                });
+                
+                it('throws when asked to create a new collection and is already in process of creating a new collection', function () {
+                    collection._isCreatingCollection = true;
+                    expect(function () {
+                        collection._createCollection();
+                    }).toThrow();
                 });
 
                 it('throws error when services are failing, without making more calls than necessary', function () {
