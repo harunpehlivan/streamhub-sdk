@@ -34,7 +34,7 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
 
         this._collectionMeta = opts.collectionMeta;
         this._signed = opts.signed;
-        this._autoCreate = opts.autoCreate || true;
+        this._autoCreate = ('autoCreate' in opts) ? opts.autoCreate : Boolean(this._collectionMeta);
         this._replies = opts.replies || false;
 
         this._bootstrapClient = opts.bootstrapClient || new LivefyreBootstrapClient();
@@ -197,13 +197,24 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
         this._isInitingFromBootstrap = true;
         this._getBootstrapInit(function (err, initData) {
             self._isInitingFromBootstrap = false;
-            if (err && err.toLowerCase() === 'not found' && this._autoCreate) {
-                this._createCollection(function (err) {
-                    if (!err) {
-                        self.initFromBootstrap();
-                    }
-                });
-                return;
+            var notFound = err && err.toLowerCase() === 'not found';
+            var errMsg;
+            if (notFound) {
+                if (this._autoCreate) {
+                    this._createCollection(function (err) {
+                        if (!err) {
+                            self.initFromBootstrap();
+                        }
+                    });
+                    return;    
+                }
+                errMsg = [
+                    'Couldnt find Collection with articleId "{articleId}"',
+                    'in {networkId}. Are you sure you passed correct info?'
+                ].join('')
+                    .replace('{articleId}', this.articleId)
+                    .replace('{networkId}', this.network);
+                throw errMsg;
             }
             if (!initData) {
                 throw 'Fatal collection connection error';
