@@ -34,7 +34,7 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
 
         this._collectionMeta = opts.collectionMeta;
         this._signed = opts.signed;
-        this._autoCreate = opts.autoCreate || true;
+        this._autoCreate = ('autoCreate' in opts) ? opts.autoCreate : Boolean(this._collectionMeta);
         this._maxInitAttempts = opts.maxInitAttempts || 4;
         this._replies = opts.replies || false;
 
