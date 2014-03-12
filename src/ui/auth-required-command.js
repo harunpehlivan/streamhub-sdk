@@ -21,7 +21,8 @@ var util = require('streamhub-sdk/util');
 var AuthRequiredCommand = function (command, opts) {
     var self = this;
     opts = opts || {};
-    this._command = command || function () {};
+    command = command || function () {};
+    this._command = command;
     Command.call(this, command, opts);
     if (this._command instanceof Command) {
         this._command.on('change:canExecute', this._emitChangeCanExecute());
