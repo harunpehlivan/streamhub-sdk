@@ -22,11 +22,7 @@ var AuthRequiredCommand = function (command, opts) {
     var self = this;
     opts = opts || {};
     command = command || function () {};
-    this._command = command;
     Command.call(this, command, opts);
-    if (this._command instanceof Command) {
-        this._command.on('change:canExecute', this._emitChangeCanExecute());
-    }
     if (opts.authenticate) {
         this._authenticate = opts.authenticate;
     }
@@ -74,13 +70,10 @@ AuthRequiredCommand.prototype.execute = function () {
  * @returns {!boolean}
  */
 AuthRequiredCommand.prototype.canExecute = function () {
-    if (this._command && ! this._command.canExecute()) {
-        return false;
-    }
     if ( ! Auth.getDelegate()) {
         return false;
     }
-    return true;
+    return Command.prototype.canExecute.apply(this, arguments);
 };
 
 /**
@@ -103,8 +96,6 @@ AuthRequiredCommand.prototype._authenticate = function (callback) {
  * Prepares this command for trash collection.
  */
 AuthRequiredCommand.prototype.destroy = function () {
-    this._command = null;
-    this._execute = null;//Command
     this._listeners = null;//EventEmitter
 };
 
