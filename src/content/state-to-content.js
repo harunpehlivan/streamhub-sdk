@@ -158,9 +158,6 @@ inherits) {
             return [content].concat(descendantContent);
         }
 
-        // Content extensions
-        content.extensions = state.content.annotations.extension;
-
         return [content];
     };
 
