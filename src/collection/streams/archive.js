@@ -243,8 +243,31 @@ inherits) {
             content = stateToContent.write(state);
         }
 
+        contents = this._sortContents(contents);
         log("created contents from bootstrapDoc", contents);
         return contents;
+    };
+
+    /**
+     * Sort an array of Contents in the ideal order for this archive's
+     * comparator.
+     */
+    CollectionArchive.prototype._sortContents = function (contentList) {
+        var contentListComparator;
+        var sortedContentList;
+        if (this._comparator === CollectionArchive.comparators.CREATED_AT_ASCENDING) {
+            contentListComparator = function (contentA, contentB) {
+                return contentA.createdAt - contentB.createdAt;
+            };
+        } else {
+            // Must be descending. That's the default.
+            // Change this if there are ever 3 comparator options
+            contentListComparator = function (contentA, contentB) {
+                return contentB.createdAt - contentA.createdAt;
+            };
+        }
+        sortedContentList = contentList.sort(contentListComparator);
+        return sortedContentList;
     };
 
     /**
