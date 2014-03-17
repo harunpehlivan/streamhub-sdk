@@ -27,6 +27,9 @@ inherits) {
      * @param [opts.bootstrapClient] {LivefyreBootstrapClient} A Client object
      *     that can request StreamHub's Bootstrap web service
      * @param [opts.replies=false] {boolean} Whether to read out reply Content
+     * @param [opts.comparator] Indicate the order in which you'd like to read
+     *     the archive. Default is CollectionArchive.comparators.CREATED_AT_DESCENDING
+     *     (newest first). You can also pass other values of CollectionArchive.comparators
      */
     var CollectionArchive = function (opts) {
         opts = opts || {};
