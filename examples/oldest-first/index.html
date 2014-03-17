@@ -43,7 +43,7 @@
                 showMore: 50,
                 el: document.getElementById("listView"),
                 comparator: function (cvA, cvB) {
-                    return cvB - cvA;
+                    return cvA.content.createdAt - cvB.content.createdAt;
                 }
             });
 
