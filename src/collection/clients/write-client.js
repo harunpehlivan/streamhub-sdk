@@ -60,6 +60,31 @@ function(LivefyreHttpClient, inherits) {
         }, callback);
     };
 
+    //POST http://quill.{network}/api/v3.0/message/{messageId}/trash/
+    LivefyreWriteClient.prototype.trashContent = function (opts, callback) {
+        opts = opts || {};
+        callback = callback || function() {};
+        var url = [
+            this._getUrlBase(opts),
+            "/api/v3.0/message/",
+            opts.contentId,
+            "/hide/"
+        ].join("");
+
+        var postData = {
+            'collection_id': opts.collectionId,
+            'site_id': opts.siteId,
+            lftoken: opts.lftoken
+        };
+        console.log(url);
+
+        this._request({
+            method: 'POST',
+            url: url,
+            data: postData
+        }, callback);
+    };
+
     /**
      * Posts a tweet to a Livefyre collection.
      * @param opts {Object} The livefyre collection options.
@@ -240,6 +265,7 @@ function(LivefyreHttpClient, inherits) {
             data: postData
         }, callback);
     };
+
 
     return LivefyreWriteClient;
 });
