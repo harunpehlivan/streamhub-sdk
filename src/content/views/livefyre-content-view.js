@@ -16,6 +16,11 @@ define([
 
     var LIKE_REQUEST_LISTENER = false;
 
+    var DEFAULT_LABELS = {
+        like: 'Like',
+        liked: 'Liked'
+    };
+
     /**
      * Defines the base class for all content-views. Handles updates to attachments
      * and loading of images.
@@ -35,6 +40,7 @@ define([
             'right': []
         };
         this._rendered = false;
+        this._labels = $.extend({}, DEFAULT_LABELS, opts.labels || {});
 
         ContentView.call(this, opts);
 
@@ -52,25 +58,34 @@ define([
     LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left';
     LivefyreContentView.prototype.footerRightSelector = '.content-footer-right';
 
+    LivefyreContentView.prototype.events = {
+        'contentLiked.hub': function (e) {
+            this._likeButton.updateLabel(this._labels.liked);
+        },
+        'contentUnliked.hub': function (e) {
+            this._likeButton.updateLabel(this._labels.like);
+        }
+    };
+
     LivefyreContentView.handleLikeClick = function (e, content) {
         var liker = new Liker();
         var userUri = Auth.getUserUri();
 
         if (! content.isLiked(userUri)) {
-            liker.like(content, function (err, data) {
+            liker.like(content, function (err, response) {
                 if (err) {
                     throw err;
                     return;
                 }
-                $('body').trigger('contentLike.hub', data);
+                $('body').trigger('contentLiked.hub', response);
             });
         } else {
-            liker.unlike(content, function (err, data) {
+            liker.unlike(content, function (err, response) {
                 if (err) {
                     throw err;
                     return;
                 }
-                $('body').trigger('contentUnlike.hub', data);
+                $('body').trigger('contentUnliked.hub', response);
             });
         }
     };
@@ -107,8 +122,8 @@ define([
             return;
         }
 
-        var likeButton = this._createLikeButton();
-        this.addButton(likeButton);
+        this._likeButton = this._createLikeButton();
+        this.addButton(this._likeButton);
 
         //TODO(ryanc): Wait until we have replies on SDK
         //var replyCommand = new Command(function () {
