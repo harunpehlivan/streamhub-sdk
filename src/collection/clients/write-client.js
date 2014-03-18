@@ -76,7 +76,6 @@ function(LivefyreHttpClient, inherits) {
             'site_id': opts.siteId,
             lftoken: opts.lftoken
         };
-        console.log(url);
 
         this._request({
             method: 'POST',
