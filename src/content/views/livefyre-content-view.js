@@ -58,14 +58,14 @@ define([
     LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left';
     LivefyreContentView.prototype.footerRightSelector = '.content-footer-right';
 
-    LivefyreContentView.prototype.events = {
+    LivefyreContentView.prototype.events = ContentView.prototype.events.extended({
         'contentLiked.hub': function (e) {
             this._likeButton.updateLabel(this._labels.liked);
         },
         'contentUnliked.hub': function (e) {
             this._likeButton.updateLabel(this._labels.like);
         }
-    };
+    });
 
     LivefyreContentView.handleLikeClick = function (e, content) {
         var liker = new Liker();
