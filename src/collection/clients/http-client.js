@@ -49,7 +49,7 @@ define(['streamhub-sdk/jquery'], function($) {
                 return;
             }
             var errorMessage = err || 'LivefyreHttpClient Error';
-            var httpError = createHttpError(errorMessage, jqXhr.status);
+            var httpError = createHttpError(errorMessage, jqXhr.status, status);
             callback(httpError);
         });
 
@@ -99,9 +99,17 @@ define(['streamhub-sdk/jquery'], function($) {
         return host;
     };
 
-    function createHttpError (message, statusCode) {
+    /**
+     * Create an Error object representing a failure to complete an HTTP request
+     * @param message {string} a developer friendly error message
+     * @param statusCode {number} HTTP status code of response, if available
+     * @param errType {string} 'error' or 'abort' if the request was aborted by
+     *     the user-agent
+     */
+    function createHttpError (message, statusCode, errType) {
         var err = new Error(message);
         err.statusCode = statusCode;
+        err.type = errType;
         return err;
     }
 
