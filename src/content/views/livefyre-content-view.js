@@ -80,10 +80,6 @@ define([
     LivefyreContentView.prototype._handleLikeClick = function () {
         // Lazily attach event handler for contentLike
         if (! LIKE_REQUEST_LISTENER) {
-            var self = this;
-            $('body').on('contentLike.hub contentUnlike.hub', function () {
-                self._renderButtons();
-            });
             $('body').on('likeClick.hub', LivefyreContentView.handleLikeClick);
             LIKE_REQUEST_LISTENER = true;
         }
