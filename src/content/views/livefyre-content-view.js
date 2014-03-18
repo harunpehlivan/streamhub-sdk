@@ -100,7 +100,7 @@ define([
         return this;
     };
 
-    LivefyreContentView.prototype._handleLikeClick = function () {
+    LivefyreContentView.prototype._initLikeButton = function () {
         // Lazily attach event handler for contentLike
         if (! LIKE_REQUEST_LISTENER) {
             $('body').on('likeClick.hub', LivefyreContentView.handleLikeClick);
@@ -149,7 +149,7 @@ define([
      */
     LivefyreContentView.prototype._createLikeButton = function () {
         var likeCount = this.content.getLikeCount();
-        var likeButton = new HubToggleButton(this._handleLikeClick.bind(this), {
+        var likeButton = new HubToggleButton(this._initLikeButton.bind(this), {
             className: 'content-like',
             enabled: this.content.isLiked(Auth.getUserUri()), //TODO(ryanc): Get user id from auth
             label: likeCount.toString()
