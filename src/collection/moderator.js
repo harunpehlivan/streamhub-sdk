@@ -9,12 +9,12 @@ define([
         this._writeClient = opts.writeClient || new LivefyreWriteClient();
     };
 
-    Moderator.prototype.trash = function (opts, callback) {
+    Moderator.prototype.trash = function (content, callback) {
         this._writeClient.trashContent({
-            contentId: opts.content.id,
-            siteId: opts.content.collection.siteId,
-            collectionId: opts.content.collection.id,
-            network: opts.content.collection.network,
+            contentId: content.id,
+            siteId: content.collection.siteId,
+            collectionId: content.collection.id,
+            network: content.collection.network,
             lftoken: Auth.getToken()
         }, callback);
     };
