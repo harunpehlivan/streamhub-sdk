@@ -77,7 +77,7 @@ define([
                     throw err;
                     return;
                 }
-                $('body').trigger('contentLiked.hub', response);
+                $(e.target).trigger('contentLiked.hub', response);
             });
         } else {
             liker.unlike(content, function (err, response) {
@@ -85,7 +85,7 @@ define([
                     throw err;
                     return;
                 }
-                $('body').trigger('contentUnliked.hub', response);
+                $(e.target).trigger('contentUnliked.hub', response);
             });
         }
     };
