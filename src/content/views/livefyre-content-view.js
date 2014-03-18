@@ -57,12 +57,20 @@ define([
         var userUri = Auth.getUserUri();
 
         if (! content.isLiked(userUri)) {
-            liker.like(content, function () {
-                $('body').trigger('contentLike.hub');
+            liker.like(content, function (err, data) {
+                if (err) {
+                    throw err;
+                    return;
+                }
+                $('body').trigger('contentLike.hub', data);
             });
         } else {
-            liker.unlike(content, function () {
-                $('body').trigger('contentUnlike.hub');
+            liker.unlike(content, function (err, data) {
+                if (err) {
+                    throw err;
+                    return;
+                }
+                $('body').trigger('contentUnlike.hub', data);
             });
         }
     };
