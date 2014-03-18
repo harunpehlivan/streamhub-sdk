@@ -22,17 +22,11 @@ var util = require('streamhub-sdk/util');
 var AuthRequiredCommand = function (command, opts) {
     var self = this;
     opts = opts || {};
-    this._authCmd = command || new Command(function () {});
-    Command.call(this, this._authCmd, opts);
+    command = command || function () {};
+    Command.call(this, command, opts);
     if (opts.authenticate) {
         this._authenticate = opts.authenticate;
     }
-
-    auth.on('delegate', function () {
-        if (auth.hasDelegate()) {
-            self.enable();
-        }
-    });
 };
 inherits(AuthRequiredCommand, Command);
 
@@ -42,10 +36,11 @@ inherits(AuthRequiredCommand, Command);
  */
 AuthRequiredCommand.prototype.execute = function () {
     var self = this;
-    var executeArgs = arguments;
-
+    var authDelegate = Auth.getDelegate();
+    var authUser = authDelegate && authDelegate.getUser();
     function isAuthenticated () {
-        return auth.get('livefyre');
+        var authenticated = authUser ? authUser.isAuthenticated() : Auth.getToken();
+        return authenticated;
     }
 
     /**
@@ -57,15 +52,9 @@ AuthRequiredCommand.prototype.execute = function () {
     }
 
     if (isAuthenticated()) {
-        doWorkWithAuth.apply(self, executeArgs);
+        doWorkWithAuth();
     } else {
-        auth.login(function (err, user) {
-            if (err) {
-                this.emit('loginError.hub', err);
-                return;
-            }
-            doWorkWithAuth.apply(self, executeArgs);
-        });
+        this._authenticate(doWorkWithAuth);
     }
 };
 
@@ -82,10 +71,26 @@ AuthRequiredCommand.prototype.execute = function () {
  * @returns {!boolean}
  */
 AuthRequiredCommand.prototype.canExecute = function () {
-    if (! auth.hasDelegate('login')) {
+    if ( ! Auth.getDelegate()) {
         return false;
     }
-    return Command.prototype.canExecute.apply(this, arguments) && this._authCmd.canExecute();
+    return Command.prototype.canExecute.apply(this, arguments);
+};
+
+/**
+ * Checks if this._authCmd can be executed, then executes it.
+ * @param [callback] {function}
+ * @protected
+ */
+AuthRequiredCommand.prototype._authenticate = function (callback) {
+    var delegate = Auth.getDelegate();
+    if ( ! delegate) {
+        return false;
+    }
+    delegate.getUser().once('login', function () {
+        callback();
+    });
+    delegate.login();
 };
 
 /**

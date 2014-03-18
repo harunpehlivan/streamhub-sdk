@@ -11,12 +11,14 @@ function (auth, inherits, EventEmitter, debug) {
      */
     var Auth = new EventEmitter();
 
+    Auth._onUserLogin = function () {
+        var token = this.getDelegate().getUser().get('token');
+        this.setToken(token);
+    }.bind(Auth);
 
     /**
      * Set the Auth token
-     * This is deprecated now. You should use the `auth` module's
-     * `.authenticate({ livefyre: token })` method
-     * But will be supported in streamhub-sdk v2 for backward compatability
+     * @deprecated
      * @param token {string} A Livefyre authentication token,
      *     as described at http://bit.ly/17SYaoT
      */
@@ -29,7 +31,38 @@ function (auth, inherits, EventEmitter, debug) {
 
     /**
      * Get the Auth token
+     * @deprecated
      * @return A token, if one has been set, else undefined
+     */
+    Auth.getToken = function () {
+        return this._token;
+    };
+
+    /**
+     * Set the Auth delegate
+     * @param authDelegate {AuthDelegate} A auth delegate instance
+     */
+    Auth.setDelegate = function (authDelegate) {
+        if (this._delegate) {
+            // remove old listener
+            this._delegate.getUser().removeListener('login', this._onUserLogin);
+        }
+        this._delegate = authDelegate;
+        this._delegate.getUser().on('login', this._onUserLogin);
+        this.emit('delegate', authDelegate);
+    };
+
+    /**
+     * Get the Auth delegate
+     * @return An auth delegate, if one has been set, else undefined
+     */
+    Auth.getDelegate = function () {
+        return this._delegate;
+    };
+
+
+    /**
+     * Get the user id for from the Auth token
      */
     Auth.getToken = function () {
         var livefyreUser = auth.get('livefyre');
@@ -38,7 +71,6 @@ function (auth, inherits, EventEmitter, debug) {
         }
         return livefyreUser.get('token');
     };
-
 
     /**
      * An Error that represents that an operation could not be performed
@@ -51,6 +83,16 @@ function (auth, inherits, EventEmitter, debug) {
     inherits(UnauthorizedError, Error);
     UnauthorizedError.prototype.name = "UnauthorizedError";
 
+    /**
+     * An Error that represents that an operation could not be performed
+     * because the user has not been authorized. Semantics like HTTP 401
+     */
+    var UnauthorizedError = function (message) {
+        Error.apply(this, arguments);
+        this.message = message;
+    };
+    inherits(UnauthorizedError, Error);
+    UnauthorizedError.prototype.name = "UnauthorizedError";
 
     Auth.UnauthorizedError = UnauthorizedError;
     return Auth;
