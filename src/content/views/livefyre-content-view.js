@@ -75,7 +75,6 @@ define([
             liker.like(content, function (err, response) {
                 if (err) {
                     throw err;
-                    return;
                 }
                 $(e.target).trigger('contentLiked.hub', response);
             });
@@ -83,7 +82,6 @@ define([
             liker.unlike(content, function (err, response) {
                 if (err) {
                     throw err;
-                    return;
                 }
                 $(e.target).trigger('contentUnliked.hub', response);
             });
