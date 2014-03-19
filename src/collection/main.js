@@ -196,7 +196,7 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
         this._isInitingFromBootstrap = true;
         this._getBootstrapInit(function (err, initData) {
             self._isInitingFromBootstrap = false;
-            var notFound = err && err.toLowerCase() === 'not found';
+            var notFound = err && err.statusCode === 404;
             var errMsg;
             if (notFound) {
                 if (this._autoCreate) {
@@ -213,10 +213,10 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
                 ].join('')
                     .replace('{articleId}', this.articleId)
                     .replace('{networkId}', this.network);
-                throw errMsg;
+                errback(errMsg);
             }
             if (!initData) {
-                throw 'Fatal collection connection error';
+                return errback("Couldn't get bootstrap init data for Collection");
             }
             var collectionSettings = initData.collectionSettings;
             self.id = collectionSettings && collectionSettings.collectionId;

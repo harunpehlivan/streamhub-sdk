@@ -61,6 +61,9 @@ StateToContent, Annotator, debug) {
             // Get the latest event and/or collection ID by initing
             // the collection from bootstrap
             return this._collection.initFromBootstrap(function (err, initData) {
+                if (err) {
+                    return self.emit('error', err);
+                }
                 var collectionSettings = initData.collectionSettings,
                     latestEvent = collectionSettings && collectionSettings.event;
                 if ( ! self._collection.id) {
