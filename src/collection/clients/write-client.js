@@ -60,10 +60,33 @@ function(LivefyreHttpClient, inherits) {
         }, callback);
     };
 
-    //POST http://quill.{network}/api/v3.0/message/{messageId}/trash/
+    LivefyreWriteClient.prototype.updateContent = function (opts, callback) {
+        opts = opts || {};
+        callback = callback || function () {};
+        var url = [
+            this._getUrlBase(opts),
+            "/api/v3.0/message/",
+            opts.contentId,
+            "/edit/"
+        ].join("");
+
+        var postData = {
+            'body': opts.body,
+            'collection_id': opts.collectionId,
+            'site_id': opts.siteId,
+            lftoken: opts.lftoken
+        };
+
+        this._request({
+            method: 'POST',
+            url: url,
+            data: postData
+        }, callback);
+    };    
+
     LivefyreWriteClient.prototype.trashContent = function (opts, callback) {
         opts = opts || {};
-        callback = callback || function() {};
+        callback = callback || function () {};
         var url = [
             this._getUrlBase(opts),
             "/api/v3.0/message/",

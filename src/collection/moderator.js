@@ -19,5 +19,16 @@ define([
         }, callback);
     };
 
+    Moderator.prototype.edit = function (content, callback) {
+        this._writeClient.updateContent({
+            body: content.body,
+            contentId: content.id,
+            siteId: content.collection.siteId,
+            collectionId: content.collection.id,
+            network: content.collection.network,
+            lftoken: Auth.getToken()
+        }, callback);
+    };
+
     return Moderator;
 });
