@@ -130,13 +130,15 @@ function($, Content, Annotator, LivefyreOpine, inherits) {
 
     /**
      * Remove an Opine from the LivefyreContent
-     * @param obj {Oembed} An LivefyreOpine instance to remove
+     * @param obj {Oembed} An LivefyreOpine instance to remove, or an id of one
      * @fires Content#removeOpine
      */
-    LivefyreContent.prototype.removeOpine = function(obj) {
+    LivefyreContent.prototype.removeOpine = function(objOrId) {
         var indexToRemove = null;
+        var idToRemove = objOrId.id || objOrId;
+        var removedObj;
         for (var i=0; i < this.opines.length; i++) {
-            if (obj.id === this.opines[i].id) {
+            if (idToRemove === this.opines[i].id) {
                 indexToRemove = i;
                 break;
             }
@@ -144,9 +146,9 @@ function($, Content, Annotator, LivefyreOpine, inherits) {
         if (indexToRemove === null) {
             return;
         }
-        this.opines.splice(indexToRemove, 1);
+        removedObj = this.opines.splice(indexToRemove, 1)[0];
         this._likes--;
-        this.emit('removeOpine', obj);
+        this.emit('removeOpine', removedObj);
     };
 
     LivefyreContent.prototype.getLikeCount = function () {
