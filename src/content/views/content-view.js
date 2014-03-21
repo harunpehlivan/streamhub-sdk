@@ -63,6 +63,9 @@ define([
         'imageLoaded.hub': function(e) {
             this.$el.addClass(this.contentWithImageClass);
             this.$el.removeClass(this.imageLoadingClass);
+
+            e.stopPropagation();
+            this.$el.parent().trigger('imageLoaded.hub', { contentView: this });
         },
         'imageError.hub': function(e, oembed) {
             this.content.removeAttachment(oembed);
@@ -71,6 +74,9 @@ define([
                 this.$el.removeClass(this.contentWithImageClass);
                 this.$el.removeClass(this.imageLoadingClass);
             }
+
+            e.stopPropagation();
+            this.$el.parent().trigger('imageError.hub', { oembed: oembed, contentView: this });
         }
     }, function (events) {
         events['click ' + this.headerElSelector] = function(e) {
