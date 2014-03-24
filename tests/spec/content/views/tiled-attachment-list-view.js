@@ -204,7 +204,7 @@ function($, jasmineJquery, Content, TiledAttachmentListView) {
                 }
                 tiledAttachmentEl = tiledAttachmentListView.$el.find('.content-attachment:first');
 
-                var spyFocusAttachmentEvent = spyOnEvent(tiledAttachmentEl[0], 'focusContent.hub');
+                var spyFocusAttachmentEvent = spyOnEvent(tiledAttachmentListView.el, 'focusContent.hub');
                 var tileClicked = false;
                 tiledAttachmentListView.$el.on('focusContent.hub', function() {
                     tileClicked = true;

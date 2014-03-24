@@ -45,14 +45,17 @@ function($, View, OembedPhotoTemplate, OembedVideoTemplate, OembedLinkTemplate, 
     };
 
     OembedView.prototype.events = View.prototype.events.extended({
-        'click': function (e) {
-             e.stopPropagation();
-             console.log(self.content, self.oembed);
-             self.$el.parent().trigger('click', {
-                 oembed: self.oembed
-             });
-        }
+        'click': '_handleClick'
     });
+
+    OembedView.prototype._handleClick = function (e) {
+         e.stopPropagation();
+         this.$el.off('click');
+         this.$el.trigger('click', {
+            oembed: this.oembed
+         });
+         this.$el.on('click', this._handleClick.bind(this));
+    };
 
     /**
      * Renders the template and appends itself to this.el
