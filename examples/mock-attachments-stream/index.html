@@ -34,7 +34,7 @@
             
             var feed = window.view = new ListView({
                 el: document.getElementById("feed"),
-                modal: false
+                modal: true
             });
 
             (new MockAttachmentsStream()).pipe(feed);
