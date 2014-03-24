@@ -22,11 +22,12 @@ function($, View, OembedPhotoTemplate, OembedVideoTemplate, OembedLinkTemplate, 
      * @constructor
      */
     var OembedView = function(opts) {
-        View.call(this);
         this.oembed = opts.oembed || {};
         if (!this.oembed) {
             return;
         }
+
+        View.call(this);
         this.template = this.OEMBED_TEMPLATES[this.oembed.type];
     };
     inherits(OembedView, View);
@@ -42,6 +43,16 @@ function($, View, OembedPhotoTemplate, OembedVideoTemplate, OembedLinkTemplate, 
         'link':  OembedLinkTemplate,
         'rich':  OembedRichTemplate
     };
+
+    OembedView.prototype.events = View.prototype.events.extended({
+        'click': function (e) {
+             e.stopPropagation();
+             console.log(self.content, self.oembed);
+             self.$el.parent().trigger('click', {
+                 oembed: self.oembed
+             });
+        }
+    });
 
     /**
      * Renders the template and appends itself to this.el

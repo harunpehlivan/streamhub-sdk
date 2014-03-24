@@ -33,6 +33,12 @@ function ($, View, AttachmentListView, OembedView, TiledAttachmentListTemplate, 
     TiledAttachmentListView.prototype.horizontalTileClassName = 'content-attachment-horizontal-tile';
     TiledAttachmentListView.prototype.contentAttachmentSelector = '.content-attachment';
 
+    TiledAttachmentListView.prototype.events = AttachmentListView.prototype.events.extended({
+        'click': function (e, opts) {
+            opts = opts || {};
+            $(e.target).trigger('focusContent.hub', { content: this.content, attachmentToFocus: opts.oembed });
+        }
+    });
 
     TiledAttachmentListView.prototype.render = function () {
         AttachmentListView.prototype.render.call(this);
@@ -72,17 +78,7 @@ function ($, View, AttachmentListView, OembedView, TiledAttachmentListTemplate, 
      * @returns {AttachmentListView} By convention, return this instance for chaining
      */
     TiledAttachmentListView.prototype.add = function (oembed) {
-        var self = this;
-        var oembedView = AttachmentListView.prototype.add.call(this, oembed);
-
-        oembedView.$el.on('click', function(e) {
-            /**
-             * Focus content
-             * @event TiledAttachmentListView#focusContent.hub
-             */
-            $(e.target).trigger('focusContent.hub', { content: self.content, attachmentToFocus: oembedView.oembed });
-        });
-
+        AttachmentListView.prototype.add.call(this, oembed);
         this.retile();
         return this;
     };
