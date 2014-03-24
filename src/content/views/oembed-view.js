@@ -23,11 +23,11 @@ function($, View, OembedPhotoTemplate, OembedVideoTemplate, OembedLinkTemplate, 
      */
     var OembedView = function(opts) {
         this.oembed = opts.oembed || {};
+        View.call(this);
+
         if (!this.oembed) {
             return;
         }
-
-        View.call(this);
         this.template = this.OEMBED_TEMPLATES[this.oembed.type];
     };
     inherits(OembedView, View);
