@@ -46,6 +46,11 @@ function($, View, OembedView, AttachmentListTemplate, inherits) {
             return;
         }
 
+        if ( ! content.theViews) {
+            content.theViews = []
+        }
+        content.theViews.push(this);
+
         // If this was previously managing different Content
         if (this.content) {
             // Remove existing attachment views
@@ -75,12 +80,17 @@ function($, View, OembedView, AttachmentListTemplate, inherits) {
      * @returns this
      */
     AttachmentListView.prototype.setElement = function (element) {
+        debugger;
         var ret = View.prototype.setElement.apply(this, arguments);
         this.$el.attr(this.listLengthAttribute, this.count());
         return ret;
     };
 
     AttachmentListView.prototype.render = function () {
+        if (this._rendered) {
+            debugger;
+            return;
+        }
         var self = this;
         View.prototype.render.call(this);
         this._rendered = true;

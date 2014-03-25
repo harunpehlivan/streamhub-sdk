@@ -51,10 +51,13 @@
             'streamhub-sdk/content/types/livefyre-facebook-content',
             'streamhub-sdk/content/types/livefyre-content',
             'streamhub-sdk/content/types/livefyre-oembed',
+            'streamhub-sdk/content/content-view-factory',
             'streamhub-sdk/content/views/content-view',
             'streamhub-sdk/content/views/facebook-content-view',
             'streamhub-sdk/content/views/twitter-content-view'],
-        function (Content, LivefyreTweet, Oembed, LivefyreFacebookContent, LivefyreContent, LivefyreOembed, ContentView, FacebookContentView, TwitterContentView) {
+        function (Content, LivefyreTweet, Oembed, LivefyreFacebookContent, LivefyreContent, LivefyreOembed, ContentViewFactory, ContentView, FacebookContentView, TwitterContentView) {
+
+            var contentViewFactory = new ContentViewFactory();
 
             var mockData = {};
             mockData.livefyreContent = {"source":5,"content":{"replaces":"","parentId":"","bodyHtml":"<p>first</p>","id":"26377292","authorId":"_u1975@livefyre.com","updatedAt":1359696267,"annotations":{"moderator":true},"createdAt":1359696267},"vis":1,"type":0,"event":1359696267541618,"childContent":[],"author":{"displayName":"markdoten","tags":[],"profileUrl":"http://www.t402.livefyre.com/profile/1975/","avatar":"http://d10g4z0y9q0fip.cloudfront.net/a/1/a26fc9513108c64ecdeef1809f2815e8/50.jpg","type":1,"id":"_u1975@livefyre.com"}}
@@ -62,6 +65,7 @@
             mockData.livefyreTwitterContent = {"source":1,"content":{"replaces":"","parentId":"","bodyHtml":"Chronicles of Riddick. Every time.","id":"tweet-297510939517939713@twitter.com","authorId":"16275037@twitter.com","updatedAt":1359767110,"annotations":{},"createdAt":1359767110},"vis":1,"type":0,"event":1359767110368889,"childContent":[],"author":{"displayName":"joemfbrown","tags":[],"profileUrl":"http://twitter.com/#!/joemfbrown","avatar":"http://a0.twimg.com/profile_images/2190838404/me_normal.jpg","type":3,"id":"16275037@twitter.com"}};
             mockData.livefyreFacebookContent = {"source": 14, "content": {"replaces": "", "parentId": "", "bodyHtml": "<div class='fyre-facebook-entry'>My house with Tamberly Kennedy jammin by the fire</div><div class='fyre-facebook-entry fyre-image'>http://www.facebook.com/photo.php?fbid=598374453508425&set=pcb.598375046841699&type=1&relevant_count=3</div>", "id": "1e2aa20a21caad80e0661f94ecc26d14", "authorId": "100000076278740@facebook.com", "updatedAt": 1366506808, "annotations": {}, "createdAt": 1366506807}, "vis": 1, "type": 0, "event": 1366506809748878, "author": {"displayName": "Ryan Boone", "tags": [], "profileUrl": "http://www.facebook.com/profile.php?id=100000076278740", "avatar": "https://graph.facebook.com/100000076278740/picture", "type": 4, "id": "100000076278740@facebook.com"}};
 
+            /*
             var c1 = new LivefyreContent(mockData.livefyreContent);
             var c1v = new ContentView({
                 content: c1,
@@ -75,7 +79,7 @@
                 el: document.getElementById('c2')
             });
             c2v.render();
-
+            */
             var c3 = new Content('<p>Woah</p>');
             c3.attachments = [{
                 "version": "1.0",
@@ -89,12 +93,12 @@
                 "provider_name": "Flickr",
                 "provider_url": "http://www.flickr.com/"
             }]
-            var c3v = new ContentView({
-                content: c3,
-                el: document.getElementById('c3')
-            });
+            var c3v = contentViewFactory.createContentView(c3);
+            c3v.setElement(document.getElementById('c3'));
             c3v.render();
-
+            debugger;
+            c3v.render();
+            /*
             var c4 = new LivefyreTweet(mockData.livefyreTwitterContent);
             c4.addAttachment(new Oembed({
                 "version": "1.0",
@@ -149,6 +153,7 @@
                 el: document.getElementById('c6')
             });
             c6v.render();
+            */
         });
         </script>
     </body>

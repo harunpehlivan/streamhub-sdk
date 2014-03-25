@@ -23,7 +23,8 @@ function($, View, OembedPhotoTemplate, OembedVideoTemplate, OembedLinkTemplate, 
      */
     var OembedView = function(opts) {
         this.oembed = opts.oembed || {};
-        View.call(this);
+        debugger;
+        View.apply(this, arguments);
 
         if (!this.oembed) {
             return;
@@ -43,6 +44,17 @@ function($, View, OembedPhotoTemplate, OembedVideoTemplate, OembedLinkTemplate, 
         'link':  OembedLinkTemplate,
         'rich':  OembedRichTemplate
     };
+
+    OembedView.prototype.events = View.prototype.events.extended({
+        click: function (e) {
+            debugger;
+        }
+    });
+
+    OembedView.prototype.setElement = function (el) {
+        debugger;
+        return View.prototype.setElement.apply(this, arguments);
+    }
 
     /**
      * Renders the template and appends itself to this.el

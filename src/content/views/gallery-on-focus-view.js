@@ -14,42 +14,59 @@ define([
 		opts = opts || {};
 		this._isGallery = false;
 		this._initialView = initialView;
-		AttachmentListView.call(this, opts);
+        this._rendered = false;
+        this._renderedInitialView = false;
+		View.call(this, opts);
+        if (opts.content) {
+            this.setContent(opts.content);
+        }
 	};
-	inherits(GalleryOnFocusView, AttachmentListView);
+	inherits(GalleryOnFocusView, View);
+
+    GalleryOnFocusView.prototype.events = View.prototype.events.extended({
+        'click': function () {
+            debugger
+        },
+        'focusContent.hub': function () {
+            debugger
+        }
+    })
 
 	GalleryOnFocusView.prototype.setContent = function (content) {
 		this._initialView.setContent(content);
-		AttachmentListView.prototype.setContent.call(this, content);
 	};
 
 	GalleryOnFocusView.prototype.add = function (attachment) {
-		AttachmentListView.prototype.add.call(this, attachment);
-		//this._initialView.add(attachment);
+        debugger;
+        AttachmentListView.prototype.add.call(this, attachment);
 		if (this._focusedView) {
 			this._focusedView.add(attachment);
 		}
 	};
-
+    var renderCount = 0;
 	GalleryOnFocusView.prototype.render = function () {
-		AttachmentListView.prototype.render.call(this);
-		this._initialView.$el.appendTo(this.$el);
-		this._initialView.render();
-	};
-
-
-	GalleryOnFocusView.prototype._insert = function (oembedView) {
-		// Don't actually put anything in DOM. Subviews will do that.
-	};
-
-    GalleryOnFocusView.prototype.tileableCount = function () {
-        if (this._initialView.tileableCount) {
-            return this._initialView.tileableCount();
+        renderCount++;
+        if (this._rendered) {
+            return;
         }
+		View.prototype.render.call(this);
+        console.log('GalleryOnFocusView render', Math.random());
+        debugger;
+		this._initialView.$el.appendTo(this.$el);
+        if ( ! this._renderedInitialView) {
+            this._initialView.render();
+            this._renderedInitialView = true;
+        }
+        this._rendered = true;
+	};
 
-        return 0;
+    GalleryOnFocusView.prototype.setElement = function (el) {
+        var self = this;
+        debugger;
+        var ret = View.prototype.setElement.apply(this, arguments);
+        this._rendered = false;
+        return ret;
     };
-
 
 	GalleryOnFocusView.prototype.focus = function (attachment) {
 		if (this._isGallery || (attachment.type !== 'photo' && attachment.type !== 'video')) {

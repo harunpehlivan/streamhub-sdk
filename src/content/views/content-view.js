@@ -29,7 +29,6 @@ define([
         this.createdAt = new Date();
         this.template = opts.template || this.template;
         this.attachmentsView = opts.attachmentsView;
-
         View.call(this, opts);
 
         if (this.content) {
@@ -61,7 +60,7 @@ define([
 
     ContentView.prototype.events = View.prototype.events.extended({
         'imageLoaded.hub': function(e) {
-            this.$el.addClass(this.contentWithImageClass);
+            //this.$el.addClass(this.contentWithImageClass);
             this.$el.removeClass(this.imageLoadingClass);
 
             e.stopPropagation();
