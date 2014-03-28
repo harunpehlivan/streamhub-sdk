@@ -129,16 +129,8 @@ Auth, Writable, Readable) {
                         },
                         signed: false
                     };
-
-                    function createHttpError (message, statusCode, errType) {
-                        var err = new Error(message);
-                        err.statusCode = statusCode;
-                        err.type = errType;
-                        return err;
-                    }
-
                     //Faked responses
-                    mock404Response = createHttpError("Not Found", 404);;//{"msg": "", "status": "error", "error_type": "ResourceDoesNotExist", "trace": "Traceback (most recent call last):\n  File... raise ResourceDoesNotExist()\nResourceNotFoundError\n", "code": 404};
+                    mock404Response = "Not Found";//{"msg": "", "status": "error", "error_type": "ResourceDoesNotExist", "trace": "Traceback (most recent call last):\n  File... raise ResourceDoesNotExist()\nResourceNotFoundError\n", "code": 404};
                     mock400Response = "Bad Request";//{"msg": "Cannot create a collection without an articleId: {\"url\": \"http://www.fake.com\", \"tags\": \"test,wall\", \"title\": \"Media Wall Example\"}.", "status": "error", "error_type": "BadRequestError", "trace": "Traceback (most recent call last):\n  File... raise BadRequestError(\"Cannot create a collection without an articleId: %s.\" % json.dumps(collection_meta))\nBadDataError: Cannot create a collection without an articleId: {\"url\": \"http://www.fake.com\", \"tags\": \"test,wall\", \"title\": \"Media Wall Example\"}.\n", "code": 400}
                     mock409Response = "Conflict";
                     mock500Response = "Internal Server Error";//{"msg": "", "status": "error", "code": 500};
