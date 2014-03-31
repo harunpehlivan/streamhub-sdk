@@ -64,7 +64,8 @@ define([
 
     /**
      * Makes the modal and its content visible
-     * @param modalSubView {View} The view to be displayed in the by the modal
+     * @param [modalSubView] {View} The view to be displayed in the by the modal.
+     *      Defaults to this._modalSubView
      */
     ModalView.prototype.show = function (modalSubView) {
         // First hide any other modals
@@ -82,7 +83,7 @@ define([
             this._attach();
         }
 
-        this._modalSubView = modalSubView;
+        this._modalSubView = modalSubView || this._modalSubView;
 
         this.render();
 
