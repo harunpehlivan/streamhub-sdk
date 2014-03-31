@@ -54,7 +54,7 @@ function (LivefyreContentView, inherits) {
      * @return {Content} The content object this view was instantiated with.
      */
     InstagramContentView.prototype.getTemplateContext = function () {
-        var context = ContentView.prototype.getTemplateContext.call(this);
+        var context = LivefyreContentView.prototype.getTemplateContext.call(this);
 
         context.contentSourceName = 'instagram';
 

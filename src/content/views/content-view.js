@@ -1,7 +1,7 @@
 define([
     'streamhub-sdk/jquery',
     'streamhub-sdk/view',
-    'streamhub-sdk/ui/button/hub-button',
+    'streamhub-sdk/ui/hub-button',
     'hgn!streamhub-sdk/content/templates/content',
     'streamhub-sdk/util',
     'inherits',
