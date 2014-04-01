@@ -407,49 +407,47 @@
         .content-source-logo {
             background-position: -24px 0;
         }
-        .content-action {
-            padding: 0;
-            margin-right: 5px;
-            display: block;
-            float: left;
-            text-indent: -99999px;
+        
+        .hub-content-action-favorite {
+            width: 18px;
+            height: 18px;
+            background-position: center;
             background-repeat: no-repeat;
-            
-            &.content-action-favorite {
-                width: 18px;
-                height: 18px;
-                background-image: data-uri('../images/favorite.png');
-                margin-top: 3px;
-                &:hover {
-                    background-image: data-uri('../images/favorite_hover.png');
-                }
-                &:active {
-                    background-image: data-uri('../images/favorite_active.png');
-                }
+            background-image: data-uri('../images/favorite.png');
+            margin-top: 3px;
+            &:hover {
+                background-image: data-uri('../images/favorite_hover.png');
             }
-            &.content-action-reply {
-                width: 23px;
-                height: 16px;
-                margin-top: 4px;
-                background-image: data-uri('../images/reply.png');
-                &:hover {
-                    background-image: data-uri('../images/reply_hover.png');
-                }
-                &:active {
-                    background-image: data-uri('../images/reply_active.png');
-                }
+            &:active {
+                background-image: data-uri('../images/favorite_active.png');
             }
-            &.content-action-retweet {
-                width: 27px;
-                height: 14px;
-                margin-top: 4px;
-                background-image: data-uri('../images/retweet.png');
-                &:hover {
-                    background-image: data-uri('../images/retweet_hover.png');
-                }
-                &:active {
-                    background-image: data-uri('../images/retweet_active.png');
-                }
+        }
+        .hub-content-action-reply {
+            width: 23px;
+            height: 16px;
+            margin-top: 4px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-image: data-uri('../images/reply.png');
+            &:hover {
+                background-image: data-uri('../images/reply_hover.png');
+            }
+            &:active {
+                background-image: data-uri('../images/reply_active.png');
+            }
+        }
+        .hub-content-action-retweet {
+            width: 27px;
+            height: 14px;
+            margin-top: 4px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-image: data-uri('../images/retweet.png');
+            &:hover {
+                background-image: data-uri('../images/retweet_hover.png');
+            }
+            &:active {
+                background-image: data-uri('../images/retweet_active.png');
             }
         }
     }
