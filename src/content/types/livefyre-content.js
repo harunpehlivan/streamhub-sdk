@@ -93,8 +93,17 @@ function($, Content, Annotator, LivefyreOpine, inherits) {
         }
     };
 
+    LivefyreContent.prototype.addLike = function (authorId) {
+        this._likes++;
+    };
+
+    LivefyreContent.prototype.removeLike = function (authorId) {
+        this._likes--;
+    };
+
     /**
      * Add a opine to the Content while first checking for an existing opine.
+     * Using v3.0 api, so any opine is assumed to be a Like.
      * @param obj {Content} A piece of Content in reply to this one
      * @fires Content#opine
      */
@@ -130,6 +139,7 @@ function($, Content, Annotator, LivefyreOpine, inherits) {
 
     /**
      * Remove an Opine from the LivefyreContent
+     * Using v3.0 api, so any opine is assumed to be a Like.
      * @param obj {Oembed} An LivefyreOpine instance to remove, or an id of one
      * @fires Content#removeOpine
      */

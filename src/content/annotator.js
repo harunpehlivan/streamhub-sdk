@@ -101,6 +101,29 @@ define([
         changeSet.moderator = false;
     };
 
+    //likedBy
+
+    Annotator.prototype.added.likedBy = function (changeSet, annotationValue, content) {
+        for (var i=0; i < annotationValue.length; i++) {
+            content.addLike(annotationValue[i]);
+        }
+        changeSet.likedBy = annotationValue;
+    };
+
+    Annotator.prototype.updated.likedBy = function (changeSet, annotationValue, content) {
+        this.added.likedBy.apply(this, arguments);
+    };
+
+    Annotator.prototype.removed.likedBy = function (changeSet, annotationValue, content) {
+        var likes = content.likedBy.slice(0) || [];
+        for (var i=0; i < annotationValue.length; i++) {
+            var like = annotationValue[i];
+            likes.splice(likes.indexOf(like), 1);
+            content.removeLike(like);
+        }
+        changeSet.likedBy = likes;
+    };
+
     // Content Extensions
     Annotator.prototype.added.extension = function (changeSet, addedExtensions, content) {
         var existingExtensions = content.extensions || {};
