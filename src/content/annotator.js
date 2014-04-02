@@ -107,7 +107,6 @@ define([
         for (var i=0; i < annotationValue.length; i++) {
             content.addLike(annotationValue[i]);
         }
-        changeSet.likedBy = annotationValue;
     };
 
     Annotator.prototype.updated.likedBy = function (changeSet, annotationValue, content) {
@@ -121,7 +120,6 @@ define([
             likes.splice(likes.indexOf(like), 1);
             content.removeLike(like);
         }
-        changeSet.likedBy = likes;
     };
 
     // Content Extensions

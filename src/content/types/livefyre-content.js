@@ -94,11 +94,13 @@ function($, Content, Annotator, LivefyreOpine, inherits) {
     };
 
     LivefyreContent.prototype.addLike = function (authorId) {
-        this._likes++;
+        var opine = LivefyreOpine.adaptLikedBy(authorId, this);
+        this.addOpine(opine);
     };
 
     LivefyreContent.prototype.removeLike = function (authorId) {
-        this._likes--;
+        var opine = LivefyreOpine.adaptLikedBy(authorId, this);
+        this.removeOpine(opine);
     };
 
     /**
