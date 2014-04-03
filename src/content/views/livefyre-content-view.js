@@ -48,10 +48,6 @@ define([
         return this;
     };
 
-    LivefyreContentView.prototype._handleShare = function () {
-        this.$el.trigger('contentShare.hub', this.content);
-    };
-
     LivefyreContentView.prototype._renderButtons = function () {
         this.$el.find(this.footerLeftSelector).empty();
         this.$el.find(this.footerRightSelector).empty();
