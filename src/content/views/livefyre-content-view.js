@@ -6,15 +6,12 @@ define([
     'streamhub-sdk/content/types/livefyre-opine',
     'streamhub-sdk/ui/hub-button',
     'streamhub-sdk/ui/hub-toggle-button',
-    'streamhub-sdk/collection/liker',
     'hgn!streamhub-sdk/content/templates/content',
     'streamhub-sdk/util',
     'inherits',
     'streamhub-sdk/debug'
-], function ($, Auth, ContentView, LivefyreContent, LivefyreOpine, HubButton, HubToggleButton, Liker, ContentTemplate, util, inherits, debug) {
+], function ($, Auth, ContentView, LivefyreContent, LivefyreOpine, HubButton, HubToggleButton, ContentTemplate, util, inherits, debug) {
     'use strict';
-
-    var LIKE_REQUEST_LISTENER = false;
 
     /**
      * Defines the base class for all content-views. Handles updates to attachments
@@ -50,20 +47,6 @@ define([
     inherits(LivefyreContentView, ContentView);
 
     LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left';
-    LivefyreContentView.handleLikeClick = function (e, content) {
-        var liker = new Liker();
-        var userUri = Auth.getUserUri();
-
-        if (! content.isLiked(userUri)) {
-            liker.like(content, function () {
-                $('body').trigger('contentLike.hub');
-            });
-        } else {
-            liker.unlike(content, function () {
-                $('body').trigger('contentUnlike.hub');
-            });
-        }
-    };
 
     /**
      * Render the content inside of the LivefyreContentView's element.
@@ -73,20 +56,6 @@ define([
         ContentView.prototype.render.call(this);
         this._renderButtons();
         return this;
-    };
-
-    LivefyreContentView.prototype._handleLikeClick = function () {
-        // Lazily attach event handler for contentLike
-        if (! LIKE_REQUEST_LISTENER) {
-            var self = this;
-            $('body').on('contentLike.hub contentUnlike.hub', function () {
-                self._renderButtons();
-            });
-            $('body').on('likeClick.hub', LivefyreContentView.handleLikeClick);
-            LIKE_REQUEST_LISTENER = true;
-        }
-
-        this.$el.trigger('likeClick.hub', this.content);
     };
 
     LivefyreContentView.prototype._handleShare = function () {
@@ -101,8 +70,10 @@ define([
             return;
         }
 
-        var likeButton = this._createLikeButton();
-        this.addButton(likeButton);
+        //TODO(ryanc): Wait until we have auth
+        // to add like button
+        //var likeButton = this._createLikeButton();
+        //this.addButton(likeButton);
 
         //TODO(ryanc): Wait until we have replies on SDK
         //var replyCommand = new Command(function () {
@@ -120,20 +91,6 @@ define([
         //    label: 'Share'
         //});
         //this.addButton(shareButton);
-    };
-
-    /**
-     * Create a Button to be used for Liking functionality
-     * @protected
-     */
-    LivefyreContentView.prototype._createLikeButton = function () {
-        var likeCount = this.content.getLikeCount();
-        var likeButton = new HubToggleButton(this._handleLikeClick.bind(this), {
-            className: 'content-like',
-            enabled: this.content.isLiked(Auth.getUserUri()), //TODO(ryanc): Get user id from auth
-            label: likeCount.toString()
-        });
-        return likeButton;
     };
 
     LivefyreContentView.prototype.addButton = function (button) {
