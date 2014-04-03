@@ -3,14 +3,18 @@ define([
     'streamhub-sdk/auth',
     'streamhub-sdk/content/views/content-view',
     'streamhub-sdk/content/types/livefyre-content',
+    'streamhub-sdk/content/types/livefyre-opine',
     'streamhub-sdk/ui/hub-button',
     'streamhub-sdk/ui/hub-toggle-button',
+    'streamhub-sdk/collection/liker',
     'hgn!streamhub-sdk/content/templates/content',
     'streamhub-sdk/util',
     'inherits',
     'streamhub-sdk/debug'
-], function ($, Auth, ContentView, LivefyreContent, HubButton, HubToggleButton, ContentTemplate, util, inherits, debug) {
+], function ($, Auth, ContentView, LivefyreContent, LivefyreOpine, HubButton, HubToggleButton, Liker, ContentTemplate, util, inherits, debug) {
     'use strict';
+
+    var LIKE_REQUEST_LISTENER = false;
 
     /**
      * Defines the base class for all content-views. Handles updates to attachments
@@ -36,6 +40,15 @@ define([
         this._setShareCommand(opts.shareCommand);
 
         ContentView.call(this, opts);
+
+        if (this.content) {
+            this.content.on("opine", function(content) {
+                this._renderButtons();
+            }.bind(this));
+            this.content.on("removeOpine", function(content) {
+                this._renderButtons();
+            }.bind(this));
+        }
     };
     inherits(LivefyreContentView, ContentView);
 
@@ -55,11 +68,6 @@ define([
         this.$el.find(this.footerLeftSelector).empty();
         this.$el.find(this.footerRightSelector).empty();
 
-        //TODO(ryanc): Wait until we have auth
-        // to add like button
-        //var likeButton = this._createLikeButton();
-        //this.addButton(likeButton);
-
         //TODO(ryanc): Wait until we have replies on SDK
         //var replyCommand = new Command(function () {
         //    self.$el.trigger('contentReply.hub');
@@ -70,9 +78,30 @@ define([
         //});
         //this.addButton(replyButton);
 
+        if (! (this.content instanceof LivefyreContent)) {
+            return;
+        }
+
+        var likeButton = this._createLikeButton();
+        this.addButton(likeButton);
+
+
         this._renderShareButton();
     };
 
+    /**
+     * Create a Button to be used for Liking functionality
+     * @protected
+     */
+    LivefyreContentView.prototype._createLikeButton = function () {
+        var likeCount = this.content.getLikeCount();
+        var likeButton = new HubToggleButton(this._handleLikeClick.bind(this), {
+            className: 'content-like',
+            enabled: this.content.isLiked(Auth.getUserUri()), //TODO(ryanc): Get user id from auth
+            label: likeCount.toString()
+        });
+        return likeButton;
+    };
     /**
      * Render a Share Button
      * @protected
