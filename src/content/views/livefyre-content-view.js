@@ -3,14 +3,13 @@ define([
     'streamhub-sdk/auth',
     'streamhub-sdk/content/views/content-view',
     'streamhub-sdk/content/types/livefyre-content',
-    'streamhub-sdk/content/types/livefyre-opine',
     'streamhub-sdk/ui/hub-button',
     'streamhub-sdk/ui/hub-toggle-button',
     'hgn!streamhub-sdk/content/templates/content',
     'streamhub-sdk/util',
     'inherits',
     'streamhub-sdk/debug'
-], function ($, Auth, ContentView, LivefyreContent, LivefyreOpine, HubButton, HubToggleButton, ContentTemplate, util, inherits, debug) {
+], function ($, Auth, ContentView, LivefyreContent, HubButton, HubToggleButton, ContentTemplate, util, inherits, debug) {
     'use strict';
 
     /**
@@ -34,15 +33,6 @@ define([
         this._rendered = false;
 
         ContentView.call(this, opts);
-
-        if (this.content) {
-            this.content.on("opine", function(content) {
-                this._renderButtons();
-            }.bind(this));
-            this.content.on("removeOpine", function(content) {
-                this._renderButtons();
-            }.bind(this));
-        }
     };
     inherits(LivefyreContentView, ContentView);
 

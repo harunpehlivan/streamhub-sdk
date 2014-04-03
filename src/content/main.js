@@ -28,7 +28,6 @@ define([
         this.visibility = Content.enums.visibility[vis];
         this.attachments = obj.attachments || [];
         this.replies = obj.replies || [];
-        this.opines = obj.opines || [];
     };
     inherits(Content, EventEmitter);
 

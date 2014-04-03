@@ -29,18 +29,19 @@ function (LivefyreContentView, Button, inherits) {
         LivefyreContentView.prototype.render.call(this);
 
         if (! this._rendered) {
-            var likeButton = new Button(undefined, {
-                elClassPrefix: 'hub',
-                className: 'hub-content-like'
-            });
-            var shareButton = new Button(undefined, {
-                elClassPrefix: 'hub',
-                className: 'hub-btn-link hub-content-share',
-                label: 'Share'
-            });
+            //TODO(ryanc): Add like/share button
+            //var likeButton = new Button(undefined, {
+            //    elClassPrefix: 'hub',
+            //    className: 'hub-content-like'
+            //});
+            //var shareButton = new Button(undefined, {
+            //    elClassPrefix: 'hub',
+            //    className: 'hub-btn-link hub-content-share',
+            //    label: 'Share'
+            //});
 
-            this.addButton(likeButton);
-            this.addButton(shareButton);
+            //this.addButton(likeButton);
+            //this.addButton(shareButton);
         } else {
             for (var i=0; i < this._controls['left'].length; i++) {
                 this.addButton(this._controls['left'][i]);

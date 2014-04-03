@@ -4,14 +4,13 @@ define([
     'streamhub-sdk/content/types/livefyre-facebook-content',
     'streamhub-sdk/content/types/oembed',
     'streamhub-sdk/content/types/livefyre-oembed',
-    'streamhub-sdk/content/types/livefyre-opine',
     'streamhub-sdk/content/types/livefyre-instagram-content',
     'streamhub-sdk/storage',
     'streamhub-sdk/debug',
     'stream/transform',
     'inherits'
 ], function (LivefyreContent, LivefyreTwitterContent, LivefyreFacebookContent,
-Oembed, LivefyreOembed, LivefyreOpine, LivefyreInstagramContent, Storage, debug, Transform,
+Oembed, LivefyreOembed, LivefyreInstagramContent, Storage, debug, Transform,
 inherits) {
     'use strict';
 
@@ -74,13 +73,12 @@ inherits) {
             type = StateToContent.enums.type[state.type],
             isAttachment = ('OEMBED' === type),
             isContent = ('CONTENT' === type),
-            isOpine = ('OPINE' === type),
             childStates = state.childContent || [],
             content,
             childContent = [],
             descendantContent = [];
 
-        if ( ! (isAttachment || isContent || isOpine)) {
+        if ( ! (isAttachment || isContent)) {
             return;
         }
 
@@ -131,10 +129,6 @@ inherits) {
         if (isReply) {
             this._addReplyOrStore(content, state.content.parentId);
         }
-        // Add opines to their parent, or store for later
-        if (isOpine) {
-            this._addOpineOrStore(content, state.content.targetId);
-        }
 
         // Never return non-Content items or non-public items
         // But note, this is at the end of the recursive function,
@@ -176,8 +170,6 @@ inherits) {
                 content.addAttachment(child);
             } else if (child instanceof LivefyreContent) {
                 content.addReply(child);
-            } else if (child instanceof LivefyreOpine) {
-                content.addOpine(child);
             }
         }
     };
@@ -193,8 +185,6 @@ inherits) {
 
         if ('OEMBED' === StateToContent.enums.type[state.type]) {
             return new LivefyreOembed(state);
-        } else if ('OPINE' === StateToContent.enums.type[state.type]) {
-            return new LivefyreOpine(state);
         } else if (sourceName === 'twitter') {
             return new LivefyreTwitterContent(state);
         } else if (sourceName === 'facebook') {
@@ -286,17 +276,6 @@ inherits) {
     };
     // Keep static for legacy API compatibility
     StateToContent._addReplyOrStore = StateToContent.prototype._addReplyOrStore;
-
-    StateToContent.prototype._addOpineOrStore = function (opine, targetId) {
-        var target = Storage.get(targetId);
-        if (target) {
-            log('attaching attachment', arguments);
-            target.addOpine(opine);
-        } else {
-            log('storing attachment', arguments);
-            this._storeChild(opine, targetId);
-        }
-    };
 
     StateToContent.prototype._storeChild = function (child, parentId) {
         //TODO (joao) Make this smart enough to not push duplicates
