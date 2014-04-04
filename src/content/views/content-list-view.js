@@ -260,7 +260,8 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
     };
 
     ContentListView.prototype.isContentShareable = function () {
-        return !!this._sharer || $._data($('body')[0], 'events').contentShare;
+        var bodyEvents = $._data($('body')[0], 'events') || {};
+        return !!this._sharer || bodyEvents.contentShare;
     };
 
     ContentListView.prototype.destroy = function () {
