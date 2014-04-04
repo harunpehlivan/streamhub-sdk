@@ -79,22 +79,38 @@ define([
         //this.addButton(shareButton);
     };
 
-    LivefyreContentView.prototype.addButton = function (button) {
-        for (var i=0; i < this._controls.left.length; i++) {
-            if (this._controls.left[i] !== button) {
-                this._controls.left.push(button);
+    LivefyreContentView.prototype.addButton = function (button, opts) {
+        opts = opts || {};
+        var footerControls;
+        var footerSide;
+        if (opts.side == 'right') {
+            footerControls = this._controls.right;
+            footerSide = this.$el.find(this.footerRightSelector);
+        } else {
+            footerControls = this._controls.left;
+            footerSide = this.$el.find(this.footerLeftSelector);
+        }
+
+        if (footerControls.length === 0) {
+            footerControls.push(button);
+        }
+        for (var i=0; i < footerControls.length; i++) {
+            if (footerControls[i] !== button) {
+                footerControls.push(button);
             }
         }
 
-        var footerLeft = this.$el.find(this.footerLeftSelector);
         var buttonContainerEl = $('<div></div>');
-        footerLeft.append(buttonContainerEl);
+        footerSide.append(buttonContainerEl);
 
         button.setElement(buttonContainerEl);
         button.render();
     };
 
     LivefyreContentView.prototype.removeButton = function (button) {
+        this._controls.left.splice(this._controls.left.indexOf(button), 1);
+        this._controls.left.splice(this._controls.right.indexOf(button), 1);
+
         button.destroy();
     };
     
