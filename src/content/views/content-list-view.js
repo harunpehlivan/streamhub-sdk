@@ -79,16 +79,10 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
                 var modalSubView = new GalleryAttachmentListView(context);
                 this.modal.show(modalSubView);
             }
-        }
+        },
+        'contentShare.hub': this._sharer ? this._sharer : function () {}
     });
 
-    ContentListView.prototype.setElement = function (el) {
-        ListView.prototype.setElement.call(this, el);
-        if (this._sharer) {
-            this.$el.on('contentShare.hub', this._sharer);
-        }
-    };
-    
     /**
      * Comparator function to determine ordering of ContentViews.
      * ContentView elements indexes in this.el will be ordered by this

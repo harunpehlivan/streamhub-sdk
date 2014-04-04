@@ -71,6 +71,7 @@ define([
      * @returns {ContentView} A new content view object for the given piece of content.
      */
     ContentViewFactory.prototype.createContentView = function(content, opts) {
+        opts = opts || {};
         var ContentViewType = this._getViewTypeForContent(content);
         var attachmentsView = this._createAttachmentsView(content);
         var contentView = new ContentViewType({
