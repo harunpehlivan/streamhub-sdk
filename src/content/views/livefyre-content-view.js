@@ -32,6 +32,8 @@ define([
         };
         this._rendered = false;
 
+        this._shareable = opts.shareable === undefined ? true : opts.shareable;
+
         ContentView.call(this, opts);
     };
     inherits(LivefyreContentView, ContentView);
@@ -75,11 +77,13 @@ define([
         //});
         //this.addButton(replyButton);
 
-        var shareButton = new HubButton(this._handleShare.bind(this), {
-            className: 'btn-link content-share',
-            label: 'Share'
-        });
-        this.addButton(shareButton);
+        if (this._shareable) {
+            var shareButton = new HubButton(this._handleShare.bind(this), {
+                className: 'btn-link content-share',
+                label: 'Share'
+            });
+            this.addButton(shareButton);
+        }
     };
 
     LivefyreContentView.prototype.addButton = function (button, opts) {

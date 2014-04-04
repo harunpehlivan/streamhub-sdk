@@ -256,8 +256,14 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
      * @returns {ContentView} A new content view object for the given piece of content.
      */
     ContentListView.prototype.createContentView = function (content) {
-        var view = this.contentViewFactory.createContentView(content);
+        var view = this.contentViewFactory.createContentView(content, {
+            shareable: this.isContentShareable()
+        });
         return view;
+    };
+
+    ContentListView.prototype.isContentShareable = function () {
+        return !!this._sharer || $._data($('body')[0], 'events').contentShare;
     };
 
     ContentListView.prototype.destroy = function () {

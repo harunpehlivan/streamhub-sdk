@@ -67,12 +67,17 @@ define([
      * Creates a content view from the given piece of content, by looking in this view's
      * content registry for the supplied content type.
      * @param content {Content} A content object to create the corresponding view for.
+     * @param opts {object} Options for displaying specific controls on the content view.
      * @returns {ContentView} A new content view object for the given piece of content.
      */
-    ContentViewFactory.prototype.createContentView = function(content) {
+    ContentViewFactory.prototype.createContentView = function(content, opts) {
         var ContentViewType = this._getViewTypeForContent(content);
         var attachmentsView = this._createAttachmentsView(content);
-        var contentView = new ContentViewType({ content : content, attachmentsView: attachmentsView });
+        var contentView = new ContentViewType({
+            content : content,
+            attachmentsView: attachmentsView,
+            shareable: opts.shareable
+        });
 
         return contentView;
     };
