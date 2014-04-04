@@ -80,7 +80,10 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
                 this.modal.show(modalSubView);
             }
         },
-        'contentShare.hub': this._sharer ? this._sharer : function () {}
+        'contentShare.hub': function () {
+            var callback = this._sharer ? this._sharer : function () {}
+            callback();
+        }
     });
 
     /**

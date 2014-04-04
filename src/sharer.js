@@ -5,7 +5,6 @@ var log = debug('streamhub-sdk/views/list-view');
 
 var sharer = module.exports = function () {
     if ( ! this._delegate) {
-console.log('blah');
         log('there is no share delegate');
         return;
     }
