@@ -21,8 +21,11 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
      *
      * @param [opts] {Object} A set of options to config the view with
      * @param [opts.el] {HTMLElement} The element in which to render the streamed content
+     * @param [opts.modal] {Boolean} Whether a modal is displayed when interacting 
+     *                               with photo/video thumbnail
      * @param [opts.animate] {Boolean} Whether to add animations when content is
      *                               rendered in the ContentListView
+     * @param [opts.sharer] {function} 
      * @exports streamhub-sdk/views/list-view
      * @constructor
      */
@@ -45,6 +48,7 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
         this._bound = true;
         this._animate = opts.animate === undefined ? true : opts.animate;
 
+        this._sharer = opts.sharer;
         this.contentViewFactory = opts.contentViewFactory || new ContentViewFactory();
     };
 
@@ -77,6 +81,13 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
             }
         }
     });
+
+    ContentListView.prototype.setElement = function (el) {
+        ListView.prototype.setElement.call(this, el);
+        if (this._sharer) {
+            this.$el.on('contentShare.hub', this._sharer);
+        }
+    };
     
     /**
      * Comparator function to determine ordering of ContentViews.

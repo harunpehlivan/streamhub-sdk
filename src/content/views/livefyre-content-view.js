@@ -48,6 +48,10 @@ define([
         return this;
     };
 
+    LivefyreContentView.prototype._handleShare = function () {
+        this.$el.trigger('contentShare.hub', this.content);
+    };
+
     LivefyreContentView.prototype._renderButtons = function () {
         this.$el.find(this.footerLeftSelector).empty();
         this.$el.find(this.footerRightSelector).empty();
@@ -66,17 +70,16 @@ define([
         //    self.$el.trigger('contentReply.hub');
         //});
         //var replyButton = new HubButton(replyCommand, {
-        //    className: 'hub-btn-link hub-content-reply',
+        //    className: 'btn-link content-reply',
         //    label: 'Reply'
         //});
         //this.addButton(replyButton);
 
-        //TODO(ryanc): Wait until we have likes finished first
-        //var shareButton = new HubButton(this._handleShare.bind(this), {
-        //    className: 'hub-btn-link hub-content-share',
-        //    label: 'Share'
-        //});
-        //this.addButton(shareButton);
+        var shareButton = new HubButton(this._handleShare.bind(this), {
+            className: 'btn-link content-share',
+            label: 'Share'
+        });
+        this.addButton(shareButton);
     };
 
     LivefyreContentView.prototype.addButton = function (button, opts) {

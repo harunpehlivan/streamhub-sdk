@@ -25,8 +25,9 @@
         require([
             'streamhub-sdk/content/views/content-list-view',
             'streamhub-sdk/collection',
-            'streamhub-sdk/content'
-        ],function (ListView, Collection, Content) {
+            'streamhub-sdk/content',
+            'streamhub-sdk/sharer'
+        ],function (ListView, Collection, Content, sharer) {
             var opts = {
                 "network": "labs-t402.fyre.co",
                 "siteId": "303827",
