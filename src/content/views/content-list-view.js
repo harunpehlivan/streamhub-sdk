@@ -80,7 +80,7 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
                 this.modal.show(modalSubView);
             }
         },
-        'contentShare.hub': function () {
+        'shareContent.hub': function () {
             var callback = this._sharer ? this._sharer : function () {}
             callback();
         }
@@ -261,7 +261,7 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
 
     ContentListView.prototype.isContentShareable = function () {
         var bodyEvents = $._data($('body')[0], 'events') || {};
-        return !!this._sharer || bodyEvents.contentShare;
+        return !!this._sharer || bodyEvents.shareContent;
     };
 
     ContentListView.prototype.destroy = function () {

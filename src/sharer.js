@@ -14,7 +14,7 @@ var sharer = module.exports = function () {
 };
 
 // Ensure one event bound
-$('body').on('contentShare.hub', sharer );
+$('body').on('shareContent.hub', sharer );
 
 sharer.delegate = function (delegate) {
     this._delegate = delegate;

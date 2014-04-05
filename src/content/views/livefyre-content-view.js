@@ -51,7 +51,7 @@ define([
     };
 
     LivefyreContentView.prototype._handleShare = function () {
-        this.$el.trigger('contentShare.hub', this.content);
+        this.$el.trigger('shareContent.hub', this.content);
     };
 
     LivefyreContentView.prototype._renderButtons = function () {
