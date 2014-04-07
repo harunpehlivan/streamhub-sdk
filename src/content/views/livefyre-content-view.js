@@ -53,6 +53,7 @@ define([
     inherits(LivefyreContentView, ContentView);
 
     LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left';
+    LivefyreContentView.prototype.footerRightSelector = '.content-footer-right';
 
     /**
      * Render the content inside of the LivefyreContentView's element.
