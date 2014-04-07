@@ -80,11 +80,13 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
                 this.modal.show(modalSubView);
             }
         },
-        'shareContent.hub': function () {
-            var callback = this._sharer ? this._sharer : function () {}
-            callback();
-        }
+        'shareContent.hub': '_handleShareContent'
     });
+
+    ContentListView.prototype._handleShareContent = function () {
+        var callback = this._sharer ? this._sharer : function () {};
+        callback();
+    };
 
     /**
      * Comparator function to determine ordering of ContentViews.

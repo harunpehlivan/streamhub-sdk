@@ -205,10 +205,42 @@ function ($, ContentListView, Content, ContentView) {
             
             it("removes content on 'removeContentView.hub'", function () {
                 contentView.remove();
-                
                 expect(list.views.length).toBe(0);
                 expect(list.$listEl[0].children.length).toBe(0);
             });
+        });
+
+        describe('handles shareContent.hub event', function () {
+            var list,
+                content,
+                contentView;
+
+            beforeEach(function () {
+                content = new Content('Body Text', 'id');
+            });
+
+            it('invokes _handleShareContent handler', function () {
+                var called = false;
+                ContentListView.prototype._handleShareContent = function () {
+                    called = true;
+                }
+                list = new ContentListView();
+
+                list.$listEl.trigger('shareContent.hub');
+                waitsFor(function () {
+                    return called === true;
+                });
+                runs(function () {
+                    expect(called).toBe(true);
+                });
+            });
+
+            //TODO(ryanc): How to spy on proxy function
+            //it('invokes the sharer', function () {
+            //    spyOn(list, '_handleShareContent');
+            //    list.$listEl.trigger('shareContent.hub');
+            //    expect(list._handleShareContent).toHaveBeenCalled();
+            //});
         });
 
         describe("when the default comparator is passed ContentViews a, b", function () {
