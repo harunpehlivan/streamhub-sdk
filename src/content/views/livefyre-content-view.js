@@ -109,7 +109,7 @@ define([
 
     LivefyreContentView.prototype.removeButton = function (button) {
         this._controls.left.splice(this._controls.left.indexOf(button), 1);
-        this._controls.left.splice(this._controls.right.indexOf(button), 1);
+        this._controls.right.splice(this._controls.right.indexOf(button), 1);
 
         button.destroy();
     };
