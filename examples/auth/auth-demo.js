@@ -14,28 +14,21 @@ require([
     var log = debug('streamhub-sdk/auth-demo');
     var authButton = createAuthButton(auth, document.getElementById('auth-button'));
 
-    var $tokenInput = $('*[name=lftoken]');
-    var credentials = auth.get();
-    if (credentials && credentials.livefyre) {
-        setTokenInput(credentials.livefyre.get('token'));
-    }
-    auth.on('login.livefyre', function (user) {
-        setTokenInput(user.get('token'));
-    });
-
-    function setTokenInput (token) {
-        debugger;
-        $tokenInput.val(token);
-    }
-
     authLivefyre.plugin(auth);
-
     var delegate = window.delegate = livefyreAuthDelegate('http://www.livefyre.com');
     auth.delegate(delegate);
 
-    auth.on('login.livefyre', function (livefyreUser) {
-        log("User was logged into Livefyre", livefyreUser);
-        debugger;
+    var livefyreUser = auth.get('livefyre');
+    var $tokenInput = $('*[name=lftoken]');
+    function setUser (user) {
+        $tokenInput.val(user.get('token'));
+    }
+    if (livefyreUser) {
+        setUser(livefyreUser);
+    }
+    auth.on('login.livefyre', setUser);
+    auth.on('logout', function () {
+        $tokenInput.val('');
     });
 
     var opts = {
@@ -45,8 +38,6 @@ require([
         "environment": "livefyre.com"
     };
     var listView = window.view = new ListView({
-        initial: 1,
-        showMore: 2,
         el: document.getElementById("listView")
     });
 
