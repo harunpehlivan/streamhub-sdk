@@ -34,15 +34,14 @@ inherits(Button, View);
 
 function distributeClassPrefix(prefix, classAttr) {
     var classTemplate = "{prefix}-{class}";
-    var classes = classAttr
-        .split(' ')
-        .filter(function (s) { return s; })
-        .map(function (oneClass) {
-            var prefixedClass = classTemplate
-                .replace('{prefix}', prefix)
-                .replace('{class}', oneClass);
-            return prefixedClass;
-        });
+    var classes = [];
+    var classArr = classAttr.split(' ');
+    for(var i=0; i<classArr.length; i++) {
+        classes.push(classTemplate
+                    .replace('{prefix}', prefix)
+                    .replace('{class}', classArr[i])
+        );
+    };
     return classes.join(' ');
 }
 
