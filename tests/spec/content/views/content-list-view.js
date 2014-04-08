@@ -58,6 +58,21 @@ function ($, ContentListView, Content, ContentView) {
                 });
                 expect(typeof listView.modal).toBe('object');
             });
+
+            describe("with opts.sharer", function () {
+                it('is shareable', function () {
+                    var list = new ContentListView();
+                    expect(list.isContentShareable()).toBe(false);
+
+                    require(['streamhub-sdk/sharer'], function (sharer) {
+                        list = new ContentListView({
+                            sharer: sharer
+                        });
+                        expect(list.isContentShareable()).toBe(true);
+                    });
+
+                });
+            });
         });
 
         describe("when constructed with opts.initial", function () {
@@ -219,28 +234,16 @@ function ($, ContentListView, Content, ContentView) {
                 content = new Content('Body Text', 'id');
             });
 
-            it('invokes _handleShareContent handler', function () {
-                var called = false;
-                ContentListView.prototype._handleShareContent = function () {
-                    called = true;
-                }
-                list = new ContentListView();
-
-                list.$listEl.trigger('shareContent.hub');
-                waitsFor(function () {
-                    return called === true;
-                });
-                runs(function () {
-                    expect(called).toBe(true);
+            it('invokes the sharer, when shareable', function () {
+                require(['streamhub-sdk/sharer'], function (sharer) {
+                    list = new ContentListView({
+                        sharer: sharer
+                    });
+                    spyOn(sharer, 'share');
+                    list.$listEl.trigger('shareContent.hub');
+                    expect(sharer.share).toHaveBeenCalled();
                 });
             });
-
-            //TODO(ryanc): How to spy on proxy function
-            //it('invokes the sharer', function () {
-            //    spyOn(list, '_handleShareContent');
-            //    list.$listEl.trigger('shareContent.hub');
-            //    expect(list._handleShareContent).toHaveBeenCalled();
-            //});
         });
 
         describe("when the default comparator is passed ContentViews a, b", function () {

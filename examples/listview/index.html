@@ -38,7 +38,8 @@
             var listView = window.view = new ListView({
                 initial: 50,
                 showMore: 50,
-                el: document.getElementById("listView")
+                el: document.getElementById("listView"),
+                sharer: sharer
             });
 
             var collection = window.collection =  new Collection(opts);

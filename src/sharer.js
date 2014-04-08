@@ -3,19 +3,18 @@ var debug = require('streamhub-sdk/debug');
 
 var log = debug('streamhub-sdk/views/list-view');
 
-var sharer = module.exports = function () {
+var Sharer = function (opts) {
+};
+
+Sharer.prototype.delegate = function (delegate) {
+    this._delegate = delegate;
+};
+
+Sharer.prototype.share = function () {
     if ( ! this._delegate) {
         log('there is no share delegate');
         return;
     }
-    this._delegate = function () {
-        //TODO(ryanc): Need a default delegate
-    };
 };
 
-// Ensure one event bound
-$('body').on('shareContent.hub', sharer );
-
-sharer.delegate = function (delegate) {
-    this._delegate = delegate;
-};
+var sharer = module.exports = new Sharer();

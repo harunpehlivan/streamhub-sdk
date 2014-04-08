@@ -25,7 +25,7 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
      *                               with photo/video thumbnail
      * @param [opts.animate] {Boolean} Whether to add animations when content is
      *                               rendered in the ContentListView
-     * @param [opts.sharer] {function} 
+     * @param [opts.sharer] {Sharer} 
      * @exports streamhub-sdk/views/list-view
      * @constructor
      */
@@ -84,8 +84,9 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
     });
 
     ContentListView.prototype._handleShareContent = function () {
-        var callback = this._sharer ? this._sharer : function () {};
-        callback();
+        if (this._sharer) {
+            this._sharer.share();
+        }
     };
 
     /**
@@ -262,8 +263,7 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
     };
 
     ContentListView.prototype.isContentShareable = function () {
-        var bodyEvents = $._data($('body')[0], 'events') || {};
-        return !!this._sharer || bodyEvents.shareContent;
+        return !!this._sharer;
     };
 
     ContentListView.prototype.destroy = function () {
