@@ -84,7 +84,7 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
     });
 
     ContentListView.prototype._handleShareContent = function () {
-        if (this._sharer) {
+        if (this.isContentShareable()) {
             this._sharer.share();
         }
     };
