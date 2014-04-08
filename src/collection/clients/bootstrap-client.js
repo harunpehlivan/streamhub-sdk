@@ -29,6 +29,8 @@ function(LivefyreHttpClient, inherits, base64) {
      * @param [opts.page] {string} Livefyre page name or number to fetch from bootstrap
      *     (default "init")
      * @param [opts.environment] {string} Optional livefyre environment to use dev/prod environment
+     * @param [opts.version] {string} Version string to include in Bootstrap API
+     *     resource paths. By default, one will not be added, which usually means '3.0'
      * @param callback {function} A callback that is called upon success/failure of the
      *     bootstrap request. Callback signature is "function(error, data)".
      */
