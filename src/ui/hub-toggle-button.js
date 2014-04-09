@@ -13,17 +13,26 @@ function HubToggleButton (fnOrCommand, opts) {
 }
 inherits(HubToggleButton, HubButton);
 
+// DOM Event Listeners
+HubToggleButton.prototype.events = HubButton.prototype.events.extended({
+    click: '_execute'
+});
+
 HubToggleButton.prototype._execute = function () {
-    this._enabled = !this._enabled;
     HubButton.prototype._execute.call(this);
+    this._enabled = !this._enabled;
     this.$el.removeClass('hub-btn-toggle-on').removeClass('hub-btn-toggle-off');
+    this._enabled ? this.$el.addClass('hub-btn-toggle-on') : this.$el.addClass('hub-btn-toggle-off');
+};
+
+HubToggleButton.prototype.render = function () {
+    HubButton.prototype.render.call(this);
     this._enabled ? this.$el.addClass('hub-btn-toggle-on') : this.$el.addClass('hub-btn-toggle-off');
 };
 
 HubToggleButton.prototype.getTemplateContext = function () {
     var context = HubButton.prototype.getTemplateContext.call(this);
     context.on = this._enabled;
-
     return context;
 };
 

@@ -1,9 +1,11 @@
 define([
     'streamhub-sdk/jquery',
-    'streamhub-sdk/auth',
+    'auth',
     'streamhub-sdk/content/views/content-view',
     'streamhub-sdk/content/types/livefyre-content',
     'streamhub-sdk/content/types/livefyre-opine',
+    'streamhub-sdk/ui/auth-required-command',
+    'streamhub-sdk/ui/command',
     'streamhub-sdk/ui/hub-button',
     'streamhub-sdk/ui/hub-toggle-button',
     'streamhub-sdk/collection/liker',
@@ -11,7 +13,7 @@ define([
     'streamhub-sdk/util',
     'inherits',
     'streamhub-sdk/debug'
-], function ($, Auth, ContentView, LivefyreContent, LivefyreOpine, HubButton, HubToggleButton, Liker, ContentTemplate, util, inherits, debug) {
+], function ($, auth, ContentView, LivefyreContent, LivefyreOpine, AuthRequiredCommand, Command, HubButton, HubToggleButton, Liker, ContentTemplate, util, inherits, debug) {
     'use strict';
 
     var LIKE_REQUEST_LISTENER = false;
@@ -95,10 +97,15 @@ define([
      * @protected
      */
     LivefyreContentView.prototype._createLikeButton = function () {
+        var likeCommand = new AuthRequiredCommand(
+            new Command(this._handleLikeClick.bind(this))
+        );
+
         var likeCount = this.content.getLikeCount();
-        var likeButton = new HubToggleButton(this._handleLikeClick.bind(this), {
+        var enabled = auth.get('livefyre') ? this.content.isLiked(auth.get('livefyre').get('id')) : false;
+        var likeButton = new HubToggleButton(likeCommand, {
             className: 'content-like',
-            enabled: this.content.isLiked(Auth.getUserUri()), //TODO(ryanc): Get user id from auth
+            enabled: enabled,
             label: likeCount.toString()
         });
         return likeButton;

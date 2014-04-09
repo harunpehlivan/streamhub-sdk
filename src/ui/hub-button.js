@@ -24,6 +24,11 @@ inherits(HubButton, Button);
 
 HubButton.prototype.elClassPrefix = 'hub';
 
+// DOM Event Listeners
+HubButton.prototype.events = Button.prototype.events.extended({
+    click: '_execute'
+});
+
 HubButton.prototype.getTemplateContext = function () {
     var context = Button.prototype.getTemplateContext.call(this);
     context.buttonUrl = this._buttonUrl;
