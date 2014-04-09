@@ -34,7 +34,6 @@ define([
         };
         this._rendered = false;
         this._setShareCommand(opts.shareCommand);
-        this._shareable = opts.shareable === undefined ? true : opts.shareable;
 
         ContentView.call(this, opts);
     };
@@ -50,10 +49,6 @@ define([
         ContentView.prototype.render.call(this);
         this._renderButtons();
         return this;
-    };
-
-    LivefyreContentView.prototype._handleShare = function () {
-        this.$el.trigger('shareContent.hub', this.content);
     };
 
     LivefyreContentView.prototype._renderButtons = function () {

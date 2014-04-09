@@ -79,15 +79,8 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
                 var modalSubView = new GalleryAttachmentListView(context);
                 this.modal.show(modalSubView);
             }
-        },
-        'shareContent.hub': '_handleShareContent'
-    });
-
-    ContentListView.prototype._handleShareContent = function () {
-        if (this.isContentShareable()) {
-            this._sharer.share();
         }
-    };
+    });
 
     /**
      * Comparator function to determine ordering of ContentViews.
@@ -257,13 +250,9 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
      */
     ContentListView.prototype.createContentView = function (content) {
         var view = this.contentViewFactory.createContentView(content, {
-            shareable: this.isContentShareable()
+            sharer: this._sharer
         });
         return view;
-    };
-
-    ContentListView.prototype.isContentShareable = function () {
-        return !!this._sharer;
     };
 
     ContentListView.prototype.destroy = function () {

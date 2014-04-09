@@ -43,6 +43,20 @@ Oembed) {
             }
         });
 
+        describe('when passed opts.sharer', function () {
+            it('creates a content with a ._shareCommand', function () {
+                var sharer = { share: function () {} };
+                var content = new LivefyreContent();
+                var contentViewFactory = new ContentViewFactory();
+                spyOn(contentViewFactory, '_createShareCommand').andCallThrough();
+                var contentView = contentViewFactory.createContentView(content, {
+                    sharer: sharer
+                });
+                expect(contentViewFactory._createShareCommand).toHaveBeenCalledWith(content, sharer);
+                expect(contentView._shareCommand).toBeTruthy();
+            });
+        });
+
         describe('when creating content with attachments', function () {
             var contentViewFactory,
                 content;

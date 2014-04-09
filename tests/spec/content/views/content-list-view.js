@@ -60,17 +60,17 @@ function ($, ContentListView, Content, ContentView) {
             });
 
             describe("with opts.sharer", function () {
-                it('is shareable', function () {
-                    var list = new ContentListView();
-                    expect(list.isContentShareable()).toBe(false);
-
-                    require(['streamhub-sdk/sharer'], function (sharer) {
-                        list = new ContentListView({
-                            sharer: sharer
-                        });
-                        expect(list.isContentShareable()).toBe(true);
+                it('passes the sharer to .contentViewFactory.createContentView on .createContentView', function () {
+                    var sharer = {
+                        share: function () {}
+                    };
+                    var list = new ContentListView({
+                        sharer: sharer
                     });
-
+                    spyOn(list.contentViewFactory, 'createContentView');
+                    list.add(new Content('woah'));
+                    var createContentViewOpts = list.contentViewFactory.createContentView.mostRecentCall.args[1];
+                    expect(createContentViewOpts.sharer).toBe(sharer);
                 });
             });
         });
@@ -222,27 +222,6 @@ function ($, ContentListView, Content, ContentView) {
                 contentView.remove();
                 expect(list.views.length).toBe(0);
                 expect(list.$listEl[0].children.length).toBe(0);
-            });
-        });
-
-        describe('handles shareContent.hub event', function () {
-            var list,
-                content,
-                contentView;
-
-            beforeEach(function () {
-                content = new Content('Body Text', 'id');
-            });
-
-            it('invokes the sharer, when shareable', function () {
-                require(['streamhub-sdk/sharer'], function (sharer) {
-                    list = new ContentListView({
-                        sharer: sharer
-                    });
-                    spyOn(sharer, 'share');
-                    list.$listEl.trigger('shareContent.hub');
-                    expect(sharer.share).toHaveBeenCalled();
-                });
             });
         });
 
