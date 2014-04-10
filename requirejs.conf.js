@@ -57,6 +57,9 @@ require.config({
   },{
     name: "auth-livefyre",
     location: "lib/auth-livefyre/src"
+  },{
+    name: "auth-livefyre-tests",
+    location: "lib/auth-livefyre/test"
   }],
   shim: {
     jquery: {

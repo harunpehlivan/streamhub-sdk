@@ -1,19 +1,31 @@
 define([
     'jquery',
+    'auth',
+    'auth-livefyre',
+    'auth-livefyre/livefyre-auth-delegate',
+    'auth-livefyre-tests/mocks/mock-user-factory',
+    'json!auth-livefyre-tests/mocks/auth-response.json',
     'streamhub-sdk/util',
     'streamhub-sdk/content',
     'streamhub-sdk/content/types/livefyre-content',
     'streamhub-sdk/content/types/livefyre-twitter-content',
+    'streamhub-sdk/content/types/livefyre-opine',
     'streamhub-sdk/content/views/livefyre-content-view',
     'streamhub-sdk/content/content-view-factory',
     'streamhub-sdk/ui/button',
     'streamhub-sdk/ui/command'],
 function (
     $,
+    auth,
+    authLivefyre,
+    livefyreAuthDelegate,
+    MockUserFactory,
+    mockAuthResponse,
     util,
     Content,
     LivefyreContent,
     LivefyreTwitterContent,
+    LivefyreOpine,
     LivefyreContentView,
     ContentViewFactory,
     Button,
@@ -74,12 +86,45 @@ function (
                 expect(lfContentView.$el.find('.hub-content-like')).toHaveLength(1);
             });
 
+            it("is in the toggle off state when not liked by authenticated user", function () {
+                var contentViewFactory = new ContentViewFactory();
+                var lfContent = new LivefyreContent({ body: 'lf content' });
+                var lfContentView = contentViewFactory.createContentView(lfContent);
+                lfContentView.render();
+
+                expect(lfContentView.$el.find('.hub-btn-toggle-off')).toHaveLength(1);
+            });
+
+            it("is in the toggle on state when liked by authenticated user", function () {
+                // Auth mock user
+                var mockUserFactory = new MockUserFactory();
+                var user = mockUserFactory.createUser();
+                auth.login({ livefyre: user});
+
+                var contentViewFactory = new ContentViewFactory();
+                var lfContent = new LivefyreContent({ body: 'lf content' });
+                var lfOpine = new LivefyreOpine({
+                    type: 1,
+                    vis: 1,
+                    author: { id: mockAuthResponse.data.profile.id }
+                });
+                lfContent.addOpine(lfOpine);
+                var lfContentView = contentViewFactory.createContentView(lfContent);
+                lfContentView.render();
+
+                expect(lfContentView.$el.find('.hub-btn-toggle-on')).toHaveLength(1);
+            });
+
             describe('when Like button clicked', function () {
                 var content,
                     contentView,
                     likeButtonEl;
 
                 beforeEach(function () {
+                    var mockUserFactory = new MockUserFactory();
+                    var user = mockUserFactory.createUser();
+                    auth.login({ livefyre: user});
+
                     content = new LivefyreContent({ body: 'what' });
                     contentView = new LivefyreContentView({ content: content });
                     contentView.render();
@@ -88,29 +133,13 @@ function (
 
                 afterEach(function () {
                     $('body').off();
+                    auth.logout();
                 });
 
                 it("lazily attaches an event listener for 'contentLike.hub' event on body element", function () {
                     expect($._data($('body')[0], 'events')).toBe(undefined);
                     likeButtonEl.trigger('click');
                     expect($._data($('body')[0], 'events').contentLike.length).toBe(1);
-                });
-            });
-
-            describe("body element 'contentLike.hub' listener", function () {
-                var content,
-                    contentView,
-                    likeButtonEl;
-
-                beforeEach(function () {
-                    content = new Content({ body: 'what' });
-                    contentView = new LivefyreContentView({ content: content });
-                    contentView.render();
-                    likeButtonEl = contentView.$el.find('.hub-content-like');
-                });
-
-                afterEach(function () {
-                    $('body').off();
                 });
             });
         });
