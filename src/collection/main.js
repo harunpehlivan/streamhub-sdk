@@ -8,7 +8,7 @@ define([
     'streamhub-sdk/collection/clients/create-client',
     'streamhub-sdk/collection/clients/write-client',
     'streamhub-sdk/content/clients/content-client',
-    'streamhub-sdk/content/fetchContent',
+    'streamhub-sdk/content/fetch-content',
     'streamhub-sdk/auth',
     'inherits',
     'streamhub-sdk/debug'],
@@ -43,7 +43,6 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
 
         this._bootstrapClient = opts.bootstrapClient || new LivefyreBootstrapClient();
         this._createClient = opts.createClient || new LivefyreCreateClient();
-        this._contentClient = opts.contentClient || new LivefyreContentClient();
 
         // Internal streams
         this._writer = opts.writer || null;
@@ -134,7 +133,7 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
         opts.collection = this;
         opts.contentId = contentId;
 
-        fetchContent(opts, clbk);
+        fetchContent(opts, callback);
     };
 
 
