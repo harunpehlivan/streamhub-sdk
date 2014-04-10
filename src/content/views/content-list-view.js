@@ -47,7 +47,7 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
         this._maxVisibleItems = opts.maxVisibleItems || 50;
         this._bound = true;
         this._animate = opts.animate === undefined ? true : opts.animate;
-
+        this._liker = opts.liker;
         this._sharer = opts.sharer;
         this.contentViewFactory = opts.contentViewFactory || new ContentViewFactory();
     };
@@ -250,6 +250,7 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
      */
     ContentListView.prototype.createContentView = function (content) {
         var view = this.contentViewFactory.createContentView(content, {
+            liker: this._liker,
             sharer: this._sharer
         });
         return view;

@@ -64,6 +64,20 @@ function (
 
         describe('Like button', function () {
 
+            var mockUserFactory,
+                user;
+
+            beforeEach(function () {
+                // Auth mock user
+                mockUserFactory = new MockUserFactory();
+                user = mockUserFactory.createUser();
+                auth.login({ livefyre: user});
+            });
+
+            afterEach(function () {
+                auth.logout();
+            });
+
             it("only renders for non-Twitter content items", function () {
                 var contentViewFactory = new ContentViewFactory();
 
@@ -96,11 +110,6 @@ function (
             });
 
             it("is in the toggle on state when liked by authenticated user", function () {
-                // Auth mock user
-                var mockUserFactory = new MockUserFactory();
-                var user = mockUserFactory.createUser();
-                auth.login({ livefyre: user});
-
                 var contentViewFactory = new ContentViewFactory();
                 var lfContent = new LivefyreContent({ body: 'lf content' });
                 var lfOpine = new LivefyreOpine({
@@ -113,34 +122,6 @@ function (
                 lfContentView.render();
 
                 expect(lfContentView.$el.find('.hub-btn-toggle-on')).toHaveLength(1);
-            });
-
-            describe('when Like button clicked', function () {
-                var content,
-                    contentView,
-                    likeButtonEl;
-
-                beforeEach(function () {
-                    var mockUserFactory = new MockUserFactory();
-                    var user = mockUserFactory.createUser();
-                    auth.login({ livefyre: user});
-
-                    content = new LivefyreContent({ body: 'what' });
-                    contentView = new LivefyreContentView({ content: content });
-                    contentView.render();
-                    likeButtonEl = contentView.$el.find('.hub-content-like');
-                });
-
-                afterEach(function () {
-                    $('body').off();
-                    auth.logout();
-                });
-
-                it("lazily attaches an event listener for 'contentLike.hub' event on body element", function () {
-                    expect($._data($('body')[0], 'events')).toBe(undefined);
-                    likeButtonEl.trigger('click');
-                    expect($._data($('body')[0], 'events').contentLike.length).toBe(1);
-                });
             });
         });
 

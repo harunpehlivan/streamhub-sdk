@@ -16,8 +16,6 @@ define([
 ], function ($, auth, ContentView, LivefyreContent, LivefyreOpine, AuthRequiredCommand, Command, HubButton, HubToggleButton, Liker, ContentTemplate, util, inherits, debug) {
     'use strict';
 
-    var LIKE_REQUEST_LISTENER = false;
-
     /**
      * Defines the base class for all content-views. Handles updates to attachments
      * and loading of images.
@@ -34,28 +32,39 @@ define([
     var LivefyreContentView = function LivefyreContentView (opts) {
         opts = opts || {};
 
+        this._rendered = false;
         this._controls = {
             'left': [],
             'right': []
         };
-        this._rendered = false;
-        this._setShareCommand(opts.shareCommand);
+        this._commands = {};
+        this._setCommand({
+            like: opts.likeCommand,
+            share: opts.shareCommand
+        });
 
         ContentView.call(this, opts);
 
         if (this.content) {
-            this.content.on("opine", function(content) {
-                this._renderButtons();
-            }.bind(this));
-            this.content.on("removeOpine", function(content) {
-                this._renderButtons();
-            }.bind(this));
+            this.content.on("opine", this._updateLikeCount.bind(this));
+            this.content.on("removeOpine", this._updateLikeCount.bind(this));
         }
     };
     inherits(LivefyreContentView, ContentView);
 
     LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left';
     LivefyreContentView.prototype.footerRightSelector = '.content-footer-right';
+
+    LivefyreContentView.prototype._setCommand = function (cmds) {
+        for (var name in cmds) {
+            if (cmds.hasOwnProperty(name)) {
+                if (! cmds[name]) {
+                    continue;
+                }
+                this._commands[name] = cmds[name];
+            }
+        }
+    };
 
     /**
      * Render the content inside of the LivefyreContentView's element.
@@ -68,6 +77,10 @@ define([
     };
 
     LivefyreContentView.prototype._renderButtons = function () {
+        if (! (this.content instanceof LivefyreContent)) {
+            return;
+        }
+
         this.$el.find(this.footerLeftSelector).empty();
         this.$el.find(this.footerRightSelector).empty();
 
@@ -81,15 +94,14 @@ define([
         //});
         //this.addButton(replyButton);
 
-        if (! (this.content instanceof LivefyreContent)) {
-            return;
-        }
-
         var likeButton = this._createLikeButton();
         this.addButton(likeButton);
 
-
         this._renderShareButton();
+    };
+
+    LivefyreContentView.prototype._updateLikeCount = function () {
+        this._likeButton.updateLabel(this.content.getLikeCount().toString());
     };
 
     /**
@@ -98,14 +110,13 @@ define([
      */
     LivefyreContentView.prototype._createLikeButton = function () {
         var likeCommand = new AuthRequiredCommand(
-            new Command(this._handleLikeClick.bind(this))
+            this._commands.like
         );
 
         var likeCount = this.content.getLikeCount();
-        var enabled = auth.get('livefyre') ? this.content.isLiked(auth.get('livefyre').get('id')) : false;
-        var likeButton = new HubToggleButton(likeCommand, {
+        var likeButton = this._likeButton = new HubToggleButton(likeCommand, {
             className: 'content-like',
-            enabled: enabled,
+            enabled: this.content.isLiked(),
             label: likeCount.toString()
         });
         return likeButton;
@@ -127,7 +138,7 @@ define([
      * @protected
      */
     LivefyreContentView.prototype._createShareButton = function () {
-        var shareCommand = this._shareCommand;
+        var shareCommand = this._commands.share;
         if ( ! (shareCommand && shareCommand.canExecute())) {
             return;
         }

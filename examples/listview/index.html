@@ -28,8 +28,9 @@
             'streamhub-sdk/content/views/content-list-view',
             'streamhub-sdk/collection',
             'streamhub-sdk/content',
-            'streamhub-sdk/sharer'
-        ],function (auth, authLivefyre, createAuthButton, livefyreAuthDelegate, Auth, ListView, Collection, Content, sharer) {
+            'streamhub-sdk/collection/liker',
+            'streamhub-sdk/sharer',
+        ],function (auth, authLivefyre, createAuthButton, livefyreAuthDelegate, Auth, ListView, Collection, Content, Liker, sharer) {
             createAuthButton(auth, document.getElementById('auth-button'));
 
             authLivefyre.plugin(auth);
@@ -48,6 +49,7 @@
                 initial: 50,
                 showMore: 50,
                 el: document.getElementById("listView"),
+                liker: new Liker(),
                 sharer: sharer
             });
 
