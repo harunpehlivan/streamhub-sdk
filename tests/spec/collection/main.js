@@ -68,6 +68,46 @@ Auth, Writable, Readable) {
             it('has .environment', function () {
                 expect(collection.environment).toBe(opts.environment);
             });
+<<<<<<< HEAD
+=======
+            
+            describe('.fetchContent', function () {
+                var clbk;
+                beforeEach(function () {
+                    collection.id = '10772933';
+                    clbk = jasmine.createSpy('callback');
+                });
+                
+                it('throws when attempted without collection.id or collection.network', function () {
+                    collection.network = '';
+                    expect(function () {
+                        collection.fetchContent();
+                    }).toThrow();
+                    
+                    collection.network = 'livefyre.com';
+                    collection.id = '';
+                    expect(function () {
+                        collection.fetchContent();
+                    }).toThrow();
+                });
+                
+                it('throws when a contentID or callback isn\'t specified when invoked', function () {
+                    expect(function () {
+                        collection.fetchContent('26482715');
+                    }).toThrow();
+                    expect(function () {
+                        collection.fetchContent('', undefined);
+                    }).toThrow();
+                });
+                
+                xit('optionally passes depthOnly to the content client', function () {
+                    throw 'TODO (Joao) Figure out how to test this!';
+                    collection.fetchContent('26482715', clbk, true);
+                    expect(cC.getContent).toHaveBeenCalled();
+                    expect(cC.getContent.calls[0].args[0].depthOnly).toBe(true);
+                });
+            });
+>>>>>>> 5b8fc64... Debugged and tested.
 
             describe('.createArchive', function () {
                 it('returns a readable CollectionArchive Stream', function () {

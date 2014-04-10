@@ -8,7 +8,7 @@ define([
     'streamhub-sdk/collection/clients/create-client',
     'streamhub-sdk/collection/clients/write-client',
     'streamhub-sdk/content/clients/content-client',
-    'streamhub-sdk/content/fetchContent',
+    'streamhub-sdk/content/fetch-content',
     'streamhub-sdk/auth',
     'inherits',
     'streamhub-sdk/debug'],
