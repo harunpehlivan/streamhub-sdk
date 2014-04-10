@@ -123,6 +123,48 @@ function (
 
                 expect(lfContentView.$el.find('.hub-btn-toggle-on')).toHaveLength(1);
             });
+
+            it("updates the label when a 'opine' event is emitted on the associated content", function () {
+                var contentViewFactory = new ContentViewFactory();
+                var lfContent = new LivefyreContent({ body: 'lf content' });
+                var lfContentView = contentViewFactory.createContentView(lfContent);
+                lfContentView.render();
+
+                spyOn(lfContentView._likeButton, 'updateLabel');
+
+                // Add like
+                var lfOpine = new LivefyreOpine({
+                    type: 1,
+                    vis: 1,
+                    author: { id: mockAuthResponse.data.profile.id }
+                });
+                lfContent.addOpine(lfOpine);
+
+                expect(lfContentView._likeButton.updateLabel).toHaveBeenCalled();
+            });
+
+            it("updates the label when a 'removeOpine' event is emitted on the associated content", function () {
+                var contentViewFactory = new ContentViewFactory();
+                var lfContent = new LivefyreContent({ body: 'lf content' });
+                var lfContentView = contentViewFactory.createContentView(lfContent);
+                lfContentView.render();
+
+                // Add like
+                var lfOpine = new LivefyreOpine({
+                    type: 1,
+                    vis: 1,
+                    author: { id: mockAuthResponse.data.profile.id }
+                });
+                lfContent.addOpine(lfOpine);
+
+                spyOn(lfContentView._likeButton, 'updateLabel');
+
+                // Remove like
+                lfContent.removeOpine(lfOpine);
+
+                expect(lfContentView._likeButton.updateLabel).toHaveBeenCalled();
+
+            });
         });
 
         describe('opts.shareCommand', function () {
