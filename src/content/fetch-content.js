@@ -13,7 +13,8 @@ var StateToContent = require('streamhub-sdk/content/state-to-content');
  * @param [opts.environment] {string=}
  * @param [opts.replies] {boolean=} Default is true.
  * @param [opts.depthOnly] {boolean=} Default is false.
- * @param [opts.contentClient] {ContentClient=}
+ * @param [opts.contentClient] {ContentClient=} HTTP Client
+ * @param [opts.stateToContent] {function} Constructor for StateToContent
  * @param callback {!function(err: Object, data: Content)}
  */
 var fetchContent = function (opts, callback) {
@@ -47,7 +48,8 @@ var fetchContent = function (opts, callback) {
         
         //Prepare StateToContents to handle the received states
         opts.authors = data.authors;
-        var trans = new StateToContent(opts);
+        var transConstructor = opts.stateToContent || StateToContent;
+        var trans = new transConstructor(opts);
         
         //Listen for states that have been transformed into Content
         trans.on('data', function (content) {
