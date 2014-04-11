@@ -65,7 +65,6 @@ AuthRequiredCommand.prototype.execute = function () {
             doWorkWithAuth();
             callback();
         });
-        //this._authenticate(doWorkWithAuth);
     }
 };
 
@@ -82,7 +81,7 @@ AuthRequiredCommand.prototype.execute = function () {
  * @returns {!boolean}
  */
 AuthRequiredCommand.prototype.canExecute = function () {
-    if ( ! auth.isAuthenticated() || ! auth.hasDelegate()) {
+    if ( ! auth.isAuthenticated() || ! auth.hasDelegate('login')) {
         return false;
     }
     return Command.prototype.canExecute.apply(this, arguments);
