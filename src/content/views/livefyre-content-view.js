@@ -120,10 +120,11 @@ define([
             this._commands.like
         );
 
+        var enabled = auth.get('livefyre') ? this.content.isLiked(auth.get('livefyre').get('id')) : false;
         var likeCount = this.content.getLikeCount();
         var likeButton = new HubToggleButton(likeCommand, {
             className: 'content-like',
-            enabled: this.content.isLiked(),
+            enabled: enabled,
             label: likeCount.toString()
         });
         return likeButton;

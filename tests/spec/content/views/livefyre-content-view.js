@@ -14,7 +14,8 @@ define([
     'streamhub-sdk/content/content-view-factory',
     'streamhub-sdk/collection/liker',
     'streamhub-sdk/ui/button',
-    'streamhub-sdk/ui/command'],
+    'streamhub-sdk/ui/command',
+    'streamhub-sdk/sharer'],
 function (
     $,
     auth,
@@ -31,7 +32,8 @@ function (
     ContentViewFactory,
     Liker,
     Button,
-    Command) {
+    Command,
+    sharer) {
     'use strict';
 
     describe('LivefyreContentView', function () {
@@ -74,6 +76,9 @@ function (
                 // Auth mock user
                 mockUserFactory = new MockUserFactory();
                 user = mockUserFactory.createUser();
+                auth.delegate({
+                    login: function () {}
+                });
                 auth.login({ livefyre: user});
                 contentViewFactory = new ContentViewFactory();
             });
@@ -237,14 +242,16 @@ function (
             function createCommand(onExecute) {
                 return new Command(onExecute || function () {});
             }
-            it('if not passed, share button does not appear', function () {
+
+            it('if sharer delegate is undefined, share button does not appear', function () {
+                expect(sharer.hasDelegate()).toBe(false);
                 var contentView = new LivefyreContentView({
                     content: new Content('blah')
                 });
                 contentView.render();
                 expect(hasShareButton(contentView)).toBe(false);
             });
-            it('share button appears if passed and canExecute', function () {
+            it('share button appears if passed and canExecute and share delegate is set', function () {
                 var command = createCommand();
                 command.canExecute = function () { return true; };
                 var contentView = contentViewWithShareCommand(command);

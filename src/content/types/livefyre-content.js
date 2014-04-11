@@ -1,11 +1,10 @@
 define([
     'streamhub-sdk/jquery',
-    'auth',
     'streamhub-sdk/content',
     'streamhub-sdk/content/annotator',
     'streamhub-sdk/content/types/livefyre-opine',
     'inherits'],
-function($, auth, Content, Annotator, LivefyreOpine, inherits) {
+function($, Content, Annotator, LivefyreOpine, inherits) {
     'use strict';
 
     /**
@@ -159,9 +158,6 @@ function($, auth, Content, Annotator, LivefyreOpine, inherits) {
     };
 
     LivefyreContent.prototype.isLiked = function (authorId) {
-        if (!authorId) {
-            authorId = auth.get('livefyre') ? auth.get('livefyre').get('id') : authorId;
-        }
         for (var i=0; i < this.opines.length; i++) {
             if (authorId === this.opines[i].author.id) {
                 return true;
