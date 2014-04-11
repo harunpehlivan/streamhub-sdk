@@ -105,7 +105,8 @@ define([
             }
         });
 
-        if (content.author && content.author.id === auth.get('livefyre').get('id')) {
+        var livefyreUser = auth.get('livefyre');
+        if (livefyreUser && content.author && content.author.id === livefyreUser.get('id')) {
             likeCommand.disable();
         }
 
