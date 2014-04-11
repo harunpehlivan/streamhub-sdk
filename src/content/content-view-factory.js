@@ -13,7 +13,8 @@ define([
     'streamhub-sdk/content/views/facebook-content-view',
     'streamhub-sdk/content/views/instagram-content-view',
     'streamhub-sdk/content/views/gallery-on-focus-view',
-    'streamhub-sdk/ui/command'
+    'streamhub-sdk/ui/command',
+    'streamhub-sdk/collection/liker'
 ], function(
     auth,
     Content,
@@ -29,7 +30,8 @@ define([
     FacebookContentView,
     InstagramContentView,
     GalleryOnFocusView,
-    Command
+    Command,
+    Liker
 ) {
     'use strict';
 
@@ -93,7 +95,7 @@ define([
 
     ContentViewFactory.prototype._createLikeCommand = function (content, liker) {
         if (! liker) {
-            return;
+            liker = new Liker();
         }
         var likeCommand = new Command(function () {
             if (! content.isLiked()) {
