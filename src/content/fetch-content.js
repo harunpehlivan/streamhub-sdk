@@ -54,7 +54,7 @@ var fetchContent = function (opts, callback) {
             contents.push(content);
         });
         
-        trans.once('drain', function () {
+        trans.once('end', function () {
             //Once trans has processed everything, find the desired Content
             //and send it to the callback.
             for (var i=0; i < contents.length; i++) {
@@ -73,6 +73,7 @@ var fetchContent = function (opts, callback) {
             state = states[i];
             trans.write(state);
         }
+        trans.end();
     }
 };
 
