@@ -12,6 +12,7 @@ define([
     'streamhub-sdk/content/types/livefyre-opine',
     'streamhub-sdk/content/views/livefyre-content-view',
     'streamhub-sdk/content/content-view-factory',
+    'streamhub-sdk/collection/liker',
     'streamhub-sdk/ui/button',
     'streamhub-sdk/ui/command'],
 function (
@@ -28,6 +29,7 @@ function (
     LivefyreOpine,
     LivefyreContentView,
     ContentViewFactory,
+    Liker,
     Button,
     Command) {
     'use strict';
@@ -65,13 +67,15 @@ function (
         describe('Like button', function () {
 
             var mockUserFactory,
-                user;
+                user,
+                contentViewFactory;
 
             beforeEach(function () {
                 // Auth mock user
                 mockUserFactory = new MockUserFactory();
                 user = mockUserFactory.createUser();
                 auth.login({ livefyre: user});
+                contentViewFactory = new ContentViewFactory();
             });
 
             afterEach(function () {
@@ -79,8 +83,6 @@ function (
             });
 
             it("only renders for non-Twitter content items", function () {
-                var contentViewFactory = new ContentViewFactory();
-
                 var twitterContent = new LivefyreTwitterContent({
                     id: 'tweet-1234@twitter.com',
                     body: 'tweet i am',
@@ -88,29 +90,33 @@ function (
                         id: 'jimmy@twitter.com'
                     }
                 });
-                var twitterContentView = contentViewFactory.createContentView(twitterContent);
+                var twitterContentView = contentViewFactory.createContentView(twitterContent, {
+                    liker: new Liker()
+                });
                 twitterContentView.render();
 
                 expect(twitterContentView.$el.find('.hub-content-like')).toHaveLength(0);
 
                 var lfContent = new LivefyreContent({ body: 'lf content' });
-                var lfContentView = contentViewFactory.createContentView(lfContent);
+                var lfContentView = contentViewFactory.createContentView(lfContent, {
+                    liker: new Liker()
+                });
                 lfContentView.render();
 
                 expect(lfContentView.$el.find('.hub-content-like')).toHaveLength(1);
             });
 
             it("is in the toggle off state when not liked by authenticated user", function () {
-                var contentViewFactory = new ContentViewFactory();
                 var lfContent = new LivefyreContent({ body: 'lf content' });
-                var lfContentView = contentViewFactory.createContentView(lfContent);
+                var lfContentView = contentViewFactory.createContentView(lfContent, {
+                    liker: new Liker()
+                });
                 lfContentView.render();
 
                 expect(lfContentView.$el.find('.hub-btn-toggle-off')).toHaveLength(1);
             });
 
             it("is in the toggle on state when liked by authenticated user", function () {
-                var contentViewFactory = new ContentViewFactory();
                 var lfContent = new LivefyreContent({ body: 'lf content' });
                 var lfOpine = new LivefyreOpine({
                     type: 1,
@@ -118,16 +124,19 @@ function (
                     author: { id: mockAuthResponse.data.profile.id }
                 });
                 lfContent.addOpine(lfOpine);
-                var lfContentView = contentViewFactory.createContentView(lfContent);
+                var lfContentView = contentViewFactory.createContentView(lfContent, {
+                    liker: new Liker()
+                });
                 lfContentView.render();
 
                 expect(lfContentView.$el.find('.hub-btn-toggle-on')).toHaveLength(1);
             });
 
             it("updates the label when a 'opine' event is emitted on the associated content", function () {
-                var contentViewFactory = new ContentViewFactory();
                 var lfContent = new LivefyreContent({ body: 'lf content' });
-                var lfContentView = contentViewFactory.createContentView(lfContent);
+                var lfContentView = contentViewFactory.createContentView(lfContent, {
+                    liker: new Liker()
+                });
                 lfContentView.render();
 
                 spyOn(lfContentView._likeButton, 'updateLabel');
@@ -144,9 +153,10 @@ function (
             });
 
             it("updates the label when a 'removeOpine' event is emitted on the associated content", function () {
-                var contentViewFactory = new ContentViewFactory();
                 var lfContent = new LivefyreContent({ body: 'lf content' });
-                var lfContentView = contentViewFactory.createContentView(lfContent);
+                var lfContentView = contentViewFactory.createContentView(lfContent, {
+                    liker: new Liker()
+                });
                 lfContentView.render();
 
                 // Add like
@@ -163,7 +173,50 @@ function (
                 lfContent.removeOpine(lfOpine);
 
                 expect(lfContentView._likeButton.updateLabel).toHaveBeenCalled();
+            });
 
+            it("cannot execute when the Like button's associated content is authored by the authenticated user (cannot Like own content)", function () {
+                var lfContent = new LivefyreContent({
+                    body: 'lf content',
+                    author: { id: mockAuthResponse.data.profile.id }
+                });
+
+                // Add like
+                var lfOpine = new LivefyreOpine({
+                    type: 1,
+                    vis: 1,
+                    author: { id: mockAuthResponse.data.profile.id }
+                });
+                lfContent.addOpine(lfOpine);
+
+                var lfContentView = contentViewFactory.createContentView(lfContent, {
+                    liker: new Liker()
+                });
+                lfContentView.render();
+
+                expect(lfContentView._commands.like._canExecute).toBe(false);
+            });
+
+            it("can execute when the Like button's associated content is not authored by the authenticated user (can Like other users' content)", function () {
+                var lfContent = new LivefyreContent({
+                    body: 'lf content',
+                    author: { id: 'datdude@blah' }
+                });
+
+                // Add like
+                var lfOpine = new LivefyreOpine({
+                    type: 1,
+                    vis: 1,
+                    author: { id: mockAuthResponse.data.profile.id }
+                });
+                lfContent.addOpine(lfOpine);
+
+                var lfContentView = contentViewFactory.createContentView(lfContent, {
+                    liker: new Liker()
+                });
+                lfContentView.render();
+
+                expect(lfContentView._commands.like._canExecute).toBe(true);
             });
         });
 

@@ -1,4 +1,5 @@
 define([
+    'auth',
     'streamhub-sdk/content',
     'streamhub-sdk/content/types/livefyre-content',
     'streamhub-sdk/content/types/livefyre-twitter-content',
@@ -14,6 +15,7 @@ define([
     'streamhub-sdk/content/views/gallery-on-focus-view',
     'streamhub-sdk/ui/command'
 ], function(
+    auth,
     Content,
     LivefyreContent,
     LivefyreTwitterContent,
@@ -106,6 +108,10 @@ define([
                 });
             }
         });
+
+        if (content.author && content.author.id === auth.get('livefyre').get('id')) {
+            likeCommand.disable();
+        }
 
         return likeCommand;
     };
