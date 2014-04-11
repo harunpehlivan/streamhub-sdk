@@ -133,7 +133,7 @@ define([
      * opts.shareCommand to the ContentView
      */
     ContentViewFactory.prototype._createShareCommand = function (content, sharer) {
-        if ( ! sharer) {
+        if ( ! sharer || ! sharer.hasDelegate()) {
             return;
         }
         var shareCommand = new Command(function () {

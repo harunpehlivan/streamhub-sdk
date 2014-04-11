@@ -10,6 +10,10 @@ Sharer.prototype.delegate = function (delegate) {
     this._delegate = delegate;
 };
 
+Sharer.prototype.hasDelegate = function () {
+    return !!this._delegate;
+};
+
 Sharer.prototype.share = function () {
     if ( ! this._delegate) {
         log('there is no share delegate');
