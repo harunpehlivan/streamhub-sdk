@@ -30,7 +30,7 @@ var AuthRequiredCommand = function (command, opts) {
 
     auth.on('delegate', function () {
         if (auth.hasDelegate()) {
-            this.enable();
+            self.enable();
         }
     });
 };

@@ -13,11 +13,6 @@ function HubToggleButton (fnOrCommand, opts) {
 }
 inherits(HubToggleButton, HubButton);
 
-// DOM Event Listeners
-HubToggleButton.prototype.events = HubButton.prototype.events.extended({
-    click: '_execute'
-});
-
 HubToggleButton.prototype._execute = function () {
     HubButton.prototype._execute.call(this);
     this._enabled = !this._enabled;
