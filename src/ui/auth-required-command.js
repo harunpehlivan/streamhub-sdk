@@ -27,6 +27,12 @@ var AuthRequiredCommand = function (command, opts) {
     if (opts.authenticate) {
         this._authenticate = opts.authenticate;
     }
+
+    auth.on('delegate', function () {
+        if (auth.hasDelegate()) {
+            this.enable();
+        }
+    });
 };
 inherits(AuthRequiredCommand, Command);
 
@@ -66,17 +72,17 @@ AuthRequiredCommand.prototype.execute = function () {
 /**
  * Check whether the Command can be executed.
  * 
- * return | _command.canExecute() | Auth.getToken() | _authCmd.canExecute()
- * -------|-----------------------|-----------------|----------------------
- *  false |         false         |                 |
- *  true  |         true          |     truthy      |
- *  false |         true          |     falsy       |      false
- *  true  |         true          |     falsy       |      true
- * ------------------------------------------------------------------------
+ * return | _command.canExecute() | auth.isAuthenticated() | _authCmd.canExecute()
+ * -------|-----------------------|------------------------|----------------------
+ *  false |         false         |                        |
+ *  true  |         true          |     truthy             |
+ *  false |         true          |     falsy              |      false
+ *  true  |         true          |     falsy              |      true
+ * -------------------------------------------------------------------------------
  * @returns {!boolean}
  */
 AuthRequiredCommand.prototype.canExecute = function () {
-    if ( ! auth.isAuthenticated()) {
+    if ( ! auth.isAuthenticated() || ! auth.hasDelegate()) {
         return false;
     }
     return Command.prototype.canExecute.apply(this, arguments);
