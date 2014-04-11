@@ -55,6 +55,12 @@ define([
     LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left';
     LivefyreContentView.prototype.footerRightSelector = '.content-footer-right';
 
+
+    /**
+     * Set the a command for a buton
+     * This should only be called once.
+     * @private
+     */
     LivefyreContentView.prototype._setCommand = function (cmds) {
         for (var name in cmds) {
             if (cmds.hasOwnProperty(name)) {
@@ -62,6 +68,9 @@ define([
                     continue;
                 }
                 this._commands[name] = cmds[name];
+
+                // If canExecute changes, re-render buttons because now maybe the button should appear
+                cmds[name].on('change:canExecute', this._renderButtons.bind(this));
             }
         }
     };
@@ -94,9 +103,7 @@ define([
         //});
         //this.addButton(replyButton);
 
-        var likeButton = this._createLikeButton();
-        this.addButton(likeButton);
-
+        this._renderLikeButton();
         this._renderShareButton();
     };
 
@@ -114,13 +121,22 @@ define([
         );
 
         var likeCount = this.content.getLikeCount();
-        var likeButton = this._likeButton = new HubToggleButton(likeCommand, {
+        var likeButton = new HubToggleButton(likeCommand, {
             className: 'content-like',
             enabled: this.content.isLiked(),
             label: likeCount.toString()
         });
         return likeButton;
     };
+
+    LivefyreContentView.prototype._renderLikeButton = function () {
+        var likeButton = this._likeButton = this._createLikeButton();
+        if ( ! likeButton) {
+            return;
+        }
+        this.addButton(likeButton);
+    };
+
     /**
      * Render a Share Button
      * @protected
@@ -147,21 +163,6 @@ define([
             label: 'Share'
         });
         return shareButton;
-    };
-
-    /**
-     * Set the share command
-     * This should only be called once.
-     * @private
-     */
-    LivefyreContentView.prototype._setShareCommand = function (shareCommand) {
-        this._shareCommand = shareCommand;
-        if ( ! shareCommand) {
-            return;
-        }
-        // If canExecute changes, re-render buttons because now maybe the share
-        // button should appear
-        shareCommand.on('change:canExecute', this._renderButtons.bind(this));
     };
 
     LivefyreContentView.prototype.addButton = function (button, opts) {

@@ -230,7 +230,7 @@ function (
             }
             function contentViewWithShareCommand(shareCommand) {
                 return new LivefyreContentView({
-                    content: new Content('blah'),
+                    content: new LivefyreContent({ body: 'blah' }),
                     shareCommand: shareCommand
                 });
             }

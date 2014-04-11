@@ -44,7 +44,7 @@ Oembed) {
         });
 
         describe('when passed opts.sharer', function () {
-            it('creates a content with a ._shareCommand', function () {
+            it('creates a content with a ._commands.share', function () {
                 var sharer = { share: function () {} };
                 var content = new LivefyreContent();
                 var contentViewFactory = new ContentViewFactory();
@@ -53,7 +53,7 @@ Oembed) {
                     sharer: sharer
                 });
                 expect(contentViewFactory._createShareCommand).toHaveBeenCalledWith(content, sharer);
-                expect(contentView._shareCommand).toBeTruthy();
+                expect(contentView._commands.share).toBeTruthy();
             });
         });
 
