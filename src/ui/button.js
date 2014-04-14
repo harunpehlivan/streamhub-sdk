@@ -27,6 +27,7 @@ function Button (command, opts) {
         command = new Command(command);
     }
     if (command) {
+        command.setErrback(opts.errback);
         this._setCommand(command);
     }
 }
@@ -81,7 +82,7 @@ Button.prototype.getTemplateContext = function () {
  * Execute the button's command
  * @protected
  */
-Button.prototype._execute = function _execute() {
+Button.prototype._execute = function () {
     // TODO: Don't execute if not enabled
     this._command.execute();
 };

@@ -97,11 +97,11 @@ define([
         if (! liker) {
             liker = new Liker();
         }
-        var likeCommand = new Command(function () {
+        var likeCommand = new Command(function (errback) {
             if (! content.isLiked(auth.get('livefyre').get('id'))) {
-                liker.like(content);
+                liker.like(content, errback);
             } else {
-                liker.unlike(content);
+                liker.unlike(content, errback);
             }
         });
 

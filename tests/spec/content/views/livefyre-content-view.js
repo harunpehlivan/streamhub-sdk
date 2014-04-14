@@ -144,7 +144,7 @@ function (
                 });
                 lfContentView.render();
 
-                spyOn(lfContentView._likeButton, 'updateLabel');
+                spyOn(lfContentView._likeButton, '_updateLikeCount');
 
                 // Add like
                 var lfOpine = new LivefyreOpine({
@@ -154,7 +154,7 @@ function (
                 });
                 lfContent.addOpine(lfOpine);
 
-                expect(lfContentView._likeButton.updateLabel).toHaveBeenCalled();
+                expect(lfContentView._likeButton._updateLikeCount).toHaveBeenCalled();
             });
 
             it("updates the label when a 'removeOpine' event is emitted on the associated content", function () {
@@ -172,12 +172,48 @@ function (
                 });
                 lfContent.addOpine(lfOpine);
 
-                spyOn(lfContentView._likeButton, 'updateLabel');
+                spyOn(lfContentView._likeButton, '_updateLikeCount');
 
                 // Remove like
                 lfContent.removeOpine(lfOpine);
 
-                expect(lfContentView._likeButton.updateLabel).toHaveBeenCalled();
+                expect(lfContentView._likeButton._updateLikeCount).toHaveBeenCalled();
+            });
+
+            it("auto-increments the label when Like button is clicked", function () {
+                var lfContent = new LivefyreContent({ body: 'lf content' });
+                var liker = new Liker();
+                var lfContentView = contentViewFactory.createContentView(lfContent, {
+                    liker: liker
+                });
+                lfContentView.render();
+
+                spyOn(liker, 'like');
+                spyOn(lfContentView._likeButton, '_handleClick').andCallThrough();
+
+                lfContentView._likeButton.$el.click();
+
+                expect(lfContentView._likeButton._handleClick).toHaveBeenCalled();
+                expect(lfContentView._likeButton._label).toBe(1);
+            });
+
+            it("reverts label when the Like request errors", function () {
+                var lfContent = new LivefyreContent({ body: 'lf content' });
+                var liker = new Liker();
+                var lfContentView = contentViewFactory.createContentView(lfContent, {
+                    liker: liker
+                });
+                lfContentView.render();
+
+                spyOn(liker._writeClient, 'like').andCallFake(function (opts, callback) {
+                    callback('error');
+                });
+                spyOn(liker, 'like').andCallFake(function (content, callback) {
+                    this._writeClient.like({}, callback);
+                });
+
+                lfContentView._likeButton.$el.click();
+                expect(lfContentView._likeButton._label).toBe(0);
             });
 
             it("cannot execute when the Like button's associated content is authored by the authenticated user (cannot Like own content)", function () {

@@ -42,6 +42,8 @@ inherits(AuthRequiredCommand, Command);
  */
 AuthRequiredCommand.prototype.execute = function () {
     var self = this;
+    var executeArgs = arguments;
+
     function isAuthenticated () {
         return auth.get('livefyre');
     }
@@ -55,14 +57,14 @@ AuthRequiredCommand.prototype.execute = function () {
     }
 
     if (isAuthenticated()) {
-        doWorkWithAuth();
+        doWorkWithAuth.apply(self, executeArgs);
     } else {
         auth.login(function (err, callback) {
             if (err) {
                 this.emit('loginError.hub', err);
                 return;
             }
-            doWorkWithAuth();
+            doWorkWithAuth.apply(self, executeArgs);
             callback();
         });
     }
