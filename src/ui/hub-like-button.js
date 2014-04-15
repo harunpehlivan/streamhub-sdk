@@ -28,11 +28,27 @@ function HubLikeButton (fnOrCommand, opts) {
             }
         }.bind(this)
     });
+
+    var self = this;
+    auth.on('authenticate.livefyre', function (credentials) {
+        self._enabled = auth.get('livefyre') ? self._content.isLiked(auth.get('livefyre').get('id')) : false;
+        self.render();
+    });
+    auth.on('logout', function () {
+        self._enabled = false;
+        self.render();
+    });
 }
 inherits(HubLikeButton, HubToggleButton);
 
 HubLikeButton.prototype._execute = function () {
-    HubToggleButton.prototype._execute.call(this);
+    this._command.execute();
+    if (! auth.isAuthenticated()) {
+        return;
+    }
+    this._enabled = !this._enabled;
+    this.$el.removeClass('hub-btn-toggle-on').removeClass('hub-btn-toggle-off');
+    this._enabled ? this.$el.addClass('hub-btn-toggle-on') : this.$el.addClass('hub-btn-toggle-off');
     this._handleClick();
 };
 

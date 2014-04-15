@@ -22,8 +22,8 @@ var util = require('streamhub-sdk/util');
 var AuthRequiredCommand = function (command, opts) {
     var self = this;
     opts = opts || {};
-    command = command || function () {};
-    Command.call(this, command, opts);
+    this._command = command || function () {};
+    Command.call(this, this._command, opts);
     if (opts.authenticate) {
         this._authenticate = opts.authenticate;
     }
@@ -59,13 +59,12 @@ AuthRequiredCommand.prototype.execute = function () {
     if (isAuthenticated()) {
         doWorkWithAuth.apply(self, executeArgs);
     } else {
-        auth.login(function (err, callback) {
+        auth.login(function (err, user) {
             if (err) {
                 this.emit('loginError.hub', err);
                 return;
             }
             doWorkWithAuth.apply(self, executeArgs);
-            callback();
         });
     }
 };

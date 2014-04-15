@@ -22,6 +22,7 @@ HubToggleButton.prototype._execute = function () {
 
 HubToggleButton.prototype.render = function () {
     HubButton.prototype.render.call(this);
+    this.$el.removeClass('hub-btn-toggle-on').removeClass('hub-btn-toggle-off');
     this._enabled ? this.$el.addClass('hub-btn-toggle-on') : this.$el.addClass('hub-btn-toggle-off');
 };
 
