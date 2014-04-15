@@ -19,6 +19,7 @@ function Button (command, opts) {
     if (this.elClassPrefix) {
         this.elClass = distributeClassPrefix(this.elClassPrefix, this.elClass);
     }
+    this._disabled = false;
     this._label = opts.label || '';
 
     View.call(this, opts);
@@ -109,6 +110,7 @@ Button.prototype._setCommand = function (command) {
  */
 Button.prototype._setEnabled = function (isEnabled) {
     this.$el.toggleClass(this.disabledClass, ! isEnabled);
+    this._disabled = !isEnabled;
 };
 
 module.exports = Button;

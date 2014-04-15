@@ -14,10 +14,10 @@ function HubLikeButton (fnOrCommand, opts) {
         this._content.on("removeOpine", function () { this._updateLikeCount() }.bind(this));
     }
 
-    var likeCommand = new AuthRequiredCommand(fnOrCommand);
+    this._likeCommand = new AuthRequiredCommand(fnOrCommand);
     var enabled = auth.get('livefyre') ? this._content.isLiked(auth.get('livefyre').get('id')) : false;
     var likeCount = this._content.getLikeCount();
-    HubToggleButton.call(this, likeCommand, {
+    HubToggleButton.call(this, this._likeCommand, {
         className: 'content-like',
         enabled: enabled,
         label: likeCount.toString(),
@@ -31,10 +31,14 @@ function HubLikeButton (fnOrCommand, opts) {
 
     var self = this;
     auth.on('authenticate.livefyre', function (credentials) {
+        if (self._content.author.id === auth.get('livefyre').get('id')) {
+            self._likeCommand.disable();
+        }
         self._enabled = auth.get('livefyre') ? self._content.isLiked(auth.get('livefyre').get('id')) : false;
         self.render();
     });
     auth.on('logout', function () {
+        self._likeCommand.enable();
         self._enabled = false;
         self.render();
     });
