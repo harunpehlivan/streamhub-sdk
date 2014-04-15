@@ -166,6 +166,7 @@ function (
 
                 // Add like
                 var lfOpine = new LivefyreOpine({
+                    id: 'blah',
                     type: 1,
                     vis: 1,
                     author: { id: mockAuthResponse.data.profile.id }

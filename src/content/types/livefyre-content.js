@@ -108,15 +108,13 @@ function($, Content, Annotator, LivefyreOpine, inherits) {
 
         var found = false;
         if (obj.id) {
-            for (var i in this.opines) {
-                if (this.opines.hasOwnProperty(i)) {
-                    if (this.opines[i].id === obj.id) {
-                        found = true;
-                    }
+            for (var i=0; i < this.opines.length; i++) {
+                if (this.opines[i].id === obj.id) {
+                    found = true;
                 }
             }
         } else {
-            for (var i in this.opines) {
+            for (var i=0; i < this.opines.length; i++) {
                 if (this.opines[i].content.id === obj.content.id) {
                     found = true;
                 }
@@ -139,10 +137,19 @@ function($, Content, Annotator, LivefyreOpine, inherits) {
      */
     LivefyreContent.prototype.removeOpine = function(obj) {
         var indexToRemove = null;
-        for (var i=0; i < this.opines.length; i++) {
-            if (obj.id === this.opines[i].id) {
-                indexToRemove = i;
-                break;
+        if (obj.id) {
+            for (var i=0; i < this.opines.length; i++) {
+                if (this.opines[i].id === obj.id) {
+                    indexToRemove = i;
+                    break;
+                }
+            }
+        } else {
+            for (var i=0; i < this.opines.length; i++) {
+                if (this.opines[i].content.id === obj.content.id) {
+                    indexToRemove = i;
+                    break;
+                }
             }
         }
         if (indexToRemove === null) {
