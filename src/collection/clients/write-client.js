@@ -48,13 +48,12 @@ function(LivefyreHttpClient, inherits) {
         }
 
         if (opts.media) {
-            postData.media = JSON.stringify(opts.media);
+            postData.attachments = JSON.stringify(opts.media);
         }
 
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
@@ -84,7 +83,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
@@ -104,7 +102,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
@@ -124,7 +121,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
@@ -147,7 +143,6 @@ function(LivefyreHttpClient, inherits) {
         this._request({
             method: 'POST',
             url: url,
-            dataType: 'json',
             data: postData
         }, callback);
     };
