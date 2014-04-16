@@ -111,6 +111,9 @@ define([
      * @protected
      */
     LivefyreContentView.prototype._createLikeButton = function () {
+        if (! auth.hasDelegate('login')) {
+            return; // Don't render a button when not logged in
+        }
         return new HubLikeButton(this._commands.like, {
             content: this.content
         });

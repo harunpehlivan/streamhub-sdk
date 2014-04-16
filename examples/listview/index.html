@@ -10,7 +10,6 @@
     </style>
 </head>
     <body>
-        <button id="auth-button">Log in</button>
         <div id="listView"></div>
 
         <script src="../../lib/cajon/cajon.js" type="text/javascript"></script>
@@ -20,26 +19,13 @@
             baseUrl: '../../'
         });
         require([
-            'auth',
-            'auth-livefyre',
-            'auth/contrib/auth-button',
-            'auth-livefyre/livefyre-auth-delegate',
             'streamhub-sdk/auth',
             'streamhub-sdk/content/views/content-list-view',
             'streamhub-sdk/collection',
             'streamhub-sdk/content',
             'streamhub-sdk/collection/liker',
             'streamhub-sdk/sharer',
-        ],function (auth, authLivefyre, createAuthButton, livefyreAuthDelegate, Auth, ListView, Collection, Content, Liker, sharer) {
-            createAuthButton(auth, document.getElementById('auth-button'));
-
-            authLivefyre.plugin(auth);
-            var delegate = window.delegate = livefyreAuthDelegate('http://www.livefyre.com');
-            // No auth in this example. Uncomment next line if you temporarily need it
-            // but please leave it disabled in commits. Use 'auth' example if you want
-            // auth
-            //auth.delegate(delegate);
-
+        ],function (Auth, ListView, Collection, Content, Liker, sharer) {
             var opts = {
                 "network": "labs-t402.fyre.co",
                 "siteId": "303827",
