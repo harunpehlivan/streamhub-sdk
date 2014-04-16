@@ -39,6 +39,12 @@ describe('AuthRequiredCommand: streamhub-sdk/ui/command/auth-required-command', 
             auth.delegate({
                 login: function () {}
             });
+            auth.delegate({
+                login: function () {},
+                logout: function (loggedOut) {
+                    loggedOut();
+                }
+            });
         });
         
         afterEach(function () {

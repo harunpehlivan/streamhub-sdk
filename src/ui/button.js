@@ -21,6 +21,7 @@ function Button (command, opts) {
     }
     this._disabled = false;
     this._label = opts.label || '';
+    this._errback = opts.errback;
 
     View.call(this, opts);
 
@@ -28,7 +29,6 @@ function Button (command, opts) {
         command = new Command(command);
     }
     if (command) {
-        command.setErrback(opts.errback);
         this._setCommand(command);
     }
 }
@@ -85,7 +85,7 @@ Button.prototype.getTemplateContext = function () {
  */
 Button.prototype._execute = function () {
     // TODO: Don't execute if not enabled
-    this._command.execute();
+    this._command.execute(this._errback);
 };
 
 /**

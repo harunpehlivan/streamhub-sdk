@@ -20,13 +20,12 @@ function Command (fn, opts) {
     if (fn instanceof Command) {
         var fnCommand = fn;
         fn = function () {
-            fnCommand.execute(this._errback)
+            fnCommand.execute.apply(fnCommand, arguments);
         }.bind(this);
     }
 
     this._execute = fn;
     this._canExecute = (opts.enable !== false) ? true : false;
-    this._errback = opts.errback;
     EventEmitter.call(this);
 }
 inherits(Command, EventEmitter);
@@ -34,7 +33,7 @@ inherits(Command, EventEmitter);
 /**
  * Execute the Command
  */
-Command.prototype.execute = function () {
+Command.prototype.execute = function (errback) {
     this.canExecute() && this._execute.apply(this, arguments);
 };
 
@@ -51,13 +50,6 @@ Command.prototype.enable = function () {
 Command.prototype.disable = function () {
     this._changeCanExecute(false);
 };
-
-Command.prototype.setErrback = function (errback) {
-    if (! errback) {
-        return;
-    }
-    this._errback = errback;
-}
 
 /**
  * Change whether the Command can be executed

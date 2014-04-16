@@ -46,7 +46,7 @@ function HubLikeButton (fnOrCommand, opts) {
 inherits(HubLikeButton, HubToggleButton);
 
 HubLikeButton.prototype._execute = function () {
-    this._command.execute();
+    this._command.execute(this._errback);
     if (! auth.isAuthenticated()) {
         return;
     }
