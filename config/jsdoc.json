@@ -1,0 +1,19 @@
+{
+"templates": {
+    "applicationName": "streamhub-sdk",
+    "disqus": "",
+    "googleAnalytics": "",
+    "openGraph": {
+        "title": "",
+        "type": "website",
+        "image": "",
+        "site_name": "",
+        "url": ""
+    },
+    "meta": {
+        "title": "streamhub-sdk API Reference",
+        "description": "",
+        "keyword": ""
+    }
+}
+}
