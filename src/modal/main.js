@@ -188,7 +188,6 @@ define([
      * @private
      */
     ModalView.prototype._stack = function () {
-        console.debug('stacking ', ModalView._stackedInstances);
         ModalView._stackedInstances.push(this);
     };
     
