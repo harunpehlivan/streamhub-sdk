@@ -33,11 +33,9 @@ define([
         opts = opts || {};
 
         this._rendered = false;
-        this._controls = {
-            'left': [],
-            'right': []
-        };
+        
         this._commands = {};
+        resetControls.call(this);
         this._setCommand({
             like: opts.likeCommand,
             share: opts.shareCommand
@@ -50,6 +48,12 @@ define([
     LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left';
     LivefyreContentView.prototype.footerRightSelector = '.content-footer-right';
 
+    function resetControls() {
+        this._controls = {
+            'left': [],
+            'right': []
+        }; 
+    }
 
     /**
      * Set the a command for a buton
@@ -85,6 +89,7 @@ define([
             return;
         }
 
+        resetControls.call(this);
         this.$el.find(this.footerLeftSelector).empty();
         this.$el.find(this.footerRightSelector).empty();
 

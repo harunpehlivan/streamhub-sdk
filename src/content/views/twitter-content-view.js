@@ -42,7 +42,8 @@ function (LivefyreContentView, HubButton, inherits, $) {
             this.addButton(favoriteButton);
         } else {
             for (var i=0; i < this._controls.left.length; i++) {
-                this.addButton(this._controls.left[i]);
+                // TODO: Add it! It was causing an infinite loop
+                // this.addButton(this._controls.left[i]);
             }
         }
 

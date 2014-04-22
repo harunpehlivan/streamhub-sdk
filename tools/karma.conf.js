@@ -19,6 +19,7 @@ module.exports = function(config) {
       {pattern: 'tests/lib/function.bind.js', included: true},
       {pattern: 'tests/lib/spec-list.js', included: false},
       {pattern: 'src/**/*.js', included: false},
+      {pattern: 'src/**/*.css', included: false},
       {pattern: 'src/**/*.mustache', included: false},
       {pattern: 'tests/spec/**/*.js', included: false},
       {pattern: 'tests/mocks/**/*.js', included: false},

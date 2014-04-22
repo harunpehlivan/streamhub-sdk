@@ -12,7 +12,8 @@ require.config({
     'event-emitter': 'lib/event-emitter/src/event-emitter',
     inherits: 'lib/inherits/inherits',
     blanket: 'lib/blanket/dist/qunit/blanket',
-    'blanket-jasmine': 'lib/blanket/dist/jasmine/blanket_jasmine'
+    'blanket-jasmine': 'lib/blanket/dist/jasmine/blanket_jasmine',
+    rework: 'lib/rework/rework'
   },
   map: {
     '*': {
@@ -78,6 +79,9 @@ require.config({
     },
     'jasmine-jquery': {
         deps: ['jquery']
+    },
+    rework: {
+      exports: 'rework'
     }
   }
 });

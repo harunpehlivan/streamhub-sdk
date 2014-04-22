@@ -9,12 +9,29 @@ define([
     'streamhub-sdk/views/streams/more',
     'streamhub-sdk/views/show-more-button',
     'inherits',
-    'streamhub-sdk/debug'],
+    'streamhub-sdk/debug',
+    'text!streamhub-sdk/content/css/content.css',
+    'text!streamhub-sdk/views/css/list-view.css',
+    'rework'],
 function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView,
-        AttachmentGalleryModal, Writable, More, ShowMoreButton, inherits, debug) {
+        AttachmentGalleryModal, Writable, More, ShowMoreButton, inherits, debug,
+        contentCss, listCss, rework) {
     'use strict';
 
     var log = debug('streamhub-sdk/content/views/content-list-view');
+
+    function prefixedCss(prefix) {
+        var css = rework(contentCss + listCss)
+          .use(rework.prefixSelectors(prefix))
+          .toString();
+        return css;
+    }
+
+    function insertStyleEl(css) {
+        var $style = $('<style>'+css+'</style>');
+        $style.appendTo('head');
+        return $style[0];
+    }
 
     /**
      * A simple View that displays Content in a list (`<ul>` by default).
@@ -41,6 +58,17 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
                 this.modal = opts.modal;
         }
 
+        var clvId = new Date().getTime();
+        var clvIdSelector = '[data-hub-content-list-view-id=\"'+clvId+'\"]';
+        this._attrs = {
+            'data-hub-content-list-view-id': clvId
+        };
+
+        opts.css = (typeof opts.css === 'undefined') ? true : opts.css;
+        if (opts.css) {
+            this._styleEl = insertStyleEl(prefixedCss(clvIdSelector));
+        }
+ 
         ListView.call(this, opts);
 
         this._stash = opts.stash || this.more;
@@ -260,6 +288,39 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
         ListView.prototype.destroy.call(this);
         this.contentViewFactory = null;
     };
+
+
+    /**
+     * Set the element that this ContentListView renders in
+     * @param element {HTMLElement} The element to render the ContentListView in
+     */
+    ContentListView.prototype.setElement = function (el) {
+        if (this.$el) {
+            removeAttrs.call(this);
+        }
+
+        ListView.prototype.setElement.call(this, el);
+
+        addAttrs.call(this);
+    };
+
+    function removeAttrs() {
+        var attrs = this._attrs;
+        for (var key in attrs) {
+            if (attrs.hasOwnProperty(key)) {
+                this.$el.removeAttr(key);
+            }
+        }
+    }
+
+    function addAttrs(contentListView) {
+        var attrs = this._attrs;
+        for (var key in attrs) {
+            if (attrs.hasOwnProperty(key)) {
+                this.$el.attr(key, attrs[key]);
+            }
+        }
+    }
 
     return ContentListView;
 });
