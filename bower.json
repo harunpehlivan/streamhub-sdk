@@ -19,7 +19,8 @@
     "inherits": "git://github.com/Livefyre/inherits.git",
     "view": "git://github.com/Livefyre/view.git#~1.1",
     "auth": "git://github.com/Livefyre/auth.git",
-    "rework": "gobengo/rework#master"
+    "rework": "gobengo/rework#master",
+    "guid": "gobengo/guid"
   },
   "devDependencies": {
     "jasmine": "1.3.1",
