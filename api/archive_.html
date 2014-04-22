@@ -132,7 +132,7 @@
     </ul>
 </div>
     <div class="main">
-        <h1 class="page-title" data-filename="content.html">Class: content</h1>
+        <h1 class="page-title" data-filename="archive_.html">Class: streamhub-collection/streams/archive</h1>
         
 
 
@@ -141,7 +141,7 @@
     
 <header>
     <h2>
-    content
+    streamhub-collection/streams/archive
     </h2>
     
 </header>  
@@ -154,14 +154,14 @@
         
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="content">
+        <h4 class="name" id="streamhub-collection/streams/archive">
             
-            new content<span class="signature">(body)</span>
+            new streamhub-collection/streams/archive<span class="signature">(opts)</span>
         </h4>
     
         
         <div class="tag-source">
-            content/main.js, line 16
+            collection/streams/archive.js, line 39
         </div>
         
     </div>
@@ -172,7 +172,7 @@
     
     
     <div class="description">
-        A piece of Web Content
+        A Readable Stream that emits Content for a Livefyre Collection as sourced from StreamHub's Bootstrap APIs. This Stream emits Content in descending order by bootstrap page
     </div>
     
 
@@ -203,16 +203,13 @@
 	
         <tr>
             
-                <td class="name"><code>body</code></td>
+                <td class="name"><code>opts</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">Object</span>
+<span class="param-type">object</span>
 
 
             
@@ -222,8 +219,264 @@
             
             <td class="description last">
                 
-                A string of HTML, the Content body.
-    If an object, it should have a .body property</td>
+                Configuration options
+                
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>network</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                The StreamHub Network of the Collection</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>siteId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                The StreamHub Site ID of the Collection</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>articleId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                The StreamHub Aritcle ID of the Collection</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>environment</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                If not production, the hostname of the
+    StreamHub environment the Collection resides on</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>bootstrapClient</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">LivefyreBootstrapClient</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                A Client object
+    that can request StreamHub's Bootstrap web service</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>replies</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                Whether to read out reply Content</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>comparator</code></td>
+            
+            
+            <td class="type">
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                Indicate the order in which you'd like to read
+    the archive. Default is CollectionArchive.comparators.CREATED_AT_DESCENDING
+    (newest first). You can also pass other values of CollectionArchive.comparators</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+            </td>
         </tr>
 	
 	
@@ -258,13 +511,6 @@
 
     
     
-    <h5>Fires:</h5>
-    <ul>
-        <li>Content#event:attachment</li>
-    
-        <li>Content#event:removeAttachment</li>
-    </ul>
-    
 
     
 
@@ -280,6 +526,12 @@
     
     </div>
     
+    
+        <h3 class="subsection-title">Extends</h3>
+        
+        <ul>
+            <li>external:stream/readable</li>
+        </ul>
     
     
     
@@ -297,7 +549,7 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="enums.visibility"><span class="type-signature static">static</span>content.enums.visibility</h4>
+        <h4 class="name" id="comparators"><span class="type-signature static">static</span>streamhub-collection/streams/archive.comparators</h4>
     </div>
     
     
@@ -305,134 +557,13 @@
 <dd>
     
     <div class="description">
-        The StreamHub APIs use enumerations to define
-the visibility of messages sent down the wire. All levels of
-visibility should be in this enumeration.
+        Comparators that determine the order in which to get data out of the
+archive
     </div>
     
     
     
 <dl class="details">
-    
-        
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
-
-<table class="props">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>visibility.NONE</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Should not be displayed.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>visibility.EVERYONE</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Visible to all.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>visibility.OWNER</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Visible only to the author.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>visibility.GROUP</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Visible to privileged users.</td>
-        </tr>
-	
-	
-	</tbody>
-</table></dl>
-        
     
         
     
@@ -463,514 +594,6 @@ visibility should be in this enumeration.
         </dl>
     
     
-    
-        <h3 class="subsection-title">Methods</h3>
-        
-        <dl>
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="addAttachment">
-            
-            addAttachment<span class="signature">(obj)</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            content/main.js, line 39
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Attach an Oembed to the Content
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>obj</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Oembed</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                An Oembed Content instance to attach</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    <h5>Fires:</h5>
-    <ul>
-        <li>Content#event:attachment</li>
-    </ul>
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="addReply">
-            
-            addReply<span class="signature">(obj)</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            content/main.js, line 59
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Add a reply to the Content
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>obj</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Content</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                A piece of Content in reply to this one</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    <h5>Fires:</h5>
-    <ul>
-        <li>Content#event:addReply</li>
-    </ul>
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="removeAttachment">
-            
-            removeAttachment<span class="signature">(obj)</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            content/main.js, line 49
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Remove an Oembed from the Content
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>obj</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Oembed</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                An Oembed Content instance to attach</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    <h5>Fires:</h5>
-    <ul>
-        <li>Content#event:removeAttachment</li>
-    </ul>
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="set">
-            
-            set<span class="signature">(newProperties, silence)</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            content/main.js, line 71
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Set some properties and emit 'change' and 'change:{property}' events
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>newProperties</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                An object of properties to set on this Content</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>silence</code></td>
-            
-            
-            <td class="type">
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                [boolean] Mute any events that would be fired</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    <h5>Fires:</h5>
-    <ul>
-        <li>Content#event:change</li>
-    
-        <li>Content#event:change:_property_</li>
-    </ul>
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        </dl>
     
     
     

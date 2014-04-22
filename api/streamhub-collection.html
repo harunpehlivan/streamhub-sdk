@@ -132,7 +132,7 @@
     </ul>
 </div>
     <div class="main">
-        <h1 class="page-title" data-filename="content.html">Class: content</h1>
+        <h1 class="page-title" data-filename="streamhub-collection.html">Class: streamhub-collection</h1>
         
 
 
@@ -141,7 +141,7 @@
     
 <header>
     <h2>
-    content
+    streamhub-collection
     </h2>
     
 </header>  
@@ -154,14 +154,14 @@
         
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="content">
+        <h4 class="name" id="streamhub-collection">
             
-            new content<span class="signature">(body)</span>
+            new streamhub-collection<span class="signature">()</span>
         </h4>
     
         
         <div class="tag-source">
-            content/main.js, line 16
+            collection/main.js, line 24
         </div>
         
     </div>
@@ -172,7 +172,7 @@
     
     
     <div class="description">
-        A piece of Web Content
+        An Object that represents a hosted StreamHub Collection
     </div>
     
 
@@ -193,6 +193,8 @@
 		<th>Type</th>
 		
 		
+		<th>Default</th>
+		
 		
 		<th class="last">Description</th>
 	</tr>
@@ -203,27 +205,36 @@
 	
         <tr>
             
-                <td class="name"><code>body</code></td>
+                <td class="name"><code>opts.replies</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">Object</span>
+<span class="param-type">boolean</span>
 
 
             
             </td>
             
             
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
             
             <td class="description last">
                 
-                A string of HTML, the Content body.
-    If an object, it should have a .body property</td>
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                Whether to stream out reply Content from the Archives and Updaters</td>
         </tr>
 	
 	
@@ -258,13 +269,6 @@
 
     
     
-    <h5>Fires:</h5>
-    <ul>
-        <li>Content#event:attachment</li>
-    
-        <li>Content#event:removeAttachment</li>
-    </ul>
-    
 
     
 
@@ -290,177 +294,6 @@
     
     
     
-    
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl>
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="enums.visibility"><span class="type-signature static">static</span>content.enums.visibility</h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The StreamHub APIs use enumerations to define
-the visibility of messages sent down the wire. All levels of
-visibility should be in this enumeration.
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
-
-<table class="props">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>visibility.NONE</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Should not be displayed.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>visibility.EVERYONE</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Visible to all.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>visibility.OWNER</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Visible only to the author.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>visibility.GROUP</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Visible to privileged users.</td>
-        </tr>
-	
-	
-	</tbody>
-</table></dl>
-        
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
     
     
     
@@ -470,14 +303,14 @@ visibility should be in this enumeration.
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="addAttachment">
+        <h4 class="name" id="createArchive">
             
-            addAttachment<span class="signature">(obj)</span>
+            createArchive<span class="signature">(opts)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{streamhub-sdk/streams/collection-archive}</span>
         </h4>
     
         
         <div class="tag-source">
-            content/main.js, line 39
+            collection/main.js, line 64
         </div>
         
     </div>
@@ -488,7 +321,8 @@ visibility should be in this enumeration.
     
     
     <div class="description">
-        Attach an Oembed to the Content
+        Create a readable stream that will read through the Collection Archive
+The Collection Archive contains older Content in the Collection
     </div>
     
 
@@ -519,13 +353,13 @@ visibility should be in this enumeration.
 	
         <tr>
             
-                <td class="name"><code>obj</code></td>
+                <td class="name"><code>opts</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Oembed</span>
+<span class="param-type">object</span>
 
 
             
@@ -535,7 +369,60 @@ visibility should be in this enumeration.
             
             <td class="description last">
                 
-                An Oembed Content instance to attach</td>
+                
+                
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>bootstrapClient</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">BootstrapClient</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                A bootstrapClient to
+    construct the CollectionArchive with</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+            </td>
         </tr>
 	
 	
@@ -570,10 +457,82 @@ visibility should be in this enumeration.
 
     
     
-    <h5>Fires:</h5>
-    <ul>
-        <li>Content#event:attachment</li>
-    </ul>
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="createFeaturedContents">
+            
+            createFeaturedContents<span class="signature">()</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            collection/main.js, line 100
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Create a FeaturedContents object representing the featured
+contents in this Collection
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
     
 
     
@@ -591,14 +550,14 @@ visibility should be in this enumeration.
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="addReply">
+        <h4 class="name" id="createUpdater">
             
-            addReply<span class="signature">(obj)</span>
+            createUpdater<span class="signature">()</span>
         </h4>
     
         
         <div class="tag-source">
-            content/main.js, line 59
+            collection/main.js, line 77
         </div>
         
     </div>
@@ -609,7 +568,8 @@ visibility should be in this enumeration.
     
     
     <div class="description">
-        Add a reply to the Content
+        Create a Readable Stream that will stream any new updates to the
+collection like additions, removals, edits, etc.
     </div>
     
 
@@ -617,51 +577,6 @@ visibility should be in this enumeration.
     
     
     
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>obj</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Content</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                A piece of Content in reply to this one</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
     
     
     
@@ -690,11 +605,6 @@ visibility should be in this enumeration.
 </dl>
 
     
-    
-    <h5>Fires:</h5>
-    <ul>
-        <li>Content#event:addReply</li>
-    </ul>
     
 
     
@@ -712,14 +622,14 @@ visibility should be in this enumeration.
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="removeAttachment">
+        <h4 class="name" id="pause">
             
-            removeAttachment<span class="signature">(obj)</span>
+            pause<span class="signature">()</span>
         </h4>
     
         
         <div class="tag-source">
-            content/main.js, line 49
+            collection/main.js, line 139
         </div>
         
     </div>
@@ -730,7 +640,7 @@ visibility should be in this enumeration.
     
     
     <div class="description">
-        Remove an Oembed from the Content
+        Pause live updates from this Collection
     </div>
     
 
@@ -738,51 +648,6 @@ visibility should be in this enumeration.
     
     
     
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>obj</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Oembed</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                An Oembed Content instance to attach</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
     
     
     
@@ -811,11 +676,6 @@ visibility should be in this enumeration.
 </dl>
 
     
-    
-    <h5>Fires:</h5>
-    <ul>
-        <li>Content#event:removeAttachment</li>
-    </ul>
     
 
     
@@ -833,14 +693,14 @@ visibility should be in this enumeration.
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="set">
+        <h4 class="name" id="pipe">
             
-            set<span class="signature">(newProperties, silence)</span>
+            pipe<span class="signature">(writable, opts)</span>
         </h4>
     
         
         <div class="tag-source">
-            content/main.js, line 71
+            collection/main.js, line 117
         </div>
         
     </div>
@@ -851,7 +711,7 @@ visibility should be in this enumeration.
     
     
     <div class="description">
-        Set some properties and emit 'change' and 'change:{property}' events
+        Pipe updates in the Collection the passed destination Writable
     </div>
     
 
@@ -882,13 +742,13 @@ visibility should be in this enumeration.
 	
         <tr>
             
-                <td class="name"><code>newProperties</code></td>
+                <td class="name"><code>writable</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">Writable</span>
 
 
             
@@ -898,17 +758,22 @@ visibility should be in this enumeration.
             
             <td class="description last">
                 
-                An object of properties to set on this Content</td>
+                The destination to pipe udpates to</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>silence</code></td>
+                <td class="name"><code>opts</code></td>
             
             
             <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
             
             </td>
             
@@ -916,7 +781,94 @@ visibility should be in this enumeration.
             
             <td class="description last">
                 
-                [boolean] Mute any events that would be fired</td>
+                
+                
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>pipeArchiveToMore</code></td>
+            
+            
+            <td class="type">
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                Whether to try to pipe
+    a CollectionArchive to writable.more, if it is also writable
+    This is helpful when piping to a ListView</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>archivePipeOpts</code></td>
+            
+            
+            <td class="type">
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                Options to pass to archive.pipe,
+    if you use it (defaults to opts param)</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+            </td>
         </tr>
 	
 	
@@ -951,12 +903,76 @@ visibility should be in this enumeration.
 
     
     
-    <h5>Fires:</h5>
-    <ul>
-        <li>Content#event:change</li>
+
     
-        <li>Content#event:change:_property_</li>
-    </ul>
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="resume">
+            
+            resume<span class="signature">()</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            collection/main.js, line 149
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Resume live updates from this Collection
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
     
 
     
