@@ -38,6 +38,11 @@ function (
                 expect(typeof ContentView.guid).toBe('string');
                 expect(ContentView.guid.split('-').length).toBe(5);
             });
+            it('inserts a style el with the GUID.htmlAttr(guid)', function () {
+                var guid = ContentView.guid;
+                var styleEl = document.getElementById(GUID.htmlAttr(guid));
+                expect(styleEl).toBeTruthy();
+            });
             it('puts the GUID class on the .el', function () {
                 var guid = ContentView.guid;
                 var guidClass = GUID.htmlAttr(guid);
