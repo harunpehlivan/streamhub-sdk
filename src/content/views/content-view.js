@@ -4,11 +4,37 @@ define([
     'hgn!streamhub-sdk/content/templates/content',
     'streamhub-sdk/util',
     'inherits',
-    'streamhub-sdk/debug'
-], function ($, View, ContentTemplate, util, inherits, debug) {
+    'streamhub-sdk/debug',
+    'text!streamhub-sdk/content/css/content.css',
+    'rework',
+    'guid'
+], function ($, View, ContentTemplate, util, inherits, debug, contentCss, rework, GUID) {
     'use strict';
 
     var log = debug('streamhub-sdk/content/views/content-view');
+
+    function prefixedContentCss(prefix, separator) {
+        var css = rework(contentCss)
+          .use(rework.prefixSelectors(prefix, separator))
+          .toString();
+        return css;
+    }
+
+    function insertStyleEl(css, id) {
+        var $style = $('<style>'+css+'</style>');
+        if (id) {
+            $style.attr('id', id);
+        }
+        $style.appendTo('head');
+        return $style[0];
+    }
+
+    function insertGuidCss(guid) {
+        var htmlAttr = GUID.htmlAttr(guid);
+        var prefixedCss = prefixedContentCss('.'+htmlAttr, '');
+        var styleEl = insertStyleEl(prefixedCss, htmlAttr);
+        return styleEl;
+    }
 
     /**
      * Defines the base class for all content-views. Handles updates to attachments
@@ -17,6 +43,8 @@ define([
      * @param opts {Object} The set of options to configure this view with.
      * @param opts.content {Content} The content object to use when rendering. 
      * @param opts.el {?HTMLElement} The element to render this object in.
+     * @param [opts.guidClass=true] {boolean} Whether to add a GUID class for the
+     *    default styles to work
      * @fires ContentView#removeContentView.hub
      * @exports streamhub-sdk/content/views/content-view
      * @constructor
@@ -25,6 +53,7 @@ define([
         opts = opts || {};
         
         this.content = opts.content;
+        opts.guidClass = 'guidClass' in opts ? opts.guidClass : true;
         // store construction time to use for ordering if this.content has no dates
         this.createdAt = new Date();
         this.template = opts.template || this.template;
@@ -33,7 +62,10 @@ define([
             'left': [],
             'right': []
         };
-
+        // Add the GUID to all els so this class' custom styling takes effect
+        if (opts.guidClass) {
+            this.elClass += ' '+GUID.htmlAttr(ContentView.guid);
+        }
         View.call(this, opts);
 
         if (this.content) {
@@ -50,6 +82,12 @@ define([
     };
     inherits(ContentView, View);
     
+    // This ContentView class may not be the only one running on the page
+    // (e.g. different versions). So generate a GUID for this one.
+    // And we'll add it as a CSS class on all instances
+    ContentView.guid = GUID();
+    var contentViewStyleEl = insertGuidCss(ContentView.guid);
+
     ContentView.prototype.elTag = 'article';
     ContentView.prototype.elClass = 'content';
     ContentView.prototype.contentWithImageClass = 'content-with-image';

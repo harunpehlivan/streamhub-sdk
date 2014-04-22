@@ -5,7 +5,8 @@ define([
     'streamhub-sdk/content/types/livefyre-content',
     'streamhub-sdk/content/views/content-view',
     'streamhub-sdk/content/content-view-factory',
-    'streamhub-sdk/content/views/tiled-attachment-list-view'],
+    'streamhub-sdk/content/views/tiled-attachment-list-view',
+    'guid'],
 function (
     $,
     util,
@@ -13,7 +14,8 @@ function (
     LivefyreContent,
     ContentView,
     ContentViewFactory,
-    TiledAttachmentListView) {
+    TiledAttachmentListView,
+    GUID) {
     'use strict';
 
     describe('Default ContentView', function () {
@@ -25,6 +27,43 @@ function (
             });
         });
         
+        /**
+         * The ContentView module will take care of inserting the
+         * CSS it requires.
+         * It will prefix all the selectors with a GUID class
+         * and each instance with have that class on its el
+         */
+        describe('guid-prefixed css', function () {
+            it('ContentView.guid is a guid', function () {
+                expect(typeof ContentView.guid).toBe('string');
+                expect(ContentView.guid.split('-').length).toBe(5);
+            });
+            it('puts the GUID class on the .el', function () {
+                var guid = ContentView.guid;
+                var guidClass = GUID.htmlAttr(guid);
+                var contentView = new ContentView();
+                var first$el = contentView.$el;
+                expect(contentView.$el.hasClass(guidClass)).toBe(true);
+                var second$el = $('<div />');
+                contentView.setElement(second$el);
+                expect(first$el.hasClass(guidClass)).toBe(false);
+                expect(second$el.hasClass(guidClass)).toBe(true);
+            });
+            it('does not put the GUID class on the .el if opts.guidClass=false', function () {
+                var guid = ContentView.guid;
+                var guidClass = GUID.htmlAttr(guid);
+                var contentView = new ContentView({
+                    guidClass: false
+                });
+                var first$el = contentView.$el;
+                expect(contentView.$el.hasClass(guidClass)).toBe(false);
+                var second$el = $('<div />');
+                contentView.setElement(second$el);
+                expect(first$el.hasClass(guidClass)).toBe(false);
+                expect(second$el.hasClass(guidClass)).toBe(false);
+            });
+        });
+
         describe('.remove', function () {
             var content,
                 contentView,

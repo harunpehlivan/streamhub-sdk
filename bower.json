@@ -20,7 +20,7 @@
     "view": "git://github.com/Livefyre/view.git#~1.1",
     "auth": "git://github.com/Livefyre/auth.git",
     "rework": "gobengo/rework#master",
-    "guid": "gobengo/guid"
+    "guid": "gobengo/guid#v0.0.1"
   },
   "devDependencies": {
     "jasmine": "1.3.1",
