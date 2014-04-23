@@ -19,6 +19,7 @@ Sharer.prototype.share = function () {
         log('there is no share delegate');
         return;
     }
+    this._delegate.share.apply(this._delegate, arguments);
 };
 
 var sharer = module.exports = new Sharer();
