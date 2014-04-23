@@ -98,7 +98,7 @@ define([
     ContentView.prototype.headerElSelector = '.content-header';
     ContentView.prototype.avatarSelector = '.content-author-avatar';
     ContentView.prototype.attachmentFrameElSelector = '.content-attachment-frame';
-    ContentView.prototype.footerLeftSelector = '.content-footer-left';
+    ContentView.prototype.footerLeftSelector = '.content-footer-left > .content-control-list';
     ContentView.prototype.template = ContentTemplate;
     ContentView.prototype.formatDate = util.formatDate;
 
