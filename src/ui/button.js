@@ -19,6 +19,9 @@ function Button (command, opts) {
     if (this.elClassPrefix) {
         this.elClass = distributeClassPrefix(this.elClassPrefix, this.elClass);
     }
+    if (opts.elClassNoPrefix) {
+        this.elClass += ' '+opts.elClassNoPrefix;
+    }
     this._disabled = false;
     this._label = opts.label || '';
     this._errback = opts.errback;
