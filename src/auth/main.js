@@ -1,5 +1,5 @@
-define(['inherits', 'streamhub-sdk/jquery', 'base64', 'event-emitter', 'streamhub-sdk/debug'],
-function (inherits, $, base64, EventEmitter, debug) {
+define(['auth', 'inherits', 'event-emitter', 'streamhub-sdk/debug'],
+function (auth, inherits, EventEmitter, debug) {
     'use strict';
 
 
@@ -37,17 +37,6 @@ function (inherits, $, base64, EventEmitter, debug) {
             return this._token;
         }
         return livefyreUser.get('token');
-    };
-
-    /**
-     * Get the user id for from the Auth token
-     */
-    Auth.getUserUri = function () {
-        if (! this._token) {
-            return;
-        }
-        var userInfo = $.parseJSON(base64.atob(this._token.split('.')[1]));
-        return userInfo.user_id + '@' + userInfo.domain;
     };
 
     /**

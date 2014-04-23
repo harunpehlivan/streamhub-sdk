@@ -169,8 +169,24 @@
             }
         }
 
+        & * {
+                color: #999;
+                height: 20px;
+                padding: 2px 0;
+            }
+        }
+
+        .content-footer-left {
+            .hub-btn-link:first-child {
+                margin-left: -8px;
+            }
+
         .content-footer-right {
             float: right;
+
+            .hub-btn-link:first-child {
+                margin-right: -5px;
+            }
         }
 
         .hub-btn {
@@ -200,9 +216,9 @@
             animation: likebounce 0.35s;
             -webkit-transform: scale(1);
         }
-        .hub-content-like:active,
         .hub-content-like.hub-btn-toggle-on {
             background-image: data-uri('../images/like_liked.png');
+            color: #e95c3b;
         }
 
         .hub-content-reply {
@@ -452,46 +468,22 @@
         .content-source-logo {
             background-position: -24px 0;
         }
-        .content-action {
-            padding: 0;
-            margin-right: 5px;
+        .hub-content-action:first-child {
+            margin-left: -10px;
+        }
+        
+        .hub-content-action-favorite {
+            width: 18px;
+            height: 18px;
+            background-position: center;
             background-repeat: no-repeat;
-            
-            &.content-action-favorite {
-                width: 18px;
-                height: 18px;
-                background-image: data-uri('../images/favorite.png');
-                margin-top: 3px;
-                    background-image: data-uri('../images/favorite_hover.png');
-                    background-image: data-uri('../images/favorite_active.png');
+            background-image: data-uri('../images/favorite.png');
+            &:hover {
+                background-image: data-uri('../images/favorite_hover.png');
             }
-            &.content-action-reply {
-                width: 23px;
-                height: 16px;
-                margin-top: 2px;
-                background-position: 0 0;
             &:active {
                 background-image: data-uri('../images/favorite_active.png');
-            &.content-action-reply {
-                width: 23px;
-                height: 16px;
-                margin-top: 4px;
-                background-image: data-uri('../images/reply.png');
-                    background-image: data-uri('../images/reply_hover.png');
-                    background-image: data-uri('../images/reply_active.png');
             }
-            &.content-action-retweet {
-                width: 27px;
-                height: 14px;
-                margin-top: 3px;
-                margin-bottom: 1px;
-                background-position: -25px -1px;
-                &:hover {
-                    background-position: -25px -17px;
-                }
-                &:active {
-                    background-position: -25px -33px;
-                }
         }
         .hub-content-action-reply {
             width: 23px;
@@ -516,17 +508,6 @@
             }
             &:active {
                 background-image: data-uri('../images/retweet_active.png');
-            &.content-action-retweet {
-                width: 27px;
-                height: 14px;
-                margin-top: 4px;
-                background-image: data-uri('../images/retweet.png');
-                &:hover {
-                    background-image: data-uri('../images/retweet_hover.png');
-                }
-                &:active {
-                    background-image: data-uri('../images/retweet_active.png');
-                }
             }
         }
     }

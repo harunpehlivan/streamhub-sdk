@@ -21,8 +21,7 @@ function (Writable, LivefyreWriteClient, Auth, inherits) {
             collection = this._collection,
             token = Auth.getToken(),
             post = this._writeClient.postContent,
-            numAttachments = content.attachments && content.attachments.length,
-            attachment;
+            numAttachments = content.attachments && content.attachments.length;
 
         if ( ! token) {
             throw new Auth.UnauthorizedError("Collection cannot write until streamhub-sdk/auth.setToken has been called");

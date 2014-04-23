@@ -7,14 +7,13 @@ define([
     'streamhub-sdk/collection/clients/bootstrap-client',
     'streamhub-sdk/collection/clients/create-client',
     'streamhub-sdk/collection/clients/write-client',
-    'streamhub-sdk/content/clients/content-client',
     'streamhub-sdk/content/fetch-content',
     'streamhub-sdk/auth',
     'inherits',
     'streamhub-sdk/debug'],
 function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedContents,
         Duplex, LivefyreBootstrapClient, LivefyreCreateClient, LivefyreWriteClient,
-        LivefyreContentClient, fetchContent, Auth, inherits, debug) {
+        fetchContent, Auth, inherits, debug) {
     'use strict';
 
 

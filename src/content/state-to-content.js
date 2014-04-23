@@ -303,7 +303,6 @@ inherits) {
         }
     };
 
-
     StateToContent.prototype._storeChild = function (child, parentId) {
         //TODO (joao) Make this smart enough to not push duplicates
         var childrenKey = 'children_' + parentId,
