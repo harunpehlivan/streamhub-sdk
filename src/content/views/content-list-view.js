@@ -9,29 +9,12 @@ define([
     'streamhub-sdk/views/streams/more',
     'streamhub-sdk/views/show-more-button',
     'inherits',
-    'streamhub-sdk/debug',
-    'text!streamhub-sdk/content/css/content.css',
-    'text!streamhub-sdk/views/css/list-view.css',
-    'rework'],
+    'streamhub-sdk/debug'],
 function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView,
-        AttachmentGalleryModal, Writable, More, ShowMoreButton, inherits, debug,
-        contentCss, listCss, rework) {
+        AttachmentGalleryModal, Writable, More, ShowMoreButton, inherits, debug) {
     'use strict';
 
     var log = debug('streamhub-sdk/content/views/content-list-view');
-
-    function prefixedCss(prefix) {
-        var css = rework(contentCss + listCss)
-          .use(rework.prefixSelectors(prefix))
-          .toString();
-        return css;
-    }
-
-    function insertStyleEl(css) {
-        var $style = $('<style>'+css+'</style>');
-        $style.appendTo('head');
-        return $style[0];
-    }
 
     /**
      * A simple View that displays Content in a list (`<ul>` by default).
@@ -58,17 +41,6 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
                 this.modal = opts.modal;
         }
 
-        var clvId = new Date().getTime();
-        var clvIdSelector = '[data-hub-content-list-view-id=\"'+clvId+'\"]';
-        this._attrs = {
-            'data-hub-content-list-view-id': clvId
-        };
-
-        opts.css = (typeof opts.css === 'undefined') ? true : opts.css;
-        if (opts.css) {
-            this._styleEl = insertStyleEl(prefixedCss(clvIdSelector));
-        }
- 
         ListView.call(this, opts);
 
         this._stash = opts.stash || this.more;
