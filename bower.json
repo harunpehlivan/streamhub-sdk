@@ -18,8 +18,8 @@
     "event-emitter": "git://github.com/Livefyre/event-emitter.git",
     "inherits": "git://github.com/Livefyre/inherits.git",
     "view": "git://github.com/Livefyre/view.git#~1.1",
-    "auth": "git://github.com/Livefyre/auth.git",
-    "rework": "gobengo/rework#master",
+    "auth": "git://github.com/Livefyre/auth.git#v0.0.1",
+    "rework": "gobengo/rework#0.21.0",
     "guid": "gobengo/guid#v0.0.1"
   },
   "devDependencies": {
