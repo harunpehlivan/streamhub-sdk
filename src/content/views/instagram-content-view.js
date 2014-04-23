@@ -1,7 +1,8 @@
 define([
     'streamhub-sdk/content/views/livefyre-content-view',
+    'streamhub-sdk/ui/button',
     'inherits'],
-function (LivefyreContentView, inherits) {
+function (LivefyreContentView, Button, inherits) {
     'use strict';
     
     /**
@@ -30,8 +31,6 @@ function (LivefyreContentView, inherits) {
      */
     InstagramContentView.prototype.getTemplateContext = function () {
         var context = LivefyreContentView.prototype.getTemplateContext.call(this);
-
-        context.authorDisplayName = context.author.displayName;
 
         context.contentSourceName = 'instagram';
 

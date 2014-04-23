@@ -6,8 +6,8 @@
   ],
   "dependencies": {
     "jquery": "~1.10.1",
-    "bootstrap": "~3.0.3",
-    "base64": "git://github.com/ross-pfahler/Base64.js#~0.3.3",
+    "base64": "git://github.com/ross-pfahler/Base64.js#~0.3.0",
+    "bootstrap": "~3.0.0",
     "hogan": "latest",
     "requirejs": "~2.1.5",
     "cajon": "git://github.com/requirejs/cajon.git#~0.1.11",
@@ -18,7 +18,8 @@
     "event-emitter": "git://github.com/Livefyre/event-emitter.git",
     "inherits": "git://github.com/Livefyre/inherits.git",
     "view": "git://github.com/Livefyre/view.git#~1.1",
-    "auth": "git://github.com/Livefyre/auth.git"
+    "auth": "git://github.com/Livefyre/auth.git",
+    "auth-livefyre": "git://github.com/gobengo/auth-livefyre.git"
   },
   "devDependencies": {
     "jasmine": "1.3.1",

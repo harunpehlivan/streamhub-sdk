@@ -1,17 +1,18 @@
 define([
     'streamhub-sdk/jquery',
-    'streamhub-sdk/auth',
+    'auth',
     'streamhub-sdk/content/views/content-view',
     'streamhub-sdk/content/types/livefyre-content',
     'streamhub-sdk/content/types/livefyre-opine',
+    'streamhub-sdk/ui/auth-required-command',
+    'streamhub-sdk/ui/command',
     'streamhub-sdk/ui/hub-button',
-    'streamhub-sdk/ui/hub-toggle-button',
     'streamhub-sdk/collection/liker',
     'hgn!streamhub-sdk/content/templates/content',
     'streamhub-sdk/util',
     'inherits',
     'streamhub-sdk/debug'
-], function ($, Auth, ContentView, LivefyreContent, LivefyreOpine, HubButton, HubToggleButton, Liker, ContentTemplate, util, inherits, debug) {
+], function ($, auth, ContentView, LivefyreContent, LivefyreOpine, AuthRequiredCommand, Command, HubButton, HubLikeButton, Liker, ContentTemplate, util, inherits, debug) {
     'use strict';
 
     var LIKE_REQUEST_LISTENER = false;
@@ -23,6 +24,8 @@ define([
      * @param opts {Object} The set of options to configure this view with.
      * @param opts.content {Content} The content object to use when rendering. 
      * @param opts.el {?HTMLElement} The element to render this object in.
+     * @param opts.shareCommand {streamhub-sdk/ui/command} Command to use
+     *     for share button. If not present or cannot execute, no share button
      * @fires LivefyreContentView#removeContentView.hub
      * @exports streamhub-sdk/content/views/content-view
      * @constructor
@@ -30,38 +33,41 @@ define([
     var LivefyreContentView = function LivefyreContentView (opts) {
         opts = opts || {};
 
+        this._rendered = false;
         this._controls = {
             'left': [],
             'right': []
         };
-        this._rendered = false;
+        this._commands = {};
+        this._setCommand({
+            like: opts.likeCommand,
+            share: opts.shareCommand
+        });
 
         ContentView.call(this, opts);
-
-        if (this.content) {
-            this.content.on("opine", function(content) {
-                this._renderButtons();
-            }.bind(this));
-            this.content.on("removeOpine", function(content) {
-                this._renderButtons();
-            }.bind(this));
-        }
     };
     inherits(LivefyreContentView, ContentView);
 
     LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left';
-    LivefyreContentView.handleLikeClick = function (e, content) {
-        var liker = new Liker();
-        var userUri = Auth.getUserUri();
+    LivefyreContentView.prototype.footerRightSelector = '.content-footer-right';
 
-        if (! content.isLiked(userUri)) {
-            liker.like(content, function () {
-                $('body').trigger('contentLike.hub');
-            });
-        } else {
-            liker.unlike(content, function () {
-                $('body').trigger('contentUnlike.hub');
-            });
+
+    /**
+     * Set the a command for a buton
+     * This should only be called once.
+     * @private
+     */
+    LivefyreContentView.prototype._setCommand = function (cmds) {
+        for (var name in cmds) {
+            if (cmds.hasOwnProperty(name)) {
+                if (! cmds[name]) {
+                    continue;
+                }
+                this._commands[name] = cmds[name];
+ 
+                // If canExecute changes, re-render buttons because now maybe the button should appear
+                cmds[name].on('change:canExecute', this._renderButtons.bind(this));
+            }
         }
     };
 
@@ -75,72 +81,112 @@ define([
         return this;
     };
 
-    LivefyreContentView.prototype._handleLikeClick = function () {
-        // Lazily attach event handler for contentLike
-        if (! LIKE_REQUEST_LISTENER) {
-            var self = this;
-            $('body').on('contentLike.hub contentUnlike.hub', function () {
-                self._renderButtons();
-            });
-            $('body').on('likeClick.hub', LivefyreContentView.handleLikeClick);
-            LIKE_REQUEST_LISTENER = true;
-        }
-
-        this.$el.trigger('likeClick.hub', this.content);
-    };
-
-    LivefyreContentView.prototype._handleShare = function () {
-        this.$el.trigger('contentShare.hub', this.content);
-    };
-
     LivefyreContentView.prototype._renderButtons = function () {
-        this.$el.find(this.footerLeftSelector).empty();
-
         if (! (this.content instanceof LivefyreContent)) {
             return;
         }
-        var likeCount = this.content.getLikeCount();
-        var likeButton = new HubToggleButton(this._handleLikeClick.bind(this), {
-            className: 'hub-content-like',
-            enabled: this.content.isLiked(Auth.getUserUri()), //TODO(ryanc): Get user id from auth
-            label: likeCount
-        });
-        this.addButton(likeButton);
+
+        this.$el.find(this.footerLeftSelector).empty();
+        this.$el.find(this.footerRightSelector).empty();
 
         //TODO(ryanc): Wait until we have replies on SDK
         //var replyCommand = new Command(function () {
         //    self.$el.trigger('contentReply.hub');
         //});
         //var replyButton = new HubButton(replyCommand, {
-        //    className: 'hub-btn-link hub-content-reply',
+        //    className: 'btn-link content-reply',
         //    label: 'Reply'
         //});
         //this.addButton(replyButton);
 
-        //TODO(ryanc): Wait until we have likes finished first
-        //var shareButton = new HubButton(this._handleShare.bind(this), {
-        //    className: 'hub-btn-link hub-content-share',
-        //    label: 'Share'
-        //});
-        //this.addButton(shareButton);
+        this._renderLikeButton();
+        this._renderShareButton();
     };
 
-    LivefyreContentView.prototype.addButton = function (button) {
-        for (var i=0; i < this._controls.left.length; i++) {
-            if (this._controls.left[i] !== button) {
-                this._controls.left.push(button);
+    LivefyreContentView.prototype._updateLikeCount = function () {
+        this._likeButton.updateLabel(this.content.getLikeCount().toString());
+    };
+
+    /**
+     * Create a Button to be used for Liking functionality
+     * @protected
+     */
+    LivefyreContentView.prototype._createLikeButton = function () {
+        if (! auth.hasDelegate('login')) {
+            return; // Don't render a button when not logged in
+        }
+        return new HubLikeButton(this._commands.like, {
+            content: this.content
+        });
+    };
+
+    LivefyreContentView.prototype._renderLikeButton = function () {
+        var likeButton = this._likeButton = this._createLikeButton();
+        if ( ! likeButton) {
+            return;
+        }
+        this.addButton(likeButton);
+    };
+
+    /**
+     * Render a Share Button
+     * @protected
+     */
+    LivefyreContentView.prototype._renderShareButton = function () {
+        var shareButton = this._createShareButton();
+        if ( ! shareButton) {
+            return;
+        }
+        this.addButton(shareButton);
+    };
+
+    /**
+     * Create a Share Button
+     * @protected
+     */
+    LivefyreContentView.prototype._createShareButton = function () {
+        var shareCommand = this._commands.share;
+        if ( ! (shareCommand && shareCommand.canExecute())) {
+            return;
+        }
+        var shareButton = new HubButton(shareCommand, {
+            className: 'btn-link content-share',
+            label: 'Share'
+        });
+        return shareButton;
+    };
+
+    LivefyreContentView.prototype.addButton = function (button, opts) {
+        opts = opts || {};
+        var footerControls;
+        var footerSide;
+        if (opts.side === 'right') {
+            footerControls = this._controls.right;
+            footerSide = this.$el.find(this.footerRightSelector);
+        } else {
+            footerControls = this._controls.left;
+            footerSide = this.$el.find(this.footerLeftSelector);
+        }
+
+        if (footerControls.length === 0) {
+            footerControls.push(button);
+        }
+        for (var i=0; i < footerControls.length; i++) {
+            if (footerControls[i] !== button) {
+                footerControls.push(button);
             }
         }
 
-        var footerLeft = this.$el.find(this.footerLeftSelector);
         var buttonContainerEl = $('<div></div>');
-        footerLeft.append(buttonContainerEl);
-
+        footerSide.append(buttonContainerEl);
         button.setElement(buttonContainerEl);
         button.render();
     };
 
     LivefyreContentView.prototype.removeButton = function (button) {
+        this._controls.left.splice(this._controls.left.indexOf(button), 1);
+        this._controls.right.splice(this._controls.right.indexOf(button), 1);
+        
         button.destroy();
     };
     
