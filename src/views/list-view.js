@@ -9,12 +9,39 @@ define([
     'streamhub-sdk/content/views/content-view',
     'streamhub-sdk/views/streams/more',
     'streamhub-sdk/views/show-more-button',
-    'hgn!streamhub-sdk/views/templates/list-view'],
+    'hgn!streamhub-sdk/views/templates/list-view',
+    'text!streamhub-sdk/views/css/list-view.css',
+    'rework',
+    'guid'],
 function($, View, ContentViewFactory, AttachmentGalleryModal, inherits,
-debug, Writable, ContentView, More, ShowMoreButton, ListViewTemplate) {
+debug, Writable, ContentView, More, ShowMoreButton, ListViewTemplate, listCss,
+rework, GUID) {
     'use strict';
 
     var log = debug('streamhub-sdk/views/list-view');
+
+    function prefixedListCss(prefix, separator) {
+        var css = rework(listCss)
+          .use(rework.prefixSelectors(prefix, separator))
+          .toString();
+        return css;
+    }
+
+    function insertStyleEl(css, id) {
+        var $style = $('<style>'+css+'</style>');
+        if (id) {
+            $style.attr('id', id);
+        }
+        $style.appendTo('head');
+        return $style[0];
+    }
+
+    function insertGuidCss(guid) {
+        var htmlAttr = GUID.htmlAttr(guid);
+        var prefixedCss = prefixedListCss('.'+htmlAttr, '');
+        var styleEl = insertStyleEl(prefixedCss, htmlAttr);
+        return styleEl;
+    }
 
     /**
      * A simple View that displays Content in a list (`<ul>` by default).
@@ -23,12 +50,19 @@ debug, Writable, ContentView, More, ShowMoreButton, ListViewTemplate) {
      * @param [opts.el] {HTMLElement} The element in which to render the streamed content
      * @param [opts.comparator] {function(view, view): number}
      * @param [opts.autoRender] Whether to call #render in the constructor
+     * @param [opts.guidClass=true] {boolean} Whether to add a GUID class for the
+     *    default styles to work
      * @exports streamhub-sdk/views/list-view
      * @constructor
      */
     var ListView = function(opts) {
         opts = opts || {};
         opts.autoRender = opts.autoRender === undefined ? true : opts.autoRender;
+        opts.guidClass = 'guidClass' in opts ? opts.guidClass : true;
+        // Add the GUID to all els so this class' custom styling takes effect
+        if (opts.guidClass) {
+            this.elClass += ' '+GUID.htmlAttr(ListView.guid);
+        }
 
         this.views = [];
 
@@ -57,6 +91,11 @@ debug, Writable, ContentView, More, ShowMoreButton, ListViewTemplate) {
     inherits(ListView, View);
     inherits.parasitically(ListView, Writable);
 
+    // This ListView class may not be the only one running on the page
+    // (e.g. different versions). So generate a GUID for this one.
+    // And we'll add it as a CSS class on all instances
+    ListView.guid = GUID();
+    var listViewStyleEl = insertGuidCss(ListView.guid);
 
     ListView.prototype.events = View.prototype.events.extended({
         // .showMoreButton will trigger showMore.hub when it is clicked

@@ -1,11 +1,53 @@
 define([
     'streamhub-sdk/jquery',
     'streamhub-sdk/views/list-view',
-    'streamhub-sdk/view'],
-function ($, ListView, View) {
+    'streamhub-sdk/view',
+    'guid'],
+function ($, ListView, View, GUID) {
     'use strict';
 
     describe('ListView', function () {
+        /**
+         * The ListView module will take care of inserting the
+         * CSS it requires.
+         * It will prefix all the selectors with a GUID class
+         * and each instance with have that class on its el
+         */
+        describe('guid-prefixed css', function () {
+            it('ListView.guid is a guid', function () {
+                expect(typeof ListView.guid).toBe('string');
+                expect(ListView.guid.split('-').length).toBe(5);
+            });
+            it('inserts a style el with the GUID.htmlAttr(guid)', function () {
+                var guid = ListView.guid;
+                var styleEl = document.getElementById(GUID.htmlAttr(guid));
+                expect(styleEl).toBeTruthy();
+            });
+            it('puts the GUID class on the .el', function () {
+                var guid = ListView.guid;
+                var guidClass = GUID.htmlAttr(guid);
+                var listView = new ListView();
+                var first$el = listView.$el;
+                expect(listView.$el.hasClass(guidClass)).toBe(true);
+                var second$el = $('<div />');
+                listView.setElement(second$el);
+                expect(first$el.hasClass(guidClass)).toBe(false);
+                expect(second$el.hasClass(guidClass)).toBe(true);
+            });
+            it('does not put the GUID class on the .el if opts.guidClass=false', function () {
+                var guid = ListView.guid;
+                var guidClass = GUID.htmlAttr(guid);
+                var listView = new ListView({
+                    guidClass: false
+                });
+                var first$el = listView.$el;
+                expect(listView.$el.hasClass(guidClass)).toBe(false);
+                var second$el = $('<div />');
+                listView.setElement(second$el);
+                expect(first$el.hasClass(guidClass)).toBe(false);
+                expect(second$el.hasClass(guidClass)).toBe(false);
+            });
+        });
         describe('when constructed', function () {
             var list;
             beforeEach(function () {
