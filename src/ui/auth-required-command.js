@@ -55,7 +55,7 @@ AuthRequiredCommand.prototype.execute = function () {
     function doWorkWithAuth() {
         Command.prototype.execute.apply(self, arguments);
     }
-    
+
     if (isAuthenticated()) {
         doWorkWithAuth.apply(self, executeArgs);
     } else {
@@ -72,13 +72,13 @@ AuthRequiredCommand.prototype.execute = function () {
 /**
  * Check whether the Command can be executed.
  * 
- * return | _command.canExecute() | Auth.isAuthenticated() | _authCmd.canExecute()
+ * return | _command.canExecute() | auth.isAuthenticated() | _authCmd.canExecute()
  * -------|-----------------------|------------------------|----------------------
  *  false |         false         |                        |
  *  true  |         true          |     truthy             |
  *  false |         true          |     falsy              |      false
  *  true  |         true          |     falsy              |      true
- * ------------------------------------------------------------------------
+ * -------------------------------------------------------------------------------
  * @returns {!boolean}
  */
 AuthRequiredCommand.prototype.canExecute = function () {

@@ -7,6 +7,7 @@ define([
     'streamhub-sdk/ui/auth-required-command',
     'streamhub-sdk/ui/command',
     'streamhub-sdk/ui/hub-button',
+    'streamhub-sdk/ui/hub-like-button',
     'streamhub-sdk/collection/liker',
     'hgn!streamhub-sdk/content/templates/content',
     'streamhub-sdk/util',
@@ -14,8 +15,6 @@ define([
     'streamhub-sdk/debug'
 ], function ($, auth, ContentView, LivefyreContent, LivefyreOpine, AuthRequiredCommand, Command, HubButton, HubLikeButton, Liker, ContentTemplate, util, inherits, debug) {
     'use strict';
-
-    var LIKE_REQUEST_LISTENER = false;
 
     /**
      * Defines the base class for all content-views. Handles updates to attachments
@@ -64,7 +63,7 @@ define([
                     continue;
                 }
                 this._commands[name] = cmds[name];
- 
+
                 // If canExecute changes, re-render buttons because now maybe the button should appear
                 cmds[name].on('change:canExecute', this._renderButtons.bind(this));
             }
@@ -179,6 +178,7 @@ define([
 
         var buttonContainerEl = $('<div></div>');
         footerSide.append(buttonContainerEl);
+
         button.setElement(buttonContainerEl);
         button.render();
     };
@@ -186,7 +186,7 @@ define([
     LivefyreContentView.prototype.removeButton = function (button) {
         this._controls.left.splice(this._controls.left.indexOf(button), 1);
         this._controls.right.splice(this._controls.right.indexOf(button), 1);
-        
+
         button.destroy();
     };
     

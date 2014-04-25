@@ -109,7 +109,7 @@ function ($, ListView, View) {
                             origLength;
                         beforeEach(function () {
                             addViews();
-                            view4 = new View();
+                            view4 = new View(),
                             index = 2,
                             origLength = list.views.length;
                             
