@@ -6,14 +6,15 @@ define([
     'stream/duplex',
     'streamhub-sdk/collection/clients/bootstrap-client',
     'streamhub-sdk/collection/clients/create-client',
+    'streamhub-sdk/collection/clients/permalink-client',
     'streamhub-sdk/collection/clients/write-client',
     'streamhub-sdk/content/fetch-content',
     'streamhub-sdk/auth',
     'inherits',
     'streamhub-sdk/debug'],
 function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedContents,
-        Duplex, LivefyreBootstrapClient, LivefyreCreateClient, LivefyreWriteClient,
-        fetchContent, Auth, inherits, debug) {
+        Duplex, LivefyreBootstrapClient, LivefyreCreateClient, LivefyrePermalinkClient,
+        LivefyreWriteClient, fetchContent, Auth, inherits, debug) {
     'use strict';
 
 
@@ -43,6 +44,7 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
 
         this._bootstrapClient = opts.bootstrapClient || new LivefyreBootstrapClient();
         this._createClient = opts.createClient || new LivefyreCreateClient();
+        this._permalinkClient = opts.permalinkClient || new LivefyrePermalinkClient();
 
         // Internal streams
         this._writer = opts.writer || null;
@@ -51,7 +53,6 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
 
         Duplex.call(this, opts);
     };
-
     inherits(Collection, Duplex);
 
 
@@ -298,16 +299,10 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
      */
     Collection.prototype._getBootstrapInit = function (errback) {
         var self = this,
-            collectionOpts;
+            collectionOpts = this._getBaseOpts();
 
         // Use this._bootstrapClient to request init (init is default when
         // no opts.page is specified)
-        collectionOpts = {
-            network: this.network,
-            siteId: this.siteId,
-            articleId: this.articleId,
-            environment: this.environment
-        };
         this._bootstrapClient.getContent(collectionOpts, function (err, data) {
             if (err) {
                 log("Error requesting Bootstrap init", err, data);
@@ -315,12 +310,6 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
             errback.call(self, err, data);
         });
     };
-
-
-    /**
-     * @callback optionalObjectCallback
-     * @param [error] {Object}
-     */
 
 
     /**
@@ -348,17 +337,44 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
         };
 
         // Use this._createClient to request a collection creation
-        var collectionOpts = {
-            network: this.network,
-            siteId: this.siteId,
-            articleId: this.articleId,
-            environment: this.environment,
+        var collectionOpts = this._getBaseOpts();
+        $.extend(opts, {
             collectionMeta: this._collectionMeta,
             signed: this._signed
-        };
+        });
         this._createClient.createCollection(collectionOpts, callback);
     };
 
+
+    /**
+     * Gets a permalink URL from the server for a given piece of content.
+     * @param data {Content}
+     * @param callback {function(err: Object, data: Object)}  A callback with "err/data" interface
+     */
+    Collection.prototype.getPermalink = function (data, callback) {
+        var client = this._permalinkClient;
+        var opts = this._getBaseOpts();
+        opts.messageId = data.content.id;
+        $.extend(opts, data);
+        client.getPermalink(opts, callback);
+    };
+
+
+    /**
+     * Get the base options that should go with all requests.
+     * @return {Object}
+     * @private
+     */
+    Collection.prototype._getBaseOpts = function () {
+        return {
+            network: this.network,
+            environment: this.environment,
+            collectionId: this.id,
+            siteId: this.siteId,
+            articleId: this.articleId,
+            lftoken: Livefyre.user.get('token')
+        };
+    };
 
     return Collection;
 });
