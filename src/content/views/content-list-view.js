@@ -197,7 +197,7 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
      * @returns {Boolean} Whether a content item can be displayed
      */
     ContentListView.prototype._hasVisibleVacancy = function () {
-        if (this.views.length > this._maxVisibleItems) {
+        if (this.views.length >= this._maxVisibleItems) {
             return false;
         }
         return true;
