@@ -82,13 +82,14 @@ define([
         var attachmentsView = this._createAttachmentsView(content);
 
         var likeCommand = opts.likeCommand || this._createLikeCommand(content, opts.liker);
-        var shareCommand = opts.shareCommand || this._createShareCommand(content, opts.sharer);
         var contentView = new ContentViewType({
             content : content,
             attachmentsView: attachmentsView,
-            likeCommand: likeCommand,
-            shareCommand: shareCommand
+            likeCommand: likeCommand
         });
+
+        var shareCommand = opts.shareCommand || this._createShareCommand(contentView, opts.sharer);
+        contentView._setCommand({ share: shareCommand });
 
         return contentView;
     };
