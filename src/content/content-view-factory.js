@@ -75,15 +75,16 @@ define([
         var ContentViewType = this._getViewTypeForContent(content);
         var attachmentsView = this._createAttachmentsView(content);
 
+        var contentView = new ContentViewType();
         var likeCommand = opts.likeCommand || this._createLikeCommand(content, opts.liker);
-        var contentView = new ContentViewType({
+        var shareCommand = opts.shareCommand || this._createShareCommand(contentView, opts.sharer);
+        
+        contentView.constructor.call(contentView, {
             content : content,
             attachmentsView: attachmentsView,
-            likeCommand: likeCommand
+            likeCommand: likeCommand,
+            shareCommand: shareCommand
         });
-
-        var shareCommand = opts.shareCommand || this._createShareCommand(contentView, opts.sharer);
-        contentView._setCommand({ share: shareCommand });
 
         return contentView;
     };
@@ -126,21 +127,21 @@ define([
     };
 
     /**
-     * Given content and a sharer, create a Command to pass as
+     * Given a contentView and a sharer, create a Command to pass as
      * opts.shareCommand to the ContentView
      */
-    ContentViewFactory.prototype._createShareCommand = function (content, sharer) {
+    ContentViewFactory.prototype._createShareCommand = function (contentView, sharer) {
         if ( ! sharer || ! sharer.hasDelegate()) {
             return;
         }
         var shareCommand = new Command(function () {
-            sharer.share(content);
+            sharer.share(contentView);
         });
         shareCommand.canExecute = function () {
             if (typeof sharer.canShare !== 'function') {
                 return true;
             }
-            return sharer.canShare(content);
+            return sharer.canShare(contentView);
         }
         // TODO: When the sharer's delegate changes and it didn't have one before,
         // then the shareCommand should emit change:canExecute
