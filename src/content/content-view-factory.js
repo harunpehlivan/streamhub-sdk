@@ -81,11 +81,11 @@ define([
         var ContentViewType = this._getViewTypeForContent(content);
         var attachmentsView = this._createAttachmentsView(content);
 
-        var contentView = new ContentViewType();
+        var contentView = new ContentViewType;//Wait for it...
         var likeCommand = opts.likeCommand || this._createLikeCommand(content, opts.liker);
         var shareCommand = opts.shareCommand || this._createShareCommand(contentView, opts.sharer);
         
-        contentView.constructor.call(contentView, {
+        contentView.constructor.call(contentView, {//...BAM!
             content : content,
             attachmentsView: attachmentsView,
             likeCommand: likeCommand,
