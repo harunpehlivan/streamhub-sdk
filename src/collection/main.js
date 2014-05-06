@@ -182,7 +182,13 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
         if ( ! this._writer) {
             this._writer = this.createWriter();
         }
-        this._writer.write(content, done);
+        this._writer.write(content, function(err, data) {
+            if (typeof content.errback === 'function') {
+                content.errback(err, data);
+                content.errback = null;
+            }
+            done(err, data);
+        });
     };
 
 
