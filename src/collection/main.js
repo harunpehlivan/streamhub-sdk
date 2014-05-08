@@ -1,4 +1,5 @@
 define([
+    'streamhub-sdk/jquery',
     'streamhub-sdk/collection/streams/archive',
     'streamhub-sdk/collection/streams/updater',
     'streamhub-sdk/collection/streams/writer',
@@ -12,7 +13,7 @@ define([
     'streamhub-sdk/auth',
     'inherits',
     'streamhub-sdk/debug'],
-function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedContents,
+function ($, CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedContents,
         Duplex, LivefyreBootstrapClient, LivefyreCreateClient, LivefyrePermalinkClient,
         LivefyreWriteClient, fetchContent, Auth, inherits, debug) {
     'use strict';
