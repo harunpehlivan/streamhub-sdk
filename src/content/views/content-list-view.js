@@ -112,7 +112,7 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
      * @param [forcedIndex] {number} location for the new view
      * @returns the newly created ContentView
      */
-    ContentListView.prototype.add = function(content, forcedIndex) {
+    ContentListView.prototype.add = function(content, forcedIndex, opts) {
         log("add", content);
         if (!content.el && this.getContentView(content)) {
         //No double-adds
@@ -123,8 +123,14 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
         //duck type for ContentView
         var contentView = content.el ? content : this.createContentView(content);
 
+        var newView = ListView.prototype.add.call(this, contentView, forcedIndex);
+
         if (this._bound && ! this._hasVisibleVacancy()) {
-            var viewToRemove = this.views[this.views.length-1];
+            if (opts.tail) {
+                var viewToRemove = this.views[0];
+            } else {
+                var viewToRemove = this.views[this.views.length-1];
+            }
             
             // Ensure .more won't let more through right away,
             // we already have more than we want.
@@ -136,7 +142,7 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
             this.remove(viewToRemove);
         }
         
-        return ListView.prototype.add.call(this, contentView, forcedIndex);
+        return newView;
     };
 
     ContentListView.prototype._insert = function (contentView, forcedIndex) {
