@@ -35,9 +35,10 @@ function (Writable, LivefyreWriteClient, Auth, inherits) {
 
         var postParams = {
             body: content.body,
-            network: collection.network,
             collectionId: collection.id,
-            lftoken: Auth.getToken()
+            environment: collection.environment,
+            lftoken: Auth.getToken(),
+            network: collection.network
         };
 
         if (numAttachments) {
