@@ -114,6 +114,7 @@ function($, ListView, ContentView, ContentViewFactory, GalleryAttachmentListView
      */
     ContentListView.prototype.add = function(content, forcedIndex, opts) {
         log("add", content);
+        opts = opts || {};
         if (!content.el && this.getContentView(content)) {
         //No double-adds
             log('already added', content);
