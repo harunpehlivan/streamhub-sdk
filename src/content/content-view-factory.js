@@ -87,7 +87,9 @@ define([
             content : content,
             attachmentsView: attachmentsView,
             likeCommand: likeCommand,
-            shareCommand: shareCommand
+            shareCommand: shareCommand,
+            themeClass: opts.themeClass,
+            template: opts.template
         });
 
         return contentView;

@@ -42,6 +42,10 @@ define([
             like: opts.likeCommand,
             share: opts.shareCommand
         });
+        this._themeClass = opts.themeClass || 'content-default';
+        if (opts.template) {
+            this.template = opts.template;
+        }
 
         ContentView.call(this, opts);
 
@@ -51,10 +55,6 @@ define([
 
     LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left > .content-control-list';
     LivefyreContentView.prototype.footerRightSelector = '.content-footer-right > .content-control-list';
-
-    LivefyreContentView.prototype.CLASSES = {
-        defaultTheme: 'content-default'
-    };
 
 
     /**
@@ -82,7 +82,7 @@ define([
      */
     LivefyreContentView.prototype.render = function () {
         ContentView.prototype.render.call(this);
-        this.$el.addClass(this.CLASSES.defaultTheme);
+        this.$el.addClass(this._themeClass);
         this._renderButtons();
         return this;
     };
