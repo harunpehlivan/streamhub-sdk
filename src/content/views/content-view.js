@@ -56,7 +56,6 @@ define([
     ContentView.prototype.imageLoadingClass = 'hub-content-image-loading';
     ContentView.prototype.tooltipElSelector = '.hub-tooltip-link';
     ContentView.prototype.attachmentsElSelector = '.content-attachments';
-    ContentView.prototype.tiledAttachmentsElSelector = '.content-attachments-tiled';
     ContentView.prototype.headerElSelector = '.content-header';
     ContentView.prototype.avatarSelector = '.content-author-avatar';
     ContentView.prototype.attachmentFrameElSelector = '.content-attachment-frame';
