@@ -82,8 +82,16 @@ define(['jquery'], function($) {
 
                         xdr.onprogress = function () {};
 
-                        //xdr.send(userOptions.data);
-                        xdr.send();
+                        if (userOptions.data && options.type === 'POST') {
+                            var data = userOptions.data;
+                            if (typeof(data) === 'object') {
+                                data = $.param(data);
+                            }
+
+                            xdr.send(data);
+                        } else {
+                            xdr.send();
+                        }
                     },
                     abort: function() {
                         if (xdr) {

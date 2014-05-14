@@ -1,4 +1,4 @@
-(function (root, factory) {
+(function (root) {
     if ((typeof Livefyre === 'object') && (typeof Livefyre.define === 'function') && Livefyre.define.amd) {
         // Livefyre.define is defined by https://github.com/Livefyre/require
         Livefyre.define([], factory);
@@ -16,5 +16,6 @@
         root.Livefyre = root.Livefyre || {};
         root.Livefyre['streamhub-sdk'] = factory();
     }
-}(this, function () {
-    //almond, and your modules will be inlined here
+
+    function factory() {
+        //almond, and your modules will be inlined here

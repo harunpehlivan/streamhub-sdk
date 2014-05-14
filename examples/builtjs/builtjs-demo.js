@@ -1,4 +1,7 @@
-Livefyre.require(['streamhub-sdk/collection', 'streamhub-sdk/content/views/content-list-view', 'auth'],
+Livefyre.require([
+    'streamhub-sdk/collection',
+    'streamhub-sdk/content/views/content-list-view',
+    'auth'],
 function (Collection, ListView, auth) {
     // auth.delegate({
     //     login: function (done) {
@@ -9,6 +12,7 @@ function (Collection, ListView, auth) {
     //     }
     // });
     auth.delegate(auth.createDelegate('http://livefyre.com'));
+
     var opts = {
         "network": "livefyre.com",
         "siteId": "313878",
@@ -18,8 +22,8 @@ function (Collection, ListView, auth) {
 
     var view = window.view = new ListView({
         el: document.getElementById('view'),
-        sharer: function () {
-            console.log('share', arguments);
+        sharer: function (content) {
+            alert('share: '+content.body);
         }
     });
     var collection = window.collection = new Collection(opts);

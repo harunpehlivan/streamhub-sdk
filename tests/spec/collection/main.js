@@ -129,11 +129,18 @@ Auth, Writable, Readable) {
                         },
                         signed: false
                     };
+
+                    function createHttpError (message, statusCode) {
+                        var err = new Error(message);
+                        err.statusCode = statusCode;
+                        return err;
+                    }
+
                     //Faked responses
-                    mock404Response = "Not Found";//{"msg": "", "status": "error", "error_type": "ResourceDoesNotExist", "trace": "Traceback (most recent call last):\n  File... raise ResourceDoesNotExist()\nResourceNotFoundError\n", "code": 404};
-                    mock400Response = "Bad Request";//{"msg": "Cannot create a collection without an articleId: {\"url\": \"http://www.fake.com\", \"tags\": \"test,wall\", \"title\": \"Media Wall Example\"}.", "status": "error", "error_type": "BadRequestError", "trace": "Traceback (most recent call last):\n  File... raise BadRequestError(\"Cannot create a collection without an articleId: %s.\" % json.dumps(collection_meta))\nBadDataError: Cannot create a collection without an articleId: {\"url\": \"http://www.fake.com\", \"tags\": \"test,wall\", \"title\": \"Media Wall Example\"}.\n", "code": 400}
-                    mock409Response = "Conflict";
-                    mock500Response = "Internal Server Error";//{"msg": "", "status": "error", "code": 500};
+                    mock404Response = createHttpError("Not Found", 404);//{"msg": "", "status": "error", "error_type": "ResourceDoesNotExist", "trace": "Traceback (most recent call last):\n  File... raise ResourceDoesNotExist()\nResourceNotFoundError\n", "code": 404};
+                    mock400Response = createHttpError("Bad Request", 400);//{"msg": "Cannot create a collection without an articleId: {\"url\": \"http://www.fake.com\", \"tags\": \"test,wall\", \"title\": \"Media Wall Example\"}.", "status": "error", "error_type": "BadRequestError", "trace": "Traceback (most recent call last):\n  File... raise BadRequestError(\"Cannot create a collection without an articleId: %s.\" % json.dumps(collection_meta))\nBadDataError: Cannot create a collection without an articleId: {\"url\": \"http://www.fake.com\", \"tags\": \"test,wall\", \"title\": \"Media Wall Example\"}.\n", "code": 400}
+                    mock409Response = createHttpError("Conflict", 409);
+                    mock500Response = createHttpError("Internal Server Error", 500);//{"msg": "", "status": "error", "code": 500};
                     mock200Response = "OK";//{};//Sometimes sent by our servers in leu of an error.
                     mock202Response = {"msg": "This request is being processed.", "status": "ok", "code": 202};
 
@@ -215,7 +222,7 @@ Auth, Writable, Readable) {
                         spyOn(collection._createClient, "createCollection").andCallFake(fnSuccessfulCreate);
                         collection.initFromBootstrap(fnCallback);
                     });
-                    
+
                     waitsFor(function () {
                         return cnt === 4;
                     }, "polling failed" , 5000);
@@ -233,7 +240,7 @@ Auth, Writable, Readable) {
                         spyOn(collection._createClient, "createCollection").andCallFake(fnCreateConflict);
                         collection.initFromBootstrap(fnCallback);
                     });
-                    
+
                     waitsFor(function () {
                         return cnt === 4;
                     }, "polling failed" , 5000);

@@ -197,13 +197,13 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
         this._isInitingFromBootstrap = true;
         this._getBootstrapInit(function (err, initData) {
             self._isInitingFromBootstrap = false;
-            if (err && err.toLowerCase() === 'not found' && this._autoCreate) {
+            if (err && err.statusCode === 404 && this._autoCreate) {
                 this._createCollection(function (err) {
                     // Should always poll for init file to be created. If the
                     // collection successfullly created this time (202), then
                     // we should wait. It it's a conflict (409), then it was
                     // already created and we should wait.
-                    if (!err || err.toLowerCase() === 'conflict') {
+                    if (!err || err.statusCode === 409) {
                         self._pollForBootstrapLoaded();
                     }
                 });
@@ -240,7 +240,7 @@ function (CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedConten
         var attempt = opt_attempt || 1;
         var self = this;
         this._getBootstrapInit(function (err, initData) {
-            if (err && err.toLowerCase() === 'not found') {
+            if (err && err.statusCode === 404) {
                 attempt++;
                 if (attempt < this._maxInitAttempts) {
                     setTimeout(function () {

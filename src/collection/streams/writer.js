@@ -32,15 +32,17 @@ function (Writable, LivefyreWriteClient, Auth, inherits) {
                 _write.call(self, content, done);
             });
         }
-        
+
         var postParams = {
             body: content.body,
-            network: collection.network,
             collectionId: collection.id,
-            lftoken: Auth.getToken()
+            environment: collection.environment,
+            lftoken: Auth.getToken(),
+            network: collection.network
         };
 
         if (numAttachments) {
+            var attachment;
             postParams.media = [];
             for (var i=0; i < numAttachments; i++) {
                 attachment = content.attachments[i];

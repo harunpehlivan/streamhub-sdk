@@ -51,10 +51,6 @@
 	   display: block;
 	}
     
-    p {
-        margin: 16px 0 0;
-    }
-    
     a {
         text-decoration: none;
         color: @link_color;
@@ -93,7 +89,7 @@
         -moz-transition-property: background 0.1s ease 0;
 
         .content-header-inner {
-            padding: 20px 20px 12px 20px;
+            padding: 20px 20px 0px 20px;
             clear: both;
         }
     }
@@ -131,7 +127,7 @@
         color: @text_color_fallback;
         color: @text_color;
         line-height: 28px;
-        margin: 0 20px;
+        margin: 0;
         display: block;
 
         -ms-word-break: break-all;
@@ -141,10 +137,23 @@
         -webkit-hyphens: auto;
            -moz-hyphens: auto;
                 hyphens: auto;
+
+        & > * {
+            margin: 16px 20px;
+        }
+
+        // things like RSS posts (e.g. tumblr)
+        // may have images in the content body that
+        // are big
+        img {
+            margin: 0;
+            max-width: 100%;
+        }
     }
 
     .content-footer {
-        padding: 16px 20px 0px 20px;
+        margin-top: 16px;
+        padding: 0 20px;
         clear: both;
 
         & > * {
@@ -155,7 +164,6 @@
 
             & * {
                 color: #999;
-                height: 20px;
                 padding: 2px 0;
             }
         }
@@ -175,7 +183,6 @@
         }
 
         .hub-btn {
-            height: 16px;
             font-size: 12px;
             padding: 2px 7px;
             margin-right: 0px;
@@ -192,7 +199,6 @@
             background-image: data-uri('../images/like.png');
             background-repeat: no-repeat;
             background-position: 0px center;
-            background-size: 1.3em;
         }
         .hub-content-like.hub-btn-toggle-on {
             background-image: data-uri('../images/like_liked.png');
@@ -208,22 +214,24 @@
             padding-left: 27px;
             background-image: data-uri('../images/reply.png');
             background-repeat: no-repeat;
-            background-position: 7px 4px;
+            background-position: 7px center;
         }
 
         .hub-content-share {
-            padding-left: 27px;
+            padding-left: 29px;
             background-image: data-uri('../images/share.png');
             background-repeat: no-repeat;
-            background-position: 7px 4px;
+            background-position: 7px center;
         }
     }
     
     .content-attachments {
+        margin-top: 16px;
         margin-bottom: 16px;
         clear: both;
 
         &[data-hub-list-length='0'] {
+            margin-top: 0;
             margin-bottom: 0;
         }
     }
@@ -420,7 +428,7 @@
         font-weight: 500;
         font-size: 12px;
         background: no-repeat left center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAASCAYAAABB7B6eAAACI0lEQVQ4Ea2Vz0uUYRDHP/Pu5lqZmrpUkIVKahb9JPoLOkRdIhAK9BJdOnSQqJMRHcI6B9065B/QKQwsUMhTSKAkdJB+WGvtZqm0667tvtO8717e1X2X2PWFl3dmnme+M+935plH9P29Ondh7j4wqMo++9b8iLAIMuq0Hx6Wwsv+EQO+UzNqGQAReeSYfbDM2haZdCBaFS3RndB6FGnpQ3YdgB17cCdubErKw45uslYyNB3C6bgI8VOQTkDGqG7shPWVUK//CxCJIX3XkKYu9PMYOvcUaTuO9A4g0XrchfEaAkTqcc4Mo2tJ3Knb0LAf5+QQsrvXB9XsL3T+efUBpOcqxJrR6QdI12V7L4G6aOodmv6OfpuAfLrKAI0dSPs5dPYJzrGbSPxEMevcCu70SChocKFiDZwj12H1E3LwvPHfiWaSaGIS/fE2iFFRDg/Q3FMsaj7rF1IzRsfyvFEyCWupiqDBxdAAXtaaz6Bfxq1LXhloMujnF1ssCbY1+AE1NQ2FXOke08oHiLX4fLtvbkH2Z8BJkL1njbIL1kXdqAe4vgr1rbA4hc48DuwtipIf69eNVum+Am4BInVFOtRkO7ESP41sb0OXZnE/voClGesoW7MuwwpvykaokD/4m0Z/f8Cxg4R1ke9oFHnFdb++hj8LpUC55VI9oHnTNFHVPAqAhIne2LZpKqNhG7bA/szxLwWb28VLYgsgDcLDsveh09539x9LbLqByJ9N/QAAAABJRU5ErkJggg==);
-        margin: 14px 20px 0;
+        margin: 0 20px;
         padding: 0 0 0 30px;
         height: 18px;
         line-height: 18px;
@@ -469,7 +477,6 @@
         }
         .hub-content-action-reply {
             width: 23px;
-            height: 16px;
             background-position: center;
             background-repeat: no-repeat;
             background-image: data-uri('../images/reply.png');
@@ -529,6 +536,10 @@
             .content-author-avatar img {
                 box-shadow: 0 1px 3px 0 #000;
             }
+        }
+
+        .content-attachments {
+            margin-top: 0;
         }
 
         .content-attachment {

@@ -32,14 +32,15 @@ MockLivefyreWriteClient, Auth, Writable) {
 		describe('instance', function () {
 			var collection,
 				writer;
+			var collOpts;
 			beforeEach(function () {
-                var opts = {
+                collOpts = {
                     network: 'test.fyre.co',
                     siteId: 'testSiteId',
                     articleId: 'testArticleId',
                     environment: 'test.livefyre.com'
                 };
-                collection = new MockCollection(opts);
+                collection = new MockCollection(collOpts);
 				writer = new CollectionWriter({
 					collection: collection,
 					writeClient: new MockLivefyreWriteClient()
@@ -78,6 +79,8 @@ MockLivefyreWriteClient, Auth, Writable) {
 
 	                it('posts Content to the Collection via ._writer._writeClient.postContent', function () {
 	                    writer.write(new Content('blah'));
+	                    expect(writer._writeClient.postContent.argsForCall[0][0].network).toEqual(collOpts.network);
+	                    expect(writer._writeClient.postContent.argsForCall[0][0].environment).toEqual(collOpts.environment);
 	                    expect(writer._writeClient.postContent).toHaveBeenCalled();
 	                });
 
