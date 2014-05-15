@@ -54,6 +54,7 @@ function ($, CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedCon
 
         Duplex.call(this, opts);
     };
+
     inherits(Collection, Duplex);
 
 

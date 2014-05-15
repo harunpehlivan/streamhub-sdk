@@ -39,6 +39,7 @@ function (auth, inherits, EventEmitter, debug) {
         return livefyreUser.get('token');
     };
 
+
     /**
      * An Error that represents that an operation could not be performed
      * because the user has not been authorized. Semantics like HTTP 401
