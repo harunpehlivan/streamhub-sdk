@@ -4,6 +4,9 @@ var $ = require('streamhub-sdk/jquery');
 var inherits = require('inherits');
 var View = require('streamhub-sdk/view');
 var template = require('hgn!streamhub-sdk/content/templates/content-header');
+var debug = require('debug');
+
+var log = debug('streamhub-sdk/content/views/content-header-view');
 
 var ContentHeaderView = function (opts) {
     opts = opts || {};
