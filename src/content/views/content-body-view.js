@@ -16,7 +16,13 @@ inherits(ContentBodyView, View);
 ContentBodyView.prototype.template = template;
 
 ContentBodyView.prototype.getTemplateContext = function () {
-    return $.extend({}, this._content);
+    var context = $.extend({}, this._content);
+    // Ensure that content.body has a p tag
+    var isHtml = /^\s*<(p|div)/;
+    if ( ! isHtml.test(context.body)) {
+        context.body = '<p>'+context.body+'</p>';
+    }
+    return context;
 };
 
 module.exports = ContentBodyView;
