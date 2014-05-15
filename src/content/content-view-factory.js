@@ -7,12 +7,10 @@ define([
     'streamhub-sdk/content/types/livefyre-instagram-content',
     'streamhub-sdk/content/types/twitter-content',
     'streamhub-sdk/content/views/content-view',
-    'streamhub-sdk/content/views/tiled-attachment-list-view',
     'streamhub-sdk/content/views/livefyre-content-view',
     'streamhub-sdk/content/views/twitter-content-view',
     'streamhub-sdk/content/views/facebook-content-view',
     'streamhub-sdk/content/views/instagram-content-view',
-    'streamhub-sdk/content/views/gallery-on-focus-view',
     'streamhub-sdk/ui/command',
     'streamhub-sdk/collection/liker'
 ], function(
@@ -24,12 +22,10 @@ define([
     LivefyreInstagramContent,
     TwitterContent,
     ContentView,
-    TiledAttachmentListView,
     LivefyreContentView,
     TwitterContentView,
     FacebookContentView,
     InstagramContentView,
-    GalleryOnFocusView,
     Command,
     Liker
 ) {
@@ -43,9 +39,6 @@ define([
     var ContentViewFactory = function(opts) {
         opts = opts || {};
         this.contentRegistry = this.contentRegistry.slice(0);
-        if (opts.createAttachmentsView) {
-            this._createAttachmentsView = opts.createAttachmentsView;
-        }
     };
 
     /**
@@ -79,13 +72,11 @@ define([
     ContentViewFactory.prototype.createContentView = function(content, opts) {
         opts = opts || {};
         var ContentViewType = this._getViewTypeForContent(content);
-        var attachmentsView = this._createAttachmentsView(content);
 
         var likeCommand = opts.likeCommand || this._createLikeCommand(content, opts.liker);
         var shareCommand = opts.shareCommand || this._createShareCommand(content, opts.sharer);
         var contentView = new ContentViewType({
             content : content,
-            attachmentsView: attachmentsView,
             likeCommand: likeCommand,
             shareCommand: shareCommand,
             themeClass: opts.themeClass,
@@ -172,13 +163,6 @@ define([
         // TODO: When the sharer's delegate changes and it didn't have one before,
         // then the shareCommand should emit change:canExecute
         return shareCommand;
-    };
-
-    ContentViewFactory.prototype._createAttachmentsView = function (content) {
-        var tiledAttachmentListView = new TiledAttachmentListView();
-        return new GalleryOnFocusView(tiledAttachmentListView, {
-            content: content
-        });
     };
 
     return ContentViewFactory;

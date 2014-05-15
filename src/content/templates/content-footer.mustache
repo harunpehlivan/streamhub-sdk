@@ -1,0 +1,19 @@
+<div class="content-footer">
+    <div class="content-footer-left">
+        <span class="content-control-list"></span>
+    </div>
+    <div class="content-footer-right">
+        <span class="content-control-list"></span>
+        {{#formattedCreatedAt}}
+            <div class="content-created-at">
+                {{#createdAtUrl}}
+                <a href="{{createdAtUrl}}" target="_blank">
+                {{/createdAtUrl}}
+                {{{formattedCreatedAt}}}
+                {{#createdAtUrl}}
+                </a>
+                {{/createdAtUrl}}
+            </div>
+        {{/formattedCreatedAt}}
+    </div>
+</div>

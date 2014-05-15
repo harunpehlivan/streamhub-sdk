@@ -28,7 +28,6 @@ function ($, View, AttachmentListView, OembedView, TiledAttachmentListTemplate, 
 
     TiledAttachmentListView.prototype.template = TiledAttachmentListTemplate;
     TiledAttachmentListView.prototype.tiledAttachmentsSelector = '.content-attachments-tiled';
-    TiledAttachmentListView.prototype.stackedAttachmentsSelector = '.content-attachments-stacked';
     TiledAttachmentListView.prototype.squareTileClassName = 'content-attachment-square-tile';
     TiledAttachmentListView.prototype.horizontalTileClassName = 'content-attachment-horizontal-tile';
     TiledAttachmentListView.prototype.contentAttachmentSelector = '.content-attachment';
@@ -85,11 +84,8 @@ function ($, View, AttachmentListView, OembedView, TiledAttachmentListTemplate, 
 
     TiledAttachmentListView.prototype._insert = function (oembedView) {
         var tiledAttachmentsEl = this.$el.find(this.tiledAttachmentsSelector);
-        var stackedAttachmentsEl = this.$el.find(this.stackedAttachmentsSelector);
         if (this.isTileableAttachment(oembedView.oembed)) {
             oembedView.$el.appendTo(tiledAttachmentsEl);
-        } else {
-            oembedView.$el.appendTo(stackedAttachmentsEl);
         }
     };
 
