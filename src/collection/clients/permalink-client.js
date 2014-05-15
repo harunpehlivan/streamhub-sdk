@@ -31,10 +31,14 @@ LivefyrePermalinkClient.prototype.getPermalink = function (opts, callback) {
     //production environment. Create the link here for non-prod.
         var param = 'lf-content',
             value = [opts.collectionId, opts.messageId].join(':'),
-            fragment = [param, value].join('=');
-            url = document.location.split("#")[0];
+            fragment = [param, value].join('='),
+            url = document.location.href.split("#")[0];
 
-        callback(err, self._adaptPermalink([url, fragment].join('#')]));
+        callback(undefined, self._adaptPermalink({
+            data: {
+                url: [url, fragment].join('#')
+            }
+        }));
         return;
     }
     var clbk = function (err, data) {

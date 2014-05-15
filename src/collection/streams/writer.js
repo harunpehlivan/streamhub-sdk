@@ -37,7 +37,6 @@ function (Writable, LivefyreWriteClient, Auth, inherits) {
             body: content.body,
             environment: collection.environment,
             collectionId: collection.id,
-            environment: collection.environment,
             lftoken: Auth.getToken(),
             network: collection.network
         };
