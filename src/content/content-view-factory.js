@@ -83,7 +83,6 @@ define([
 
         var likeCommand = opts.likeCommand || this._createLikeCommand(content, opts.liker);
         var shareCommand = opts.shareCommand || this._createShareCommand(content, opts.sharer);
-
         var contentView = new ContentViewType({
             content : content,
             attachmentsView: attachmentsView,
