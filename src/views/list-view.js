@@ -1,17 +1,13 @@
 define([
     'streamhub-sdk/jquery',
     'streamhub-sdk/view',
-    'streamhub-sdk/content/content-view-factory',
-    'streamhub-sdk/modal/views/attachment-gallery-modal',
     'inherits',
     'streamhub-sdk/debug',
     'stream/writable',
-    'streamhub-sdk/content/views/content-view',
     'streamhub-sdk/views/streams/more',
     'streamhub-sdk/views/show-more-button',
     'hgn!streamhub-sdk/views/templates/list-view'],
-function($, View, ContentViewFactory, AttachmentGalleryModal, inherits,
-debug, Writable, ContentView, More, ShowMoreButton, ListViewTemplate) {
+function($, View, inherits, debug, Writable, More, ShowMoreButton, ListViewTemplate) {
     'use strict';
 
     var log = debug('streamhub-sdk/views/list-view');
@@ -82,8 +78,8 @@ debug, Writable, ContentView, More, ShowMoreButton, ListViewTemplate) {
      * Selector of .el child in which to render a show more button
      */
     ListView.prototype.showMoreElSelector = '.hub-list-more';
-    
-    
+
+
     /**
      * Keys are views that were forcibly indexed into this view.
      * @type {Object.<string, boolean>}
@@ -134,7 +130,7 @@ debug, Writable, ContentView, More, ShowMoreButton, ListViewTemplate) {
      * @returns {Number} < 0 if a before b, 0 if same ordering, > 0 if b before a
      */
     ListView.prototype.comparator = null;
-    
+
 
     /**
      * Returns true if the view is listed on the indexedViews list.
@@ -145,7 +141,7 @@ debug, Writable, ContentView, More, ShowMoreButton, ListViewTemplate) {
     ListView.prototype._isIndexedView = function(view) {
         return (view && view.uid && this._indexedViews[view.uid]) ? true : false;
     };
-    
+
     /**
      * Adds a view to _indexedViews
      * @param view {!View}
@@ -154,7 +150,7 @@ debug, Writable, ContentView, More, ShowMoreButton, ListViewTemplate) {
     ListView.prototype._recordIndexedView = function(view) {
         this._indexedViews[view.uid] = true;
     };
-    
+
     /**
      * Returns the index where newView should be inserted.
      * Requires this.comparator to be defined.
@@ -168,12 +164,12 @@ debug, Writable, ContentView, More, ShowMoreButton, ListViewTemplate) {
         if (!this.comparator) {
             throw new Error("Tried to _binarySearch without this.comparator.");
         }
-        
+
         var low = 0, high = array.length, mid, comp, origMid;
         while (low < high) {
             origMid = mid = (low + high) >>> 1;
             comp = array[mid];
-            
+
             while (this._isIndexedView(comp) && mid > low) {
             //Try to get a comp that isn't indexed
             //Move lower looking for a comparable view
@@ -197,7 +193,7 @@ debug, Writable, ContentView, More, ShowMoreButton, ListViewTemplate) {
                 }
             }
         }
-        
+
         return Math.max(0, low);//Incase of miscalculations, use max() to assure minimum of 0
     };
 
@@ -227,7 +223,7 @@ debug, Writable, ContentView, More, ShowMoreButton, ListViewTemplate) {
         } else {
             this._recordIndexedView(newView);
         }
-        
+
         this.views.splice(forcedIndex || index, 0, newView);
 
         newView.render();
