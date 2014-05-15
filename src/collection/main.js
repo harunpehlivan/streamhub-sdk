@@ -365,6 +365,34 @@ function ($, CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedCon
     /**
      * Get the base options that should go with all requests.
      * @return {Object}
+     * @private
+     */
+    Collection.prototype._getBaseOpts = function () {
+        return {
+            environment: this.environment,
+            collectionId: this.id,
+            collectionMeta: this._collectionMeta,
+            signed: this._signed
+        });
+    };
+
+    /**
+     * Gets a permalink URL from the server for a given piece of content.
+     * @param data {Content}
+     * @param callback {function(err: Object, data: Object)}  A callback with "err/data" interface
+     */
+    Collection.prototype.getPermalink = function (data, callback) {
+        var client = this._permalinkClient;
+        var opts = this._getBaseOpts();
+        opts.messageId = data.content.id;
+        $.extend(opts, data);
+        client.getPermalink(opts, callback);
+    };
+
+
+    /**
+     * Get the base options that should go with all requests.
+     * @return {Object}
      * @protected
      */
     Collection.prototype._getBaseOpts = function () {
