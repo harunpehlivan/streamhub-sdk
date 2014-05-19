@@ -30,9 +30,17 @@ TiledAttachmentListView.prototype.horizontalTileClassName = 'content-attachment-
 TiledAttachmentListView.prototype.contentAttachmentSelector = '.content-attachment';
 
 TiledAttachmentListView.prototype.events = AttachmentListView.prototype.events.extended({
-    'click': function (e, opts) {
-        opts = opts || {};
-        this.$el.trigger('focusContent.hub', { content: this.content, attachmentToFocus: opts.oembed });
+    'click': function (e) {
+        var targetOembed;
+        for (var i=0; i < this.oembedViews.length; i++) {
+            var oembedView = this.oembedViews[i];
+            if ($.contains(oembedView.el, e.target)) {
+                targetOembed = oembedView.oembed;
+                break;
+            }
+        }
+
+        this.$el.trigger('focusContent.hub', { content: this.content, attachmentToFocus: targetOembed });
     }
 });
 
