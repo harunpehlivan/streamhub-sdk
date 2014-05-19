@@ -14,6 +14,7 @@ var ContentThumbnailAttachmentsView = function (opts) {
 };
 inherits(ContentThumbnailAttachmentsView, View);
 
+ContentThumbnailAttachmentsView.prototype.elTag = 'section';
 ContentThumbnailAttachmentsView.prototype.elClass = 'content-thumbnail-attachments';
 
 ContentThumbnailAttachmentsView.prototype.render = function () {

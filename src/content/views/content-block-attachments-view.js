@@ -14,6 +14,7 @@ var ContentBlockAttachmentsView = function (opts) {
 };
 inherits(ContentBlockAttachmentsView, View);
 
+ContentBlockAttachmentsView.prototype.elTag = 'section';
 ContentBlockAttachmentsView.prototype.elClass = 'content-block-attachments';
 
 ContentBlockAttachmentsView.prototype.render = function () {
