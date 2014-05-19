@@ -17,6 +17,8 @@ var ContentHeaderView = function (opts) {
 inherits(ContentHeaderView, View);
 
 ContentHeaderView.prototype.template = template;
+ContentHeaderView.prototype.elTag = 'section';
+ContentHeaderView.prototype.elClass = 'content-header';
 
 ContentHeaderView.prototype.headerElSelector = '.content-header';
 ContentHeaderView.prototype.avatarSelector = '.content-author-avatar';

@@ -14,6 +14,8 @@ var ContentBodyView = function (opts) {
 inherits(ContentBodyView, View);
 
 ContentBodyView.prototype.template = template;
+ContentBodyView.prototype.elTag = 'section';
+ContentBodyView.prototype.elClass = 'content-body';
 
 ContentBodyView.prototype.getTemplateContext = function () {
     var context = $.extend({}, this._content);

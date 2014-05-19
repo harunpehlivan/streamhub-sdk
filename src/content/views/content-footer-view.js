@@ -18,6 +18,8 @@ var ContentFooterView = function (opts) {
 inherits(ContentFooterView, View);
 
 ContentFooterView.prototype.template = template;
+ContentFooterView.prototype.elTag = 'section';
+ContentFooterView.prototype.elClass = 'content-footer';
 
 ContentFooterView.prototype.footerLeftSelector = '.content-footer-left > .content-control-list';
 
