@@ -33,16 +33,16 @@ var ContentView = function (opts) {
     CompositeView.call(this, opts);
 
     this._headerView = new ContentHeaderView(opts);
-    this.add(this._headerView);
+    this.addView(this._headerView);
 
     this._attachmentsView = opts.attachmentsView || new CompositeView(new TiledAttachmentListView(opts), new BlockAttachmentListView(opts));
-    this.add(this._attachmentsView);
+    this.addView(this._attachmentsView);
 
     this._bodyView = new ContentBodyView(opts);
-    this.add(this._bodyView);
+    this.addView(this._bodyView);
 
     this._footerView = new ContentFooterView(opts);
-    this.add(this._footerView);
+    this.addView(this._footerView);
 
     if (this.content) {
         this.content.on("reply", function(content) {
