@@ -8,7 +8,6 @@ var ContentBodyView = require('streamhub-sdk/content/views/content-body-view');
 var ContentFooterView = require('streamhub-sdk/content/views/content-footer-view');
 var TiledAttachmentListView = require('streamhub-sdk/content/views/tiled-attachment-list-view');
 var BlockAttachmentListView = require('streamhub-sdk/content/views/block-attachment-list-view');
-var util = require('streamhub-sdk/util');
 var inherits = require('inherits');
 var debug = require('debug');
 
@@ -36,11 +35,8 @@ var ContentView = function (opts) {
     this._headerView = new ContentHeaderView(opts);
     this.add(this._headerView);
 
-    this._thumbnailAttachmentsView = opts.contentThumbnailAttachmentsView || new TiledAttachmentListView(opts);
-    this.add(this._thumbnailAttachmentsView);
-
-    this._blockAttachmentsView = opts.contentBlockAttachmentsView || new BlockAttachmentListView(opts);
-    this.add(this._blockAttachmentsView);
+    this._attachmentsView = opts.attachmentsView || new CompositeView(new TiledAttachmentListView(opts), new BlockAttachmentListView(opts));
+    this.add(this._attachmentsView);
 
     this._bodyView = new ContentBodyView(opts);
     this.add(this._bodyView);
@@ -68,7 +64,6 @@ ContentView.prototype.contentWithImageClass = 'content-with-image';
 ContentView.prototype.imageLoadingClass = 'hub-content-image-loading';
 ContentView.prototype.attachmentsElSelector = '.content-attachments';
 ContentView.prototype.attachmentFrameElSelector = '.content-attachment-frame';
-ContentView.prototype.formatDate = util.formatDate;
 
 ContentView.prototype.events = View.prototype.events.extended({
     'imageLoaded.hub': function(e) {

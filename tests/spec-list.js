@@ -34,6 +34,7 @@ define(function () {
         'tests/spec/content/views/oembed-view',
         'tests/spec/content/views/attachment-list-view',
         'tests/spec/content/views/tiled-attachment-list-view',
+        'tests/spec/content/views/block-attachment-list-view',
         'tests/spec/content/views/gallery-attachment-list-view',
         'tests/spec/content/views/content-list-view',
         'tests/spec/modal/main',

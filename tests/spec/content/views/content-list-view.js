@@ -179,17 +179,6 @@ function ($, ContentListView, Content, ContentView) {
 
                 expect(listView.modal.show).toHaveBeenCalled();
             });
-
-            it('shows finds the correct ContentView instance and invokes .attachmentsView.focus when no modal is set on the ContentListView instance', function () {
-                listView.modal = false;
-                var targetContentView = listView.getContentView(content);
-                targetContentView.attachmentsView.focus = function () {};
-                spyOn(targetContentView.attachmentsView, 'focus');
-
-                listView.$el.trigger('focusContent.hub', { content: content });
-
-                expect(targetContentView.attachmentsView.focus).toHaveBeenCalled();
-            });
         });
 
         describe("handles showMore.hub event", function () {

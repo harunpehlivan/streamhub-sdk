@@ -52,8 +52,8 @@ function (
                 var button = new Button();
                 contentView.addButton(button);
                 contentView.render();
-                expect(contentView._controls.left.length).toBe(1);
-                expect(contentView._controls.left[0]).toBe(button);
+                expect(contentView._footerView._controls.left.length).toBe(1);
+                expect(contentView._footerView._controls.left[0]).toBe(button);
                 expect(contentView.$('.lf-btn').length).toBe(1);
             });
 
@@ -61,19 +61,19 @@ function (
                 var button = new Button();
                 contentView.render();
                 contentView.addButton(button);
-                expect(contentView._controls.left.length).toBe(1);
-                expect(contentView._controls.left[0]).toBe(button);
+                expect(contentView._footerView._controls.left.length).toBe(1);
+                expect(contentView._footerView._controls.left[0]).toBe(button);
                 expect(contentView.$('.lf-btn').length).toBe(1);
             });
 
             it('can remove a button', function () {
                 var button = new Button();
                 contentView.addButton(button);
-                expect(contentView._controls.left.length).toBe(1);
-                expect(contentView._controls.left[0]).toBe(button);
+                expect(contentView._footerView._controls.left.length).toBe(1);
+                expect(contentView._footerView._controls.left[0]).toBe(button);
                
                 contentView.removeButton(button);
-                expect(contentView._controls.left.length).toBe(0);
+                expect(contentView._footerView._controls.left.length).toBe(0);
             });
         });
 
@@ -205,7 +205,6 @@ function (
                 spyOn(lfContentView._likeButton, '_handleClick').andCallThrough();
 
                 lfContentView._likeButton.$el.click();
-
                 expect(lfContentView._likeButton._handleClick).toHaveBeenCalled();
                 expect(lfContentView._likeButton._label).toBe(1);
             });

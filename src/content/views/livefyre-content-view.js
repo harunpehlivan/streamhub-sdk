@@ -32,11 +32,8 @@ define([
     var LivefyreContentView = function LivefyreContentView (opts) {
         opts = opts || {};
 
-        this._rendered = false;
-        this._controls = {
-            'left': [],
-            'right': []
-        };
+        ContentView.call(this, opts);
+
         this._commands = {};
         this._setCommand({
             like: opts.likeCommand,
@@ -47,14 +44,9 @@ define([
             this.template = opts.template;
         }
 
-        ContentView.call(this, opts);
-
         this._addInitialButtons();
     };
     inherits(LivefyreContentView, ContentView);
-
-    LivefyreContentView.prototype.footerLeftSelector = '.content-footer-left > .content-control-list';
-    LivefyreContentView.prototype.footerRightSelector = '.content-footer-right > .content-control-list';
 
 
     /**
@@ -71,7 +63,7 @@ define([
                 this._commands[name] = cmds[name];
 
                 // If canExecute changes, re-render buttons because now maybe the button should appear
-                cmds[name].on('change:canExecute', this._renderButtons.bind(this));
+                cmds[name].on('change:canExecute', this._footerView._renderButtons.bind(this._footerView));
             }
         }
     };
@@ -83,7 +75,6 @@ define([
     LivefyreContentView.prototype.render = function () {
         ContentView.prototype.render.call(this);
         this.$el.addClass(this._themeClass);
-        this._renderButtons();
         return this;
     };
 
@@ -103,25 +94,6 @@ define([
         if (this._shareButton) {
             this.addButton(this._shareButton);
         }
-    };
-
-    /**
-     * Clear out the current control list,
-     * and render all the buttons that have been added
-     */
-    LivefyreContentView.prototype._renderButtons = function () {
-        var $leftControls = this.$el.find(this.footerLeftSelector);
-        var $rightControls = this.$el.find(this.footerRightSelector);
-
-        $leftControls.empty();
-        this._controls.left.forEach(function (button) {
-            $leftControls.append(button.$el);
-        });
-
-        $rightControls.empty();
-        this._controls.right.forEach(function (button) {
-            $rightControls.append(button.$el);
-        });
     };
 
     LivefyreContentView.prototype._updateLikeCount = function () {
@@ -171,33 +143,7 @@ define([
      *     the button to
      */
     LivefyreContentView.prototype.addButton = function (button, opts) {
-        opts = opts || {};
-        var footerControls;
-        var footerSide;
-        if (opts.side === 'right') {
-            footerControls = this._controls.right;
-            footerSide = this.$el.find(this.footerRightSelector);
-        } else {
-            footerControls = this._controls.left;
-            footerSide = this.$el.find(this.footerLeftSelector);
-        }
-
-        // Don't add the same button twice
-        if (footerControls.indexOf(button) !== -1) {
-            return;
-        }
-
-        footerControls.push(button);
-        var buttonContainerEl = $('<div></div>');
-        button.setElement(buttonContainerEl);
-        button.render();
-
-        // If the footer is rendered, then re-render all buttons.
-        // If buttons are added before the ContentView is, then we shouldn't
-        // render buttons
-        if (footerSide.length) {
-            this._renderButtons();
-        }
+        this._footerView.addButton(button, opts);
     };
 
     /**
@@ -205,11 +151,8 @@ define([
      * @param button {Button} Button to remove
      */
     LivefyreContentView.prototype.removeButton = function (button) {
-        this._controls.left.splice(this._controls.left.indexOf(button), 1);
-        this._controls.right.splice(this._controls.right.indexOf(button), 1);
-
-        button.destroy();
+        this._footerView.removeButton(button);
     };
-    
+
     return LivefyreContentView;
 });

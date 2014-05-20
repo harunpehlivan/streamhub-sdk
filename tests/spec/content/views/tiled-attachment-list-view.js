@@ -64,7 +64,6 @@ function($, jasmineJquery, Content, TiledAttachmentListView) {
 
                 it('is a tiled attachment (appended to .content-attachments-tiled)', function() {
                     expect(tiledAttachmentListView.$el.find('.content-attachments-tiled')).toContain('.content-attachment');
-                    expect(tiledAttachmentListView.$el.find('.content-attachments-stacked')).toBeEmpty();
                 });
             });
 
@@ -77,7 +76,6 @@ function($, jasmineJquery, Content, TiledAttachmentListView) {
 
                 it('is a tiled attachment (appended to .content-attachments-tiled)', function() {
                     expect(tiledAttachmentListView.$el.find('.content-attachments-tiled')).toContain('.content-attachment');
-                    expect(tiledAttachmentListView.$el.find('.content-attachments-stacked')).toBeEmpty();
                 });
             });
 
@@ -88,8 +86,7 @@ function($, jasmineJquery, Content, TiledAttachmentListView) {
                 oembedAttachment.type = 'link';
                 tiledAttachmentListView.add(oembedAttachment);
 
-                it('is a stacked attachment (appended to .content-attachments-stacked)', function() {
-                    expect(tiledAttachmentListView.$el.find('.content-attachments-stacked')).toContain('.content-attachment');
+                it('is not inserted', function() {
                     expect(tiledAttachmentListView.$el.find('.content-attachments-tiled')).toBeEmpty();
                 });
             });
@@ -101,8 +98,7 @@ function($, jasmineJquery, Content, TiledAttachmentListView) {
                 oembedAttachment.type = 'rich';
                 tiledAttachmentListView.add(oembedAttachment);
 
-                it('is a stacked attachment (appended to .content-attachments-stacked)', function() {
-                    expect(tiledAttachmentListView.$el.find('.content-attachments-stacked')).toContain('.content-attachment');
+                it('is not inserted', function() {
                     expect(tiledAttachmentListView.$el.find('.content-attachments-tiled')).toBeEmpty();
                 });
             });

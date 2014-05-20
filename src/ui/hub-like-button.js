@@ -45,6 +45,10 @@ function HubLikeButton (fnOrCommand, opts) {
 }
 inherits(HubLikeButton, HubToggleButton);
 
+HubLikeButton.prototype.setElement = function (el ) {
+    HubToggleButton.prototype.setElement.call(this, el);
+};
+
 HubLikeButton.prototype._execute = function () {
     this._command.execute(this._errback);
     if (! auth.isAuthenticated()) {
