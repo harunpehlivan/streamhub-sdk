@@ -33,16 +33,16 @@ var ContentView = function (opts) {
     CompositeView.call(this, opts);
 
     this._headerView = new ContentHeaderView(opts);
-    this.addView(this._headerView);
+    this.add(this._headerView, { render: false });
 
     this._attachmentsView = opts.attachmentsView || new CompositeView(new TiledAttachmentListView(opts), new BlockAttachmentListView(opts));
-    this.addView(this._attachmentsView);
+    this.add(this._attachmentsView, { render: false });
 
     this._bodyView = new ContentBodyView(opts);
-    this.addView(this._bodyView);
+    this.add(this._bodyView, { render: false });
 
     this._footerView = new ContentFooterView(opts);
-    this.addView(this._footerView);
+    this.add(this._footerView, { render: false });
 
     if (this.content) {
         this.content.on("reply", function(content) {
