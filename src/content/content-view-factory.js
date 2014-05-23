@@ -7,7 +7,7 @@ var LivefyreTwitterContent = require('streamhub-sdk/content/types/livefyre-twitt
 var LivefyreFacebookContent = require('streamhub-sdk/content/types/livefyre-facebook-content');
 var LivefyreInstagramContent = require('streamhub-sdk/content/types/livefyre-instagram-content');
 var TwitterContent = require('streamhub-sdk/content/types/twitter-content');
-var ContentView = require('streamhub-sdk/content/views/content-view');
+var ContentView = require('streamhub-sdk/content/views/card-content-view');
 var LivefyreContentView = require('streamhub-sdk/content/views/livefyre-content-view');
 var TwitterContentView = require('streamhub-sdk/content/views/twitter-content-view');
 var FacebookContentView = require('streamhub-sdk/content/views/facebook-content-view');
@@ -71,13 +71,13 @@ ContentViewFactory.prototype.createContentView = function(content, opts) {
 
     var likeCommand = opts.likeCommand || this._createLikeCommand(content, opts.liker);
     var shareCommand = opts.shareCommand || this._createShareCommand(content, opts.sharer);
+
     var contentView = new ContentViewType({
         content : content,
         attachmentsView: opts.attachmentsView,
         likeCommand: likeCommand,
-        shareCommand: shareCommand,
-        themeClass: opts.themeClass,
-        template: opts.template
+        shareCommand: shareCommand
+        //template: opts.template
     });
 
     return contentView;

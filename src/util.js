@@ -127,5 +127,12 @@ define(['streamhub-sdk/debug', 'streamhub-sdk/jquery'], function (debug, $) {
         return $.inArray(val, this);
     };
 
+    exports.extendFromConstructor = function (target, mixin) {
+        for (var property in mixin.prototype) {
+            target[property] = mixin.prototype[property];
+        }
+        mixin.call(target);
+    };
+
     return exports;
 });

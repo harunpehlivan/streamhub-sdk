@@ -1,7 +1,4 @@
-'use strict';
-
 var $ = require('streamhub-sdk/jquery');
-var View = require('streamhub-sdk/view');
 var CompositeView = require('view/composite-view');
 var ContentHeaderView = require('streamhub-sdk/content/views/content-header-view');
 var ContentBodyView = require('streamhub-sdk/content/views/content-body-view');
@@ -10,6 +7,8 @@ var TiledAttachmentListView = require('streamhub-sdk/content/views/tiled-attachm
 var BlockAttachmentListView = require('streamhub-sdk/content/views/block-attachment-list-view');
 var inherits = require('inherits');
 var debug = require('debug');
+
+'use strict';
 
 var log = debug('streamhub-sdk/content/views/content-view');
 
@@ -29,20 +28,11 @@ var ContentView = function (opts) {
 
     this.content = opts.content;
     this.createdAt = new Date(); // store construction time to use for ordering if this.content has no dates
+    this._themeClass = opts.themeClass;
 
     CompositeView.call(this, opts);
 
-    this._headerView = new ContentHeaderView(opts);
-    this.add(this._headerView, { render: false });
-
-    this._attachmentsView = opts.attachmentsView || new CompositeView(new TiledAttachmentListView(opts), new BlockAttachmentListView(opts));
-    this.add(this._attachmentsView, { render: false });
-
-    this._bodyView = new ContentBodyView(opts);
-    this.add(this._bodyView, { render: false });
-
-    this._footerView = new ContentFooterView(opts);
-    this.add(this._footerView, { render: false });
+    this._addInitialChildViews(opts);
 
     if (this.content) {
         this.content.on("reply", function(content) {
@@ -65,7 +55,7 @@ ContentView.prototype.imageLoadingClass = 'hub-content-image-loading';
 ContentView.prototype.attachmentsElSelector = '.content-attachments';
 ContentView.prototype.attachmentFrameElSelector = '.content-attachment-frame';
 
-ContentView.prototype.events = View.prototype.events.extended({
+ContentView.prototype.events = CompositeView.prototype.events.extended({
     'imageLoaded.hub': function(e) {
         this.$el.addClass(this.contentWithImageClass);
         this.$el.removeClass(this.imageLoadingClass);
@@ -86,13 +76,35 @@ ContentView.prototype.events = View.prototype.events.extended({
     }
 });
 
+ContentView.prototype.render = function () {
+    CompositeView.prototype.render.call(this);
+    if (this._themeClass) {
+        this.$el.addClass(this._themeClass);
+    }
+};
+
+ContentView.prototype._addInitialChildViews = function (opts) {
+    opts = opts || {};
+    this._headerView = new ContentHeaderView(opts);
+    this.add(this._headerView, { render: false });
+
+    this._attachmentsView = opts.attachmentsView || new CompositeView(new TiledAttachmentListView(opts), new BlockAttachmentListView(opts));
+    this.add(this._attachmentsView, { render: false });
+
+    this._bodyView = new ContentBodyView(opts);
+    this.add(this._bodyView, { render: false });
+
+    this._footerView = new ContentFooterView(opts);
+    this.add(this._footerView, { render: false });
+};
+
  /**
  * Set the .el DOMElement that the ContentView should render to
  * @param el {DOMElement} The new element the ContentView should render to
  * @returns {ContentView}
  */
 ContentView.prototype.setElement = function (el) {
-    View.prototype.setElement.apply(this, arguments);
+    CompositeView.prototype.setElement.apply(this, arguments);
 
     if (this._thumbnailAttachmentsView && this._thumbnailAttachmentsView.tileableCount()) {
         this.$el.addClass(this.imageLoadingClass);
@@ -141,7 +153,7 @@ ContentView.prototype._handleVisibilityChange = function(newVis, oldVis) {
 };
 
 ContentView.prototype.destroy = function () {
-    View.prototype.destroy.call(this);
+    CompositeView.prototype.destroy.call(this);
     this.content = null;
 };
 

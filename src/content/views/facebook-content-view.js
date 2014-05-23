@@ -1,43 +1,46 @@
-define([
-    'streamhub-sdk/content/views/livefyre-content-view',
-    'inherits',
-    'streamhub-sdk/jquery'],
-function (LivefyreContentView, inherits, $) {
-    'use strict';
+var $ = require('streamhub-sdk/jquery');
+var inherits = require('inherits');
+var LivefyreContentView = require('streamhub-sdk/content/views/livefyre-content-view');
+var asLivefyreContentView = require('streamhub-sdk/content/views/mixins/livefyre-content-view-mixin');
+var asFacebookContentView = require('streamhub-sdk/content/views/mixins/facebook-content-view-mixin');
 
-    /**
-     * A view for rendering facebook content into an element.
-     * @param opts {Object} The set of options to configure this view with (See LivefyreContentView).
-     * @exports streamhub-sdk/content/views/facebook-content-view
-     * @constructor
-     */
-    var FacebookContentView = function FacebookContentView (opts) {
-        LivefyreContentView.call(this, opts);
-    };
-    inherits(FacebookContentView, LivefyreContentView);
+'use strict';
+
+/**
+ * A view for rendering facebook content into an element.
+ * @param opts {Object} The set of options to configure this view with (See LivefyreContentView).
+ * @exports streamhub-sdk/content/views/facebook-content-view
+ * @constructor
+ */
+var FacebookContentView = function FacebookContentView (opts) {
+    LivefyreContentView.apply(this, arguments);
+
+    asLivefyreContentView(this);
+    asFacebookContentView(this);
+};
+inherits(FacebookContentView, LivefyreContentView);
+
+FacebookContentView.prototype.elClass += ' content-facebook ';
+
+/**
+ * Gets the template rendering context. By default, returns "this.content".
+ * @return {Content} The content object this view was instantiated with.
+ */
+FacebookContentView.prototype.getTemplateContext = function () {
+    var context = LivefyreContentView.prototype.getTemplateContext.call(this);
+    if (context.attachments.length) {
+        context.permalink = context.attachments[0].url;
+    }
     
-    FacebookContentView.prototype.elClass += ' content-facebook ';
+    context.authorUrl = context.author.profileUrl;
 
-    /**
-     * Gets the template rendering context. By default, returns "this.content".
-     * @return {Content} The content object this view was instantiated with.
-     */
-    FacebookContentView.prototype.getTemplateContext = function () {
-        var context = LivefyreContentView.prototype.getTemplateContext.call(this);
-        if (context.attachments.length) {
-            context.permalink = context.attachments[0].url;
-        }
-        
-        context.authorUrl = context.author.profileUrl;
+    context.contentSourceName = 'facebook';
+    context.contentSourceTooltipUrl = context.permalink;
+    context.contentSourceTooltipText = 'View on Facebook';
 
-        context.contentSourceName = 'facbeook';
-        context.contentSourceTooltipUrl = context.permalink;
-        context.contentSourceTooltipText = 'View on Facebook';
+    context.createdAtUrl = context.permalink;
 
-        context.createdAtUrl = context.permalink;
+    return context;
+};
 
-        return context;
-    };
-    
-    return FacebookContentView;
-});
+module.exports = FacebookContentView;
