@@ -106,7 +106,7 @@ define(['streamhub-sdk/jquery'], function($) {
      * @private
      */
     LivefyreHttpClient.prototype._isProdEnvironment = function (env) {
-        return (env == 'livefyre.com' || env == 'fyre');
+        return (env == 'livefyre.com');
     }
 
     function createHttpError (message, statusCode) {

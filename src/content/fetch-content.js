@@ -67,7 +67,7 @@ var fetchContent = function (opts, callback) {
             }
             
             //If we get here, something went very wrong.
-            callback('ERROR');
+            callback(new Error('fetchContent result could not create Content instance for the asked-for contentId'));
         });
 
         //Write each state into StateToContent

@@ -3,13 +3,11 @@
  * 140 character tweets.
  */
 
-var textEnumeration = require('annotations/i18n/enumeration');
-
 /** @const {string} */
 var FACEBOOK_APP_ID = '595267417193679';
 
 /** @type {Object} */
-var Social = {};
+var ShareFormat = {};
 
 /**
  * Clean html off of a string of content.
@@ -30,10 +28,10 @@ function cleanHtml(str, useLineBreaks) {
  * @param {string} provider The provider type being shared to.
  * @return {Object}
  */
-Social.contentToShare = function(data, provider) {
-    var fn = Social.contentToTweet;
+ShareFormat.contentToShare = function(data, provider) {
+    var fn = ShareFormat.contentToTweet;
     if (provider === 'facebook') {
-        fn = Social.contentToFacebookMessage;
+        fn = ShareFormat.contentToFacebookMessage;
     }
     return fn(data);
 };
@@ -43,7 +41,7 @@ Social.contentToShare = function(data, provider) {
  * @param {Object|Comment} data The data to adapt.
  * @return {Object}
  */
-Social.contentToFacebookMessage = function(data) {
+ShareFormat.contentToFacebookMessage = function(data) {
     return {
         body: null,
         url: data.permalink
@@ -55,17 +53,12 @@ Social.contentToFacebookMessage = function(data) {
  * @param {Object|Comment} data The data to adapt.
  * @return {Object}
  */
-Social.contentToTweet = function(data) {
+ShareFormat.contentToTweet = function(data) {
     var body = cleanHtml(data.body);
     var username = data.author.displayName;
     username = username ? '- ' + username : '';
     var permalink = data.permalink;
-    var urlLength = 23; // 22 for the URL and 1 for the space in front of it.
-
-    // Https t.co urls are 23 characters + 1 for the space.
-    if (permalink.indexOf('https') === 0) {
-        urlLength++;
-    }
+    var urlLength = permalink.length + 1; // +1 for the space in front of it.
 
     // Tweets are always 140 characters.
     var remaining = 140 - urlLength - username.length;
@@ -74,9 +67,11 @@ Social.contentToTweet = function(data) {
         body = body.substring(0, remaining - 5) + '...';
     }
 
+    var finalBody = (140 - permalink.length - body.length - 2 - username.length < 0) ? '' :  '"' + body + '"' + username;
+
     return {
-        body: '"' + body + '"' + username,
-        url: data.permalink
+        body: finalBody,
+        url: permalink
     };
 };
 
@@ -85,7 +80,7 @@ Social.contentToTweet = function(data) {
  * @param {Object} params All necessary params.
  * @return {string} Url formatted params.
  */
-Social.generateParams = function(params) {
+ShareFormat.generateParams = function(params) {
     if (params.provider === 'facebook') {
         return generateFacebookParams(params);
     }
@@ -98,7 +93,7 @@ Social.generateParams = function(params) {
  * @return {string} Url formatted params.
  */
 function generateFacebookParams(params) {
-    var caption = textEnumeration.get(textEnumeration.KEYS.FACEBOOK_SHARE_CAPTION);
+    var caption = textEnumeration.get('Sidenotes on "{title}"');
     var uri = [
         window.location.protocol,
         params.assetServer,
@@ -122,4 +117,4 @@ function generateTwitterParams(params) {
             '&url=', encodeURIComponent(params.url)].join('');
 }
 
-module.exports = Social;
+module.exports = ShareFormat;

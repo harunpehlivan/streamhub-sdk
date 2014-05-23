@@ -1,6 +1,7 @@
 define([
     'streamhub-sdk/collection',
     'streamhub-sdk-tests/mocks/collection/mock-collection',
+    'streamhub-sdk-tests/mocks/collection/clients/mock-permalink-client',
     'streamhub-sdk/collection/streams/archive',
     'streamhub-sdk/collection/streams/updater',
     'streamhub-sdk/collection/streams/writer',
@@ -10,7 +11,7 @@ define([
     'streamhub-sdk/auth',
     'stream/writable',
     'stream/readable'
-], function (Collection, MockCollection, CollectionArchive,
+], function (Collection, MockCollection, MockLivefyrePermalinkClient, CollectionArchive,
 CollectionUpdater, CollectionWriter, FeaturedContents, ContentListView, Content,
 Auth, Writable, Readable) {
     'use strict';
@@ -34,7 +35,12 @@ Auth, Writable, Readable) {
             expect(collection.id).toBe(myId);
         });
         it('defaults ._autoCreate to true on construction', function () {
-            var collection = new Collection();
+            var collection = new Collection({
+                    collectionMeta: {
+                        title: 'SDK Test',
+                        url: 'http://test.fyre.co',
+                        tags: ['test', 'SDK']
+                    }});
             expect(collection._autoCreate).toBe(true);
         });
         it('can set ._autoCreate to false using opts.autoCreate on construction', function () {
@@ -63,6 +69,7 @@ Auth, Writable, Readable) {
                         errback(null, typeof opts.page !== 'undefined' ? mockPageResponse : mockInitResponse);
                     })
                 };
+                opts.permalinkClident = new MockLivefyrePermalinkClient();
                 collection = new Collection(opts);
             });
 
