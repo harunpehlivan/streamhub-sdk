@@ -2,7 +2,7 @@
  * @fileOverview User agent functions.
  */
 
-var internals = require('annotations/util/internals');
+var util = require('streamhub-sdk/util');
 
 /** @type {Object} */
 var userAgent = {};
@@ -11,7 +11,7 @@ var userAgent = {};
  * Get the browser version.
  * @return {string|number}
  */
-userAgent.getIEVersion = internals.memoize(function () {
+userAgent.getIEVersion = util.memoize(function () {
     if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
         return parseInt(RegExp.$1, 10);
     }
@@ -22,7 +22,7 @@ userAgent.getIEVersion = internals.memoize(function () {
  * Is the current browser IE?
  * @return {boolean} yay or nay.
  */
-userAgent.isIE = internals.memoize(function () {
+userAgent.isIE = util.memoize(function () {
     return /MSIE ([0-9]+)\./.test(navigator.userAgent);
 });
 
@@ -30,7 +30,7 @@ userAgent.isIE = internals.memoize(function () {
  * Is the current browser mobile?
  * @return {boolean} yay or nay.
  */
-userAgent.isMobile = internals.memoize(function () {
+userAgent.isMobile = util.memoize(function () {
     var mobile = navigator.appVersion.indexOf('Mobile') !== -1;
     var android = navigator.appVersion.indexOf('Android') !== -1;
     return mobile || android;

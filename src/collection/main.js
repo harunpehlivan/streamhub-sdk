@@ -39,7 +39,7 @@ function ($, CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedCon
 
         this._collectionMeta = opts.collectionMeta;
         this._signed = opts.signed;
-        this._autoCreate = (opts.autoCreate === false) ? false : true;
+        this._autoCreate = (!this._collectionMeta || opts.autoCreate === false) ? false : true;
         this._maxInitAttempts = opts.maxInitAttempts || 4;
         this._replies = opts.replies || false;
 
@@ -121,10 +121,10 @@ function ($, CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedCon
     Collection.prototype.fetchContent = function (contentId, callback, depthOnly) {
         var opts = {};
         if (!this.id || !this.network) {
-            throw 'Can\'t fetchContent() without this.id and this.network';
+            throw new Error('Can\'t fetchContent() without this.id and this.network');
         }
         if (!contentId || !callback) {
-            throw 'Can\'t fetchContent() without specifying a contentId and a callback';
+            throw new Error('Can\'t fetchContent() without specifying a contentId and a callback');
         }
         //build opts for content client and state to content
         opts.collectionId = this.id;
@@ -259,7 +259,7 @@ function ($, CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedCon
      */
     Collection.prototype._handleInitComplete = function (err, initData) {
         if (!initData) {
-            throw 'Fatal collection connection error';
+            throw new Error('Fatal collection connection error');
         }
         var collectionSettings = initData.collectionSettings;
         this.id = collectionSettings && collectionSettings.collectionId;
@@ -323,7 +323,7 @@ function ($, CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedCon
      */
     Collection.prototype._createCollection = function (errback) {
         if (this._isCreatingCollection) {
-            throw 'Attempting to create a collection more than once.';
+            throw new Error('Attempting to create a collection more than once.');
         }
         this._isCreatingCollection = true;
 
@@ -365,7 +365,7 @@ function ($, CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedCon
     /**
      * Get the base options that should go with all requests.
      * @return {Object}
-     * @private
+     * @protected
      */
     Collection.prototype._getBaseOpts = function () {
         return {
@@ -373,8 +373,7 @@ function ($, CollectionArchive, CollectionUpdater, CollectionWriter, FeaturedCon
             environment: this.environment,
             collectionId: this.id,
             siteId: this.siteId,
-            articleId: this.articleId,
-            lftoken: Livefyre.user.get('token')
+            articleId: this.articleId
         };
     };
 

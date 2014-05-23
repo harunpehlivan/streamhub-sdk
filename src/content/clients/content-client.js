@@ -28,7 +28,7 @@ LivefyreContentClient.prototype._serviceName = 'bootstrap';
  * @param opts {Object} The livefyre collection options.
  * @param opts.network {!string} The name of the network in the livefyre platform
  * @param opts.collectionId {!string} The livefyre collectionId for the conversation stream
- * @param opts.contentId {!string} The commentId to fetch content from (default "0")
+ * @param opts.contentId {!string} The commentId to fetch content from
  * @param [opts.depthOnly] {boolean} False by default. Set to true to return all
  *      replies to the specified contentId
  * @param [opts.environment] {string} Optional livefyre environment to use dev/prod environment
@@ -54,9 +54,6 @@ LivefyreContentClient.prototype.getContent = function(opts, callback) {
     }, function (err, data) {
         if (err) {
             return callback.apply(this, arguments);
-        }
-        if (data.timeout) {
-            return callback(null, { timeout: data.timeout });
         }
         if (data.status === 'error') {
             return callback(data.msg);
