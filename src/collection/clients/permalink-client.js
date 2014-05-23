@@ -91,7 +91,7 @@ LivefyrePermalinkClient.prototype._adaptPermalink = function (opt_data) {
         return null;
     }
     var permalink = opt_data.data.url;
-    if (permalink.indexOf('http://') !== 0) {
+    if (permalink.search(/http[s]*:\/\//) !== 0) {//http:// or https://
         permalink = 'http://' + permalink;
     }
     return permalink;
